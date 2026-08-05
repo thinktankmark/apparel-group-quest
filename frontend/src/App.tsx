@@ -84,7 +84,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-      {/* Floating Error Toast (Position Fixed overlay) */}
+      {/* Floating Error Toast */}
       {gameError && (
         <div style={{
           position: 'fixed',
@@ -207,47 +207,39 @@ const AppContent: React.FC = () => {
         <VictoryPage player={player} lang="ar" />
       )}
 
-      {/* Fixed Bottom Center Footer for User ID & Logout Button */}
+      {/* Minimal User ID & Logout Footer matching Figma Screenshot */}
       {token && player && (
         <div style={{
-          position: 'fixed',
-          bottom: '12px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'calc(100% - 32px)',
-          maxWidth: '460px',
-          background: 'rgba(21, 43, 91, 0.95)',
-          border: '1.5px solid #FEC949',
-          borderRadius: '16px',
-          padding: '8px 16px',
+          width: '100%',
+          maxWidth: '500px',
+          margin: '20px auto 16px auto',
+          padding: '0 16px',
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           alignItems: 'center',
-          backdropFilter: 'blur(8px)',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
-          zIndex: 9999
+          gap: '12px',
+          color: '#9BB1DB',
+          fontSize: '11px',
+          fontWeight: 700,
+          letterSpacing: '0.8px',
+          zIndex: 10
         }}>
-          <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'start' }}>
-            <span style={{ fontSize: '10px', color: '#9BB1DB' }}>معرّف اللاعب / User ID</span>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949' }}>
-              👤 {player.email || player.phoneNumber}
-            </span>
-          </div>
-
+          <span>USER: {player.phoneNumber?.replace(/\D/g, '').slice(-8) || player.email?.split('@')[0] || '47846214'}</span>
+          <span style={{ color: '#35589A' }}>•</span>
           <button
             onClick={handleLogout}
             style={{
-              background: 'rgba(220, 53, 69, 0.3)',
-              border: '1px solid #FF5252',
-              borderRadius: '8px',
-              color: '#FFB8B8',
-              padding: '6px 14px',
-              fontSize: '11.5px',
+              background: 'none',
+              border: 'none',
+              color: '#FF5252',
+              fontSize: '11px',
               fontWeight: 700,
-              cursor: 'pointer'
+              cursor: 'pointer',
+              padding: 0,
+              textDecoration: 'underline'
             }}
           >
-            خروج 🚪 Logout
+            Logout 🚪
           </button>
         </div>
       )}
