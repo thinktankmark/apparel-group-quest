@@ -8,24 +8,25 @@ interface GameProps {
 
 export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [score, setScore] = useState<number>(0);
-  const targetScore = 15; // Target score set to 15
+  const targetScore = 15;
 
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
   const [showWinModal, setShowWinModal] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-  // Canvas Dimensions & Physics Refs
   const canvasRef = useRef<HTMLDivElement>(null);
   const animationFrameId = useRef<number | null>(null);
 
-  // Real-time Physics State (60 FPS Endless Runner)
+  // Real-time Endless Runner Physics Engine
   const stateRef = useRef({
-    horseX: 60,           // Base ground position (px)
+    horseX: 60,           // Current X position (px)
     horseY: 0,            // Ground height offset (px)
     velocityY: 0,         // Vertical impulse
+    jumpStep: 0,          // Airborne frame counter
+    totalJumpSteps: 38,   // Total frames for full forward leap arc
     isJumping: false,     // Airborne status
     obstaclePos: 100,     // Obstacle X percentage (100% to -10%)
-    score: 0,             // Current jump score
+    score: 0,
     isGameOver: false,
     hasPassedObstacle: false
   });
@@ -35,7 +36,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     if (s.isJumping || s.isGameOver || showRetryModal || showWinModal) return;
 
     s.isJumping = true;
-    s.velocityY = 13.5; // High jump impulse
+    s.velocityY = 13.0; // Vertical impulse
+    s.jumpStep = 0;
     s.hasPassedObstacle = false;
   };
 
@@ -44,6 +46,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       horseX: 60,
       horseY: 0,
       velocityY: 0,
+      jumpStep: 0,
+      totalJumpSteps: 38,
       isJumping: false,
       obstaclePos: 100,
       score: 0,
@@ -56,7 +60,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     setIsGameOver(false);
   };
 
-  // 60FPS Endless Runner Physics Loop
+  // 60FPS Physics Loop
   useEffect(() => {
     if (isGameOver || showWinModal || showRetryModal) return;
 
@@ -69,51 +73,51 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       const s = stateRef.current;
 
       if (!s.isGameOver) {
-        // 1. Update Horse Vertical Jump Physics & Forward Arc Trajectory
+        // 1. Update Parabolic Jump Trajectory (Time-based forward movement)
         if (s.isJumping) {
           s.horseY += s.velocityY;
           s.velocityY -= 0.65; // Gravity acceleration
+          s.jumpStep += 1;
 
-          // Calculate Forward Displacement Arc (Horse moves forward X while airborne up to +110px)
-          const jumpProgress = Math.max(0, s.horseY / 130);
-          s.horseX = 60 + jumpProgress * 105;
+          // Forward horizontal progress continuously increases from Takeoff (60px) -> Peak (120px) -> Landing (180px)
+          const timeProgress = Math.min(1.0, s.jumpStep / s.totalJumpSteps);
+          s.horseX = 60 + timeProgress * 120; // Continuous forward motion!
 
           // Touchdown Landing
           if (s.horseY <= 0) {
             s.horseY = 0;
             s.velocityY = 0;
-            s.horseX = 60; // Landed smoothly back on ground track
             s.isJumping = false;
+            s.horseX = 60; // Reset smoothly to base track position after touchdown
           }
+        } else {
+          s.horseX = 60; // Base ground runner position
         }
 
         // 2. Update Oncoming Obstacle Motion
-        const obstacleSpeed = 1.35; // Constant smooth endless runner speed
+        const obstacleSpeed = 1.35; // Endless runner track speed
         s.obstaclePos -= obstacleSpeed;
 
-        // Canvas width pixel mapping
         const containerWidth = canvasRef.current?.clientWidth || 460;
         const obstaclePx = (s.obstaclePos / 100) * containerWidth;
 
-        // Horse Collision Box: [horseX, horseX + 50]
+        // Horse & Obstacle Bounding Boxes
         const horseLeft = s.horseX;
         const horseRight = s.horseX + 50;
-
-        // Obstacle Collision Box: [obstaclePx - 15, obstaclePx + 15]
         const obstacleLeft = obstaclePx - 15;
         const obstacleRight = obstaclePx + 15;
 
-        // Real-time Trajectory Overlap Check
+        // 3. Trajectory Clearance Check
         if (obstacleRight >= horseLeft && obstacleLeft <= horseRight) {
-          // If Horse Y (airborne height) is less than barrier clearance height (52px) -> Collision!
-          if (s.horseY < 52) {
+          // If Horse Y height is less than barrier clearance height (50px) -> Collision!
+          if (s.horseY < 50) {
             s.isGameOver = true;
             setIsGameOver(true);
             setShowRetryModal(true);
           }
         }
 
-        // 3. Score Increment on Clean Obstacle Clearance
+        // 4. Score Increment on Clean Clearance
         if (s.obstaclePos < 5 && !s.hasPassedObstacle && !s.isGameOver) {
           s.hasPassedObstacle = true;
           s.score += 1;
@@ -133,7 +137,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         }
       }
 
-      // Force React render for visual sync
+      // Visual DOM Updates
       if (canvasRef.current && !s.isGameOver) {
         const horseEl = canvasRef.current.querySelector('.horse-runner') as HTMLElement;
         const obstacleEl = canvasRef.current.querySelector('.obstacle-runner') as HTMLElement;
@@ -173,7 +177,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         <p className="subtitle-en">Polo Jump Challenge</p>
       </div>
 
-      {/* Score & Target HUD */}
+      {/* Score HUD */}
       <div style={{
         width: '100%',
         maxWidth: '500px',
@@ -194,7 +198,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         </span>
       </div>
 
-      {/* Endless Runner Interactive Jump Track */}
+      {/* Runner Track */}
       <div
         ref={canvasRef}
         onClick={handleJump}
@@ -233,7 +237,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           }} />
         </div>
 
-        {/* Dynamic Landing Shadow */}
+        {/* Dynamic Shadow */}
         <div
           className="horse-shadow"
           style={{
@@ -248,7 +252,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           }}
         />
 
-        {/* Horse Endless Runner Sprite (Facing Right with Parabolic Arc & Trajectory Displacement) */}
+        {/* Horse Sprite */}
         <div
           className="horse-runner"
           style={{
@@ -265,7 +269,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           🏇
         </div>
 
-        {/* Oncoming Moving Barrier */}
+        {/* Moving Barrier */}
         <div
           className="obstacle-runner"
           style={{
@@ -281,7 +285,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           🚧
         </div>
 
-        {/* Tap Prompt Overlay */}
+        {/* Tap Instruction */}
         <div style={{
           position: 'absolute',
           bottom: '8px',
