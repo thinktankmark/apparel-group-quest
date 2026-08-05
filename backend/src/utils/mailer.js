@@ -4,22 +4,22 @@ const GMAIL_USER = process.env.GMAIL_USER || 'sarwatzahra546@gmail.com';
 const GMAIL_PASS = process.env.GMAIL_PASS || 'kockitzojfpiragv';
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  service: 'gmail',
   auth: {
     user: GMAIL_USER,
     pass: GMAIL_PASS
   },
-  connectionTimeout: 6000,
-  greetingTimeout: 6000,
-  socketTimeout: 6000
+  tls: {
+    rejectUnauthorized: false
+  }
 });
 
 /**
  * Send 6-Digit Email OTP with Apparel Group Branded HTML Template
  */
 async function sendOtpEmail(toEmail, otpCode) {
+  console.log(`🔑 [LIVE OTP LOG] Verification code for ${toEmail} is: ${otpCode}`);
+
   const htmlContent = `
     <div style="background-color: #0B193C; padding: 32px 16px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #FFFFFF; text-align: center;">
       <div style="max-width: 480px; margin: 0 auto; background: #152B5B; border: 1.5px solid #FEC949; border-radius: 20px; padding: 32px 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">

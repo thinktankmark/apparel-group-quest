@@ -22,7 +22,6 @@ const sendOtp = async (req, res) => {
   otpStoreMap.set(cleanEmail, { otp: otpCode, expiresAt });
 
   try {
-    // Timeout promise after 5 seconds so mobile UI is NEVER stuck loading
     const sendPromise = sendOtpEmail(cleanEmail, otpCode);
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('TIMEOUT')), 5000)
@@ -219,5 +218,6 @@ module.exports = {
   sendOtp,
   verifyOtp,
   register,
-  login
+  login,
+  otpStoreMap
 };

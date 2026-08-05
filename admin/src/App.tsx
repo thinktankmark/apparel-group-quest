@@ -50,6 +50,7 @@ export const App: React.FC = () => {
   const [players, setPlayers] = useState<PlayerResult[]>([]);
   const [sequence, setSequence] = useState<SequenceItem[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [activeOtps, setActiveOtps] = useState<{ email: string; otpCode: string; expiresAt: number }[]>([]);
   const [actionMsg, setActionMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,6 +59,12 @@ export const App: React.FC = () => {
       fetchPlayers();
       fetchSequence();
       fetchLogs();
+      fetchActiveOtps();
+
+      const timer = setInterval(() => {
+        fetchActiveOtps();
+      }, 5000);
+      return () => clearInterval(timer);
     }
   }, [token]);
 
@@ -123,6 +130,18 @@ export const App: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) setAuditLogs(await res.json());
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchActiveOtps = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/otps`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) setActiveOtps(await res.json());
     } catch (err) {
       console.error(err);
     }
@@ -265,7 +284,7 @@ export const App: React.FC = () => {
             }}
           >
             {tab === 'DASHBOARD' && '📊 Dashboard & Metrics'}
-            {tab === 'PLAYERS' && '👥 Registered Players & Verification'}
+            {tab === 'PLAYERS' && '👥 Registered Players & Live OTP Lookup'}
             {tab === 'QR_PRINTER' && '🖨️ Store QR Code Poster Generator'}
             {tab === 'AUDIT' && '📜 System Audit Logs'}
           </button>
@@ -303,6 +322,20 @@ export const App: React.FC = () => {
 
         {activeTab === 'PLAYERS' && (
           <div>
+            {/* Live Active OTP Lookup Banner for Event Booth Staff */}
+            {activeOtps.length > 0 && (
+              <div style={{ background: 'rgba(254,201,73,0.12)', border: '1.5px solid #FEC949', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '14px', color: '#FEC949', margin: '0 0 8px 0' }}>🔐 Live Verification OTP Codes (Event Staff Lookup)</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                  {activeOtps.map((o, idx) => (
+                    <div key={idx} style={{ background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', padding: '8px 14px', fontSize: '12px' }}>
+                      <span style={{ color: '#9BB1DB' }}>{o.email}:</span> <strong style={{ color: '#8CE63D', fontSize: '15px', letterSpacing: '2px', marginLeft: '6px' }}>{o.otpCode}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div style={{ marginBottom: '20px', display: 'flex', gap: '12px' }}>
               <input
                 type="text"

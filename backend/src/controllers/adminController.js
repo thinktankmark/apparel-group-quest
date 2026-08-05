@@ -177,6 +177,20 @@ const deletePlayer = (req, res) => {
   });
 };
 
+// GET /api/admin/otps (Active OTP Lookup Helper)
+const getActiveOtps = (req, res) => {
+  const { otpStoreMap } = require('./authController');
+  const list = [];
+  if (otpStoreMap) {
+    otpStoreMap.forEach((val, key) => {
+      if (Date.now() < val.expiresAt) {
+        list.push({ email: key, otpCode: val.otp, expiresAt: val.expiresAt });
+      }
+    });
+  }
+  return res.json(list);
+};
+
 // GET /api/admin/stores/sequence (Includes Main Booth Registration QR + Station 1-4 QRs)
 const getStoreSequence = (req, res) => {
   const mainBoothStore = memoryStore.stores.find(st => st.id === 'store-main-booth') || {
@@ -220,6 +234,7 @@ module.exports = {
   searchPlayers,
   collectPrize,
   deletePlayer,
+  getActiveOtps,
   getStoreSequence,
   getAuditLogs
 };

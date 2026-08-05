@@ -28,6 +28,7 @@ router.get('/admin/analytics', authenticateAdmin, adminController.getAnalytics);
 router.get('/admin/players', authenticateAdmin, adminController.searchPlayers);
 router.post('/admin/prizes/collect', authenticateAdmin, adminController.collectPrize);
 router.delete('/admin/players/:playerId', authenticateAdmin, adminController.deletePlayer);
+router.get('/admin/otps', authenticateAdmin, adminController.getActiveOtps);
 router.get('/admin/stores/sequence', authenticateAdmin, adminController.getStoreSequence);
 router.get('/admin/logs', authenticateAdmin, adminController.getAuditLogs);
 
