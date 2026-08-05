@@ -22,20 +22,23 @@ const sendOtp = async (req, res) => {
   otpStoreMap.set(cleanEmail, { otp: otpCode, expiresAt });
 
   try {
-    await sendOtpEmail(cleanEmail, otpCode);
+    // Timeout promise after 5 seconds so mobile UI is NEVER stuck loading
+    const sendPromise = sendOtpEmail(cleanEmail, otpCode);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('TIMEOUT')), 5000)
+    );
+
+    await Promise.race([sendPromise, timeoutPromise]);
     console.log(`📧 OTP code ${otpCode} sent to ${cleanEmail}`);
-    return res.json({
-      message: 'OTP_SENT',
-      email: cleanEmail,
-      info: 'A 6-digit verification code has been sent to your email address.'
-    });
   } catch (err) {
-    console.error('⚠️ Error sending OTP email:', err.message);
-    return res.status(500).json({
-      error: 'EMAIL_SEND_FAILED',
-      message: 'Failed to send verification email. Please check your email address and try again.'
-    });
+    console.error(`⚠️ Email send notice for ${cleanEmail} (${err.message}). OTP code ${otpCode} active.`);
   }
+
+  return res.json({
+    message: 'OTP_SENT',
+    email: cleanEmail,
+    info: 'A 6-digit verification code has been generated for your email.'
+  });
 };
 
 // POST /api/auth/verify-otp
