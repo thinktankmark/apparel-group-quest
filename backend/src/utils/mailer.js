@@ -8,9 +8,6 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: GMAIL_USER,
     pass: GMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
   }
 });
 
@@ -59,7 +56,14 @@ async function sendOtpEmail(toEmail, otpCode) {
     html: htmlContent
   };
 
-  return await transporter.sendMail(mailOptions);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('⚡ Gmail SMTP Email Sent Successfully:', info.response);
+    return info;
+  } catch (err) {
+    console.error('⚠️ Gmail SMTP Error:', err.message);
+    throw err;
+  }
 }
 
 module.exports = {
