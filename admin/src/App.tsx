@@ -354,8 +354,8 @@ export const App: React.FC = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
               {sequence.map(s => (
                 <div key={s.sequenceId} style={{ background: '#152B5B', border: '1.5px solid #FEC949', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
-                  <span style={{ fontSize: '11px', background: '#FEC949', color: '#041B4E', padding: '4px 10px', borderRadius: '10px', fontWeight: 800 }}>
-                    STATION {s.sequenceOrder}
+                  <span style={{ fontSize: '11px', background: s.sequenceOrder === 0 ? '#38EF7D' : '#FEC949', color: '#041B4E', padding: '4px 10px', borderRadius: '10px', fontWeight: 800 }}>
+                    {s.sequenceOrder === 0 ? 'MAIN BOOTH REGISTRATION' : `STATION ${s.sequenceOrder}`}
                   </span>
                   <h3 style={{ color: '#FFF', margin: '12px 0 4px 0' }}>{s.store.nameEn}</h3>
                   <p style={{ color: '#9BB1DB', fontSize: '12px', margin: '0 0 16px 0' }}>{s.store.nameAr}</p>

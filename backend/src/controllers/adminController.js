@@ -42,7 +42,6 @@ const searchPlayers = (req, res) => {
   const { search } = req.query;
 
   if (!search) {
-    // Return all players if no query
     const results = memoryStore.players.map(p => {
       const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
       const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
@@ -109,7 +108,6 @@ const collectPrize = (req, res) => {
     });
   }
 
-  // Duplicate prize collection prevention
   const existingCollection = memoryStore.prizeCollections.find(pc => pc.player_id === playerId);
   if (existingCollection) {
     return res.status(409).json({
@@ -129,7 +127,6 @@ const collectPrize = (req, res) => {
 
   memoryStore.prizeCollections.push(newCollection);
 
-  // Add audit log
   memoryStore.auditLogs.push({
     id: `log-${Date.now()}`,
     admin_id: admin.id,
@@ -144,9 +141,24 @@ const collectPrize = (req, res) => {
   });
 };
 
-// GET /api/admin/stores/sequence
+// GET /api/admin/stores/sequence (Includes Main Booth Registration QR + Station 1-4 QRs)
 const getStoreSequence = (req, res) => {
-  const result = memoryStore.sequence.map(s => {
+  const mainBoothStore = memoryStore.stores.find(st => st.id === 'store-main-booth') || {
+    id: 'store-main-booth',
+    name_ar: 'جناح مجموعة أباريل الرئيسي',
+    name_en: 'Apparel Group Main Booth'
+  };
+
+  const mainBoothItem = {
+    sequenceId: 'main-booth',
+    sequenceOrder: 0,
+    gameKey: 'REGISTRATION',
+    store: mainBoothStore,
+    qrToken: memoryStore.mainBoothQr.token,
+    qrSignedJwt: memoryStore.mainBoothQr.qr_signed_jwt
+  };
+
+  const stationItems = memoryStore.sequence.map(s => {
     const store = memoryStore.stores.find(st => st.id === s.store_id);
     return {
       sequenceId: s.id,
@@ -157,7 +169,8 @@ const getStoreSequence = (req, res) => {
       qrSignedJwt: s.qr_signed_jwt
     };
   });
-  return res.json(result);
+
+  return res.json([mainBoothItem, ...stationItems]);
 };
 
 // GET /api/admin/logs
