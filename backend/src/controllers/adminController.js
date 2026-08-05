@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { memoryStore, JWT_SECRET } = require('../db/store');
+const { memoryStore, JWT_SECRET, saveStoreToFile } = require('../db/store');
 
 // POST /api/admin/login
 const adminLogin = (req, res) => {
@@ -135,9 +135,45 @@ const collectPrize = (req, res) => {
     created_at: new Date().toISOString()
   });
 
+  saveStoreToFile();
+
   return res.json({
     message: 'Prize marked as collected successfully',
     collection: newCollection
+  });
+};
+
+// DELETE /api/admin/players/:playerId
+const deletePlayer = (req, res) => {
+  const { playerId } = req.params;
+  const admin = req.admin;
+
+  const playerIndex = memoryStore.players.findIndex(p => p.id === playerId);
+  if (playerIndex === -1) {
+    return res.status(404).json({ error: 'PLAYER_NOT_FOUND', message: 'Player not found.' });
+  }
+
+  const deletedPlayer = memoryStore.players[playerIndex];
+
+  // Delete player, progress, attempts, and prize collections
+  memoryStore.players.splice(playerIndex, 1);
+  memoryStore.progress = memoryStore.progress.filter(p => p.player_id !== playerId);
+  memoryStore.attempts = memoryStore.attempts.filter(a => a.player_id !== playerId);
+  memoryStore.prizeCollections = memoryStore.prizeCollections.filter(pc => pc.player_id !== playerId);
+
+  memoryStore.auditLogs.push({
+    id: `log-${Date.now()}`,
+    admin_id: admin.id,
+    action: 'DELETE_PLAYER',
+    details: { playerId, playerName: deletedPlayer.full_name, playerEmail: deletedPlayer.email, playerPhone: deletedPlayer.phone_number },
+    created_at: new Date().toISOString()
+  });
+
+  saveStoreToFile();
+
+  return res.json({
+    message: 'Player deleted successfully',
+    playerId
   });
 };
 
@@ -183,6 +219,7 @@ module.exports = {
   getAnalytics,
   searchPlayers,
   collectPrize,
+  deletePlayer,
   getStoreSequence,
   getAuditLogs
 };

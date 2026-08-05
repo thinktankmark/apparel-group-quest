@@ -131,9 +131,13 @@ export const App: React.FC = () => {
   const handleMarkPrizeCollected = async (playerId: string) => {
     if (!token) return;
     try {
-      const res = await fetch(`${API_BASE}/api/admin/players/${playerId}/prize-collected`, {
+      const res = await fetch(`${API_BASE}/api/admin/prizes/collect`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ playerId })
       });
       const data = await res.json();
       if (res.ok) {
@@ -146,6 +150,30 @@ export const App: React.FC = () => {
       }
     } catch (err: any) {
       setActionMsg(`❌ Error: ${err.message}`);
+    }
+  };
+
+  const handleDeletePlayer = async (playerId: string, playerName: string) => {
+    if (!token) return;
+    const confirmed = window.confirm(`Are you sure you want to delete player "${playerName}"? This will permanently remove their profile and progress.`);
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/players/${playerId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setActionMsg(`🗑️ Player "${playerName}" deleted successfully.`);
+        fetchPlayers(searchQuery);
+        fetchAnalytics();
+        fetchLogs();
+      } else {
+        setActionMsg(`❌ ${data.message || 'Delete failed'}`);
+      }
+    } catch (err: any) {
+      setActionMsg(`❌ Error deleting player: ${err.message}`);
     }
   };
 
@@ -184,7 +212,7 @@ export const App: React.FC = () => {
             </div>
 
             {loginError && (
-              <div style={{ background: 'rgba(220,53,69,0.2)', border: '1px solid #FF5252', color: '#FFB8B8', padding: '10px', borderRadius: '8px', fontSize: '12px', marginBottom: '16px' }}>
+              <div style={{ background: 'rgba(220,53,69,0.2)', border: '1.5px solid #FF5252', color: '#FFB8B8', padding: '10px', borderRadius: '8px', fontSize: '12px', marginBottom: '16px' }}>
                 ⚠️ {loginError}
               </div>
             )}
@@ -325,15 +353,21 @@ export const App: React.FC = () => {
                           <span style={{ color: '#FFC107', fontWeight: 700 }}>🎁 Unclaimed</span>
                         )}
                       </td>
-                      <td style={{ padding: '14px 16px' }}>
+                      <td style={{ padding: '14px 16px', display: 'flex', gap: '8px', alignItems: 'center' }}>
                         {p.isCompleted && !p.isPrizeCollected && (
                           <button
                             onClick={() => handleMarkPrizeCollected(p.id)}
-                            style={{ padding: '8px 14px', background: '#8CE63D', border: 'none', borderRadius: '6px', color: '#041B4E', fontWeight: 800, cursor: 'pointer' }}
+                            style={{ padding: '8px 12px', background: '#8CE63D', border: 'none', borderRadius: '6px', color: '#041B4E', fontWeight: 800, cursor: 'pointer', fontSize: '11.5px' }}
                           >
                             Mark Prize Handed Over 🎁
                           </button>
                         )}
+                        <button
+                          onClick={() => handleDeletePlayer(p.id, p.fullName)}
+                          style={{ padding: '8px 12px', background: 'rgba(220,53,69,0.25)', border: '1px solid #FF5252', borderRadius: '6px', color: '#FFB8B8', fontWeight: 700, cursor: 'pointer', fontSize: '11.5px' }}
+                        >
+                          Delete 🗑️
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -382,7 +416,7 @@ export const App: React.FC = () => {
               {auditLogs.map((log, idx) => (
                 <div key={idx} style={{ padding: '10px 0', borderBottom: '1px solid #041B4E', fontSize: '12px' }}>
                   <span style={{ color: '#FEC949' }}>[{new Date(log.created_at).toLocaleTimeString()}]</span>{' '}
-                  <span style={{ color: '#FFF', fontWeight: 700 }}>{log.action}</span> - {log.details}
+                  <span style={{ color: '#FFF', fontWeight: 700 }}>{log.action}</span> - {JSON.stringify(log.details)}
                 </div>
               ))}
               {auditLogs.length === 0 && <p style={{ color: '#9BB1DB' }}>No audit logs recorded yet.</p>}
