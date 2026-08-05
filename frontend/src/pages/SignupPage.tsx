@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { HeaderLogo } from '../components/HeaderLogo';
-import { OtpModal } from '../components/OtpModal';
 import { useAuth } from '../context/AuthContext';
-
-const API_BASE = (import.meta.env.VITE_API_URL || 'https://apparel-hunt-api.onrender.com').replace(/\/$/, '');
 
 interface SignupPageProps {
   onSignupSuccess: () => void;
@@ -21,7 +18,6 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showOtpModal, setShowOtpModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,17 +27,9 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
 
     setLoading(true);
     try {
-      // Step 1: Send 6-Digit Email OTP
-      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      const data = await res.json();
-      if (!res.ok) throw data;
-
-      // Open 6-digit OTP Modal
-      setShowOtpModal(true);
+      // Direct Instant Registration (Email OTP Verification Disabled)
+      await register(fullName, email, phoneNumber);
+      onSignupSuccess();
     } catch (err: any) {
       if (err.error === 'EMAIL_ALREADY_EXISTS') {
         setEmailError('⚠️ البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول. / Email address is already registered.');
@@ -52,20 +40,6 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
       } else {
         setGeneralError(err.message || 'Registration failed. Please try again.');
       }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleOtpVerified = async () => {
-    setShowOtpModal(false);
-    setLoading(true);
-    try {
-      // Step 2: Complete Player Account Registration after OTP Verification
-      await register(fullName, email, phoneNumber);
-      onSignupSuccess();
-    } catch (err: any) {
-      setGeneralError(err.message || 'Registration failed.');
     } finally {
       setLoading(false);
     }
@@ -126,8 +100,8 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
         )}
 
         <button type="submit" className="btn-primary" disabled={loading} style={{ marginBottom: '16px' }}>
-          <span className="text-ar">{loading ? 'جاري إرسال رمز التحقق...' : 'إرسال رمز التحقق والتسجيل'}</span>
-          <span className="text-en">{loading ? 'SENDING OTP CODE...' : 'SEND OTP CODE & REGISTER'}</span>
+          <span className="text-ar">{loading ? 'جاري التسجيل...' : 'الانضمام إلى المغامرة'}</span>
+          <span className="text-en">{loading ? 'REGISTERING...' : 'JOIN THE ADVENTURE'}</span>
         </button>
       </form>
 
@@ -143,15 +117,6 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
           </button>
         </p>
       </div>
-
-      {/* 6-Digit Email OTP Modal */}
-      <OtpModal
-        isOpen={showOtpModal}
-        email={email}
-        onVerified={handleOtpVerified}
-        onClose={() => setShowOtpModal(false)}
-        lang="ar"
-      />
     </div>
   );
 };
