@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://apparel-hunt-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
