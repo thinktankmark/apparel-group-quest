@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://apparel-hunt-admin.onrender.com/api/:path*"
+    }
+  ]
+}

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Language } from '../i18n/translations';
 
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
 interface ScanHandlerProps {
   onMainBoothScanned: () => void;
   onStoreQrScanned: (storeData: { storeId: string; sequenceOrder: number; gameKey: string }) => void;
@@ -22,7 +24,7 @@ export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, on
       return;
     }
 
-    fetch(`/api/qr/validate?token=${encodeURIComponent(token)}`)
+    fetch(`${API_BASE}/api/qr/validate?token=${encodeURIComponent(token)}`)
       .then(res => res.json())
       .then(data => {
         setLoading(false);

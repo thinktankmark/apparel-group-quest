@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
 export interface Player {
   id: string;
   fullName: string;
@@ -68,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refreshProgress = async () => {
     if (!token) return;
     try {
-      const res = await fetch('/api/player/progress', {
+      const res = await fetch(`${API_BASE}/api/player/progress`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -86,7 +88,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const login = async (phoneNumber: string) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phoneNumber })
@@ -104,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (fullName: string, email: string, phoneNumber: string) => {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ fullName, email, phoneNumber, mainBoothToken })
@@ -132,7 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const completeStage = async (sequenceOrder: number, score: number, durationSeconds: number, isSuccess: boolean) => {
     if (!token) throw new Error('Unauthenticated');
-    const res = await fetch('/api/player/game-complete', {
+    const res = await fetch(`${API_BASE}/api/player/game-complete`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
