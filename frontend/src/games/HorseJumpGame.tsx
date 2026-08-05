@@ -19,13 +19,13 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   // Real-time Endless Runner Physics Engine
   const stateRef = useRef({
-    horseX: 60,           // Current X position (px)
+    horseX: 60,           // Base ground position (px)
     horseY: 0,            // Ground height offset (px)
     velocityY: 0,         // Vertical impulse
     jumpStep: 0,          // Airborne frame counter
-    totalJumpSteps: 38,   // Total frames for full forward leap arc
+    totalJumpSteps: 34,   // Total frames for smooth forward leap arc
     isJumping: false,     // Airborne status
-    obstaclePos: 100,     // Obstacle X percentage (100% to -10%)
+    obstaclePos: 100,     // Obstacle X percentage (100% to -40%)
     score: 0,
     isGameOver: false,
     hasPassedObstacle: false
@@ -47,7 +47,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       horseY: 0,
       velocityY: 0,
       jumpStep: 0,
-      totalJumpSteps: 38,
+      totalJumpSteps: 34,
       isJumping: false,
       obstaclePos: 100,
       score: 0,
@@ -73,29 +73,29 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       const s = stateRef.current;
 
       if (!s.isGameOver) {
-        // 1. Update Parabolic Jump Trajectory (Time-based forward movement)
+        // 1. Update Parabolic Jump Trajectory (Balanced forward displacement: +60px)
         if (s.isJumping) {
           s.horseY += s.velocityY;
-          s.velocityY -= 0.65; // Gravity acceleration
+          s.velocityY -= 0.68; // Gravity acceleration
           s.jumpStep += 1;
 
-          // Forward horizontal progress continuously increases from Takeoff (60px) -> Peak (120px) -> Landing (180px)
+          // Time-based forward displacement: Takeoff (60px) -> Peak (90px) -> Landing (120px)
           const timeProgress = Math.min(1.0, s.jumpStep / s.totalJumpSteps);
-          s.horseX = 60 + timeProgress * 120; // Continuous forward motion!
+          s.horseX = 60 + timeProgress * 60; // Clean forward leap without overshooting
 
           // Touchdown Landing
           if (s.horseY <= 0) {
             s.horseY = 0;
             s.velocityY = 0;
             s.isJumping = false;
-            s.horseX = 60; // Reset smoothly to base track position after touchdown
+            s.horseX = 60; // Landed smoothly back on runner track
           }
         } else {
-          s.horseX = 60; // Base ground runner position
+          s.horseX = 60; // Base runner track position
         }
 
         // 2. Update Oncoming Obstacle Motion
-        const obstacleSpeed = 1.35; // Endless runner track speed
+        const obstacleSpeed = 1.30;
         s.obstaclePos -= obstacleSpeed;
 
         const containerWidth = canvasRef.current?.clientWidth || 460;
@@ -103,14 +103,14 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
         // Horse & Obstacle Bounding Boxes
         const horseLeft = s.horseX;
-        const horseRight = s.horseX + 50;
+        const horseRight = s.horseX + 45;
         const obstacleLeft = obstaclePx - 15;
         const obstacleRight = obstaclePx + 15;
 
         // 3. Trajectory Clearance Check
         if (obstacleRight >= horseLeft && obstacleLeft <= horseRight) {
-          // If Horse Y height is less than barrier clearance height (50px) -> Collision!
-          if (s.horseY < 50) {
+          // If Horse Y height is less than barrier clearance height (48px) -> Collision!
+          if (s.horseY < 48) {
             s.isGameOver = true;
             setIsGameOver(true);
             setShowRetryModal(true);
@@ -130,8 +130,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           }
         }
 
-        // Reset Obstacle to Right Side for Next Barrier
-        if (s.obstaclePos <= -10) {
+        // Reset Obstacle to Right Side with Increased Spacing (-40%)
+        if (s.obstaclePos <= -40) {
           s.obstaclePos = 100;
           s.hasPassedObstacle = false;
         }
