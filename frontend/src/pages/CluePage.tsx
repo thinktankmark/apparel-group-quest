@@ -1,0 +1,201 @@
+import React from 'react';
+import { ActiveClue } from '../context/AuthContext';
+
+interface CluePageProps {
+  activeClue: ActiveClue;
+  onScanStoreQr: (storeData: { storeId: string; sequenceOrder: number; gameKey: string }) => void;
+  lang: 'ar' | 'en';
+}
+
+export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
+  const { store, sequenceOrder } = activeClue;
+
+  // Storefront images mapping
+  const getStoreImage = (code: string, nameEn: string = '') => {
+    const codeUpper = (code || '').toUpperCase();
+    const nameUpper = (nameEn || '').toUpperCase();
+
+    if (codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC')) return '/assets/polo-store.png';
+    if (codeUpper === 'ACO' || nameUpper.includes('ACO')) return '/assets/aco-store.png';
+    if (codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE')) return '/assets/steve-madden-store.png';
+    if (codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS')) return '/assets/skechers-store.png';
+    return '/assets/skechers-store.png';
+  };
+
+  // Render Official Uploaded Brand Logo PNGs
+  const renderStoreLogo = (code: string, nameEn: string = '') => {
+    const codeUpper = (code || '').toUpperCase();
+    const nameUpper = (nameEn || '').toUpperCase();
+
+    const isBhpc = codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC');
+    const isAco = codeUpper === 'ACO' || nameUpper.includes('ACO');
+    const isSkechers = codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS');
+    const isSteveMadden = codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE');
+
+    return (
+      <div style={{
+        background: '#041B4E',
+        border: '1.5px solid #35589A',
+        borderRadius: '10px',
+        padding: '6px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '44px',
+        maxWidth: '48%',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+        flexShrink: 0
+      }}>
+        {isBhpc && (
+          <img
+            src="/assets/polo-logo.png"
+            alt="Beverly Hills Polo Club"
+            style={{ height: '30px', maxWidth: '100%', objectFit: 'contain' }}
+          />
+        )}
+        {isAco && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
+            <span style={{ fontSize: '18px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.5px' }}>
+              ΔCO.
+            </span>
+            <span style={{ fontSize: '7.5px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '1px', marginTop: '1px' }}>
+              athletesco
+            </span>
+          </div>
+        )}
+        {isSkechers && (
+          <img
+            src="/assets/skechers-logo.png"
+            alt="Skechers"
+            style={{ height: '22px', maxWidth: '100%', objectFit: 'contain' }}
+          />
+        )}
+        {isSteveMadden && (
+          <img
+            src="/assets/steve-madden-logo.png"
+            alt="Steve Madden"
+            style={{ height: '20px', maxWidth: '100%', objectFit: 'contain' }}
+          />
+        )}
+        {!isBhpc && !isAco && !isSkechers && !isSteveMadden && (
+          <span style={{ fontSize: '13px', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap' }}>
+            {nameEn}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const getClueOrdinalAr = (seq: number) => {
+    if (seq === 1) return 'الأول';
+    if (seq === 2) return 'الثاني';
+    if (seq === 3) return 'الثالث';
+    return 'الرابع';
+  };
+
+  const getClueOrdinalEn = (seq: number) => {
+    if (seq === 1) return 'first';
+    if (seq === 2) return 'second';
+    if (seq === 3) return 'third';
+    return 'fourth';
+  };
+
+  return (
+    <div className="app-container" style={{ width: '100%', maxWidth: '500px', paddingBottom: '80px' }}>
+      {/* Top Header Row with Apparel Group Logo on Left & Official Brand Logo on Right */}
+      <div style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '16px',
+        marginBottom: '20px',
+        direction: 'ltr',
+        padding: '0 4px',
+        boxSizing: 'border-box'
+      }}>
+        {/* Left: Apparel Group Main Logo Container */}
+        <div style={{
+          background: 'rgba(4, 27, 78, 0.7)',
+          border: '1.5px solid #35589A',
+          borderRadius: '10px',
+          padding: '5px 10px',
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '44px',
+          maxWidth: '48%',
+          boxSizing: 'border-box',
+          flexShrink: 0
+        }}>
+          <img
+            src="/assets/apparel-logo.png"
+            alt="Apparel Group"
+            style={{ height: '32px', maxWidth: '100%', objectFit: 'contain' }}
+          />
+        </div>
+
+        {/* Right: Official Store Brand Logo Container */}
+        {renderStoreLogo(store.stationCode, store.nameEn)}
+      </div>
+
+      {/* Main Store Station Card */}
+      <div style={{
+        width: '100%',
+        background: 'rgba(21, 43, 91, 0.92)',
+        border: '1.5px solid #35589A',
+        borderRadius: '20px',
+        overflow: 'hidden',
+        boxShadow: '0 8px 28px rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(8px)',
+        marginBottom: '20px'
+      }}>
+        {/* Storefront Image */}
+        <div style={{ width: '100%', position: 'relative', overflow: 'hidden', padding: '12px 12px 0 12px' }}>
+          <img
+            src={getStoreImage(store.stationCode, store.nameEn)}
+            alt={store.nameEn}
+            style={{
+              width: '100%',
+              height: '190px',
+              objectFit: 'cover',
+              borderRadius: '14px',
+              border: '1px solid #35589A'
+            }}
+          />
+        </div>
+
+        {/* Location Badge Pill */}
+        <div style={{ padding: '0 16px', marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{
+            background: 'rgba(4, 27, 78, 0.9)',
+            border: '1px solid #FEC949',
+            borderRadius: '20px',
+            padding: '5px 14px',
+            color: '#FEC949',
+            fontSize: '11.5px',
+            fontWeight: 700,
+            textAlign: 'center'
+          }}>
+            📍 {store.locationTextAr} • {store.locationTextEn}
+          </div>
+        </div>
+
+        {/* Text Content matching Figma */}
+        <div style={{ padding: '20px 16px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px', lineHeight: 1.4 }}>
+            تفضل بزيارة فرع {store.nameAr}<br />للحصول على دليلك {getClueOrdinalAr(sequenceOrder)}!
+          </h2>
+          <h3 style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF', marginBottom: '16px', lineHeight: 1.4 }}>
+            Meet us at {store.nameEn}<br />to get your {getClueOrdinalEn(sequenceOrder)} clue.
+          </h3>
+        </div>
+      </div>
+
+      {/* CTA Button matching Figma */}
+      <button className="btn-primary" style={{ width: '100%' }}>
+        <span className="text-ar">توجه إلى فرع {store.nameAr}</span>
+        <span className="text-en">HEAD TO {store.nameEn.toUpperCase()}</span>
+      </button>
+    </div>
+  );
+};
