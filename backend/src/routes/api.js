@@ -9,7 +9,9 @@ const adminController = require('../controllers/adminController');
 const { authenticatePlayer, authenticateAdmin } = require('../middleware/auth');
 const { requireMainBoothRegistrationToken, validateGameProgression } = require('../middleware/guards');
 
-// --- Public Auth Routes ---
+// --- Public Auth & OTP Routes ---
+router.post('/auth/send-otp', authController.sendOtp);
+router.post('/auth/verify-otp', authController.verifyOtp);
 router.post('/auth/register', requireMainBoothRegistrationToken, authController.register);
 router.post('/auth/login', authController.login);
 

@@ -1,5 +1,85 @@
 const jwt = require('jsonwebtoken');
 const { memoryStore, JWT_SECRET, saveStoreToFile } = require('../db/store');
+const { sendOtpEmail } = require('../utils/mailer');
+
+// In-Memory OTP Cache Store (email -> { otp: string, expiresAt: number })
+const otpStoreMap = new Map();
+
+// POST /api/auth/send-otp
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email || !email.trim()) {
+    return res.status(400).json({ error: 'MISSING_EMAIL', message: 'Email address is required.' });
+  }
+
+  const cleanEmail = email.trim().toLowerCase();
+
+  // Generate 6-digit random OTP code
+  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 Minutes TTL
+
+  otpStoreMap.set(cleanEmail, { otp: otpCode, expiresAt });
+
+  try {
+    await sendOtpEmail(cleanEmail, otpCode);
+    console.log(`📧 OTP code ${otpCode} sent to ${cleanEmail}`);
+    return res.json({
+      message: 'OTP_SENT',
+      email: cleanEmail,
+      info: 'A 6-digit verification code has been sent to your email address.'
+    });
+  } catch (err) {
+    console.error('⚠️ Error sending OTP email:', err.message);
+    return res.status(500).json({
+      error: 'EMAIL_SEND_FAILED',
+      message: 'Failed to send verification email. Please check your email address and try again.'
+    });
+  }
+};
+
+// POST /api/auth/verify-otp
+const verifyOtp = (req, res) => {
+  const { email, otpCode } = req.body;
+
+  if (!email || !otpCode) {
+    return res.status(400).json({ error: 'MISSING_FIELDS', message: 'Email and verification code are required.' });
+  }
+
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanOtp = otpCode.trim();
+
+  const record = otpStoreMap.get(cleanEmail);
+  if (!record) {
+    return res.status(400).json({
+      error: 'OTP_EXPIRED_OR_NOT_FOUND',
+      message: 'Verification code not found or expired. Please request a new code.'
+    });
+  }
+
+  if (Date.now() > record.expiresAt) {
+    otpStoreMap.delete(cleanEmail);
+    return res.status(400).json({
+      error: 'OTP_EXPIRED',
+      message: 'Verification code has expired. Please click resend to get a new code.'
+    });
+  }
+
+  if (record.otp !== cleanOtp) {
+    return res.status(400).json({
+      error: 'INVALID_OTP',
+      message: 'Invalid 6-digit verification code. Please check your email and try again.'
+    });
+  }
+
+  // Clear OTP on successful verification
+  otpStoreMap.delete(cleanEmail);
+
+  return res.json({
+    message: 'OTP_VERIFIED',
+    isVerified: true
+  });
+};
 
 // POST /api/auth/register
 const register = (req, res) => {
@@ -59,7 +139,6 @@ const register = (req, res) => {
 
   memoryStore.progress.push(newProgress);
 
-  // Auto-save store to disk
   saveStoreToFile();
 
   // 5. Generate Auth Token
@@ -134,6 +213,8 @@ const login = (req, res) => {
 };
 
 module.exports = {
+  sendOtp,
+  verifyOtp,
   register,
   login
 };
