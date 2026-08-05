@@ -361,7 +361,7 @@ export const App: React.FC = () => {
                   <p style={{ color: '#9BB1DB', fontSize: '12px', margin: '0 0 16px 0' }}>{s.store.nameAr}</p>
                   <div style={{ background: '#FFF', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '16px' }}>
                     <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`http://192.168.100.92:3000/scan?token=${s.qrToken}`)}`}
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`${(import.meta.env.VITE_CLIENT_URL || 'https://apparel-scavenger-hunt.vercel.app').replace(/\/$/, '')}/scan?token=${s.qrToken}`)}`}
                       alt={s.store.nameEn}
                       style={{ width: '180px', height: '180px' }}
                     />
