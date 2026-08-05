@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://apparel-hunt-api.onrender.com').replace(/\/$/, '');
 
 interface Analytics {
   totalRegistered: number;
