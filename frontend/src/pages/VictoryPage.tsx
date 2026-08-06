@@ -79,7 +79,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         {/* Main Booth Photo */}
         <div style={{ width: '100%', overflow: 'hidden', borderRadius: '16px', marginBottom: '16px' }}>
           <img
-            src="/assets/step3.png"
+            src="/assets/main-booth.png"
             alt="Apparel Group Main Booth"
             style={{
               width: '100%',

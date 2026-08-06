@@ -56,14 +56,19 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
           />
         )}
         {!isBhpc && isAco && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
-            <span style={{ fontSize: '18px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.5px' }}>
-              ΔCO.
-            </span>
-            <span style={{ fontSize: '7.5px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '1px', marginTop: '1px' }}>
-              athletesco
-            </span>
-          </div>
+          <img
+            src="/assets/aco-logo.png"
+            alt="Beverly Hills Polo Club"
+            style={{ height: '32px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+          />
+          // <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
+          //   <span style={{ fontSize: '18px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.5px' }}>
+          //     ΔCO.
+          //   </span>
+          //   <span style={{ fontSize: '7.5px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '1px', marginTop: '1px' }}>
+          //     athletesco
+          //   </span>
+          // </div>
         )}
         {!isBhpc && !isAco && isSkechers && (
           <img
