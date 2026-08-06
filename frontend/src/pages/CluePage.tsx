@@ -96,7 +96,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
   };
 
   return (
-    <div className="app-container" style={{ width: '100%', maxWidth: '500px', paddingBottom: '80px' }}>
+    <div className="app-container">
       {/* Top Header Row with Apparel Group Logo on Left & Official Brand Logo on Right */}
       <div style={{
         width: '100%',
