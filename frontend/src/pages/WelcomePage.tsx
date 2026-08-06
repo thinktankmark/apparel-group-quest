@@ -64,13 +64,13 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ onStart }) => {
               style={{ width: '100%', height: '140px', objectFit: 'cover' }}
             />
             <div style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '2px', textAlign: 'start' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', direction:'rtl', marginBottom: '2px', textAlign: 'start' }}>
                 ١. اتبع الأدلة.
               </div>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949', marginBottom: '8px', textAlign: 'start' }}>
                 1. Follow the clues.
               </div>
-              <div style={{ fontSize: '11px', color: '#D0DCF2', marginBottom: '2px', textAlign: 'start' }}>
+              <div style={{ fontSize: '11px', color: '#D0DCF2', marginBottom: '2px', direction:'rtl', textAlign: 'start' }}>
                 اكتشف الأدلة وقم بمسح رموز QR.
               </div>
               <div style={{ fontSize: '10.5px', color: '#9BB1DB', textAlign: 'start' }}>
@@ -113,13 +113,13 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ onStart }) => {
               style={{ width: '100%', height: '140px', objectFit: 'cover' }}
             />
             <div style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '2px', textAlign: 'start' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', direction:'rtl', marginBottom: '2px', textAlign: 'start' }}>
                 ٢. العب التحديات للحصول على أدلة جديدة.
               </div>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949', marginBottom: '8px', textAlign: 'start' }}>
                 2. Play the Challenges on your browser and get new clues.
               </div>
-              <div style={{ fontSize: '11px', color: '#D0DCF2', marginBottom: '2px', textAlign: 'start' }}>
+              <div style={{ fontSize: '11px', color: '#D0DCF2', direction:'rtl', marginBottom: '2px', textAlign: 'start' }}>
                 امسح رمز QR ولعب الألعاب على الهاتف لفتح أدلة جديدة.
               </div>
               <div style={{ fontSize: '10.5px', color: '#9BB1DB', textAlign: 'start' }}>
@@ -162,13 +162,13 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ onStart }) => {
               style={{ width: '100%', height: '140px', objectFit: 'cover' }}
             />
             <div style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '2px', textAlign: 'start' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', direction:'rtl', marginBottom: '2px', textAlign: 'start' }}>
                 ٣. أكمل جميع نقاط التحدي واستلم هديتك من جناحنا.
               </div>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949', marginBottom: '8px', textAlign: 'start' }}>
                 3. Complete the treasure hunt to get your gift.
               </div>
-              <div style={{ fontSize: '11px', color: '#D0DCF2', marginBottom: '2px', textAlign: 'start' }}>
+              <div style={{ fontSize: '11px', color: '#D0DCF2', direction:'rtl', marginBottom: '2px', textAlign: 'start' }}>
                 إنهاء التحديات وتوجّه للجناح لاستلام هديتك الحصرية.
               </div>
               <div style={{ fontSize: '10.5px', color: '#9BB1DB', textAlign: 'start' }}>
