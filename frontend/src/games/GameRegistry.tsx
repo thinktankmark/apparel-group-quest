@@ -12,17 +12,23 @@ interface GameHostProps {
 }
 
 export const GameHost: React.FC<GameHostProps> = ({ gameKey, onSuccess, onFailure, lang }) => {
-  switch (gameKey) {
-    case 'MEMORY_MATCH':
-      return <MemoryGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
-    case 'SHOE_XO':
-      return <XOGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
-    case 'HORSE_JUMP':
-    case 'POLO_JUMP':
-      return <HorseJumpGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
-    case 'SPEED_TAP':
-      return <SpeedTapGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
-    default:
-      return <MemoryGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
+  const normalizedKey = (gameKey || '').toUpperCase();
+
+  if (normalizedKey === 'MEMORY_MATCH' || normalizedKey === 'MEMORY') {
+    return <MemoryGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
   }
+
+  if (normalizedKey === 'TIC_TAC_TOE' || normalizedKey === 'XO_GAME' || normalizedKey === 'SHOE_XO' || normalizedKey === 'XO') {
+    return <XOGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
+  }
+
+  if (normalizedKey === 'HORSE_JUMP' || normalizedKey === 'POLO_JUMP' || normalizedKey === 'HORSE') {
+    return <HorseJumpGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
+  }
+
+  if (normalizedKey === 'SPEED_TAP' || normalizedKey === 'SPEED_SNEAKER_TAP' || normalizedKey === 'SPEED') {
+    return <SpeedTapGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
+  }
+
+  return <XOGame onSuccess={onSuccess} onFailure={onFailure} lang={lang} />;
 };

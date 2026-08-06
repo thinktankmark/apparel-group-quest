@@ -194,9 +194,21 @@ const AppContent: React.FC = () => {
         }}
         onStoreQrScanned={(storeCtx) => {
           setGameError(null);
-          logout(); // Force re-authentication on store scan
           setTargetQrContext(storeCtx);
-          setView('LOGIN');
+          if (token) {
+            const currentSeq = progress?.currentSequenceOrder || 1;
+            if (storeCtx.sequenceOrder === currentSeq) {
+              setView('GAME');
+            } else if (storeCtx.sequenceOrder < currentSeq) {
+              setGameError("⚠️ لقد أكملت هذا الموقع بالفعل. / You have already completed this location.");
+              setView('CLUE');
+            } else {
+              setGameError("⚠️ لم تقم بفتح هذا الموقع بعد. / You haven't unlocked this location yet.");
+              setView('CLUE');
+            }
+          } else {
+            setView('LOGIN');
+          }
         }}
         onAdminTestPreview={(testView, stationNum) => {
           setGameError(null);
