@@ -83,7 +83,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'space-between', position: 'relative' }}>
       {/* Floating Error Toast */}
       {gameError && (
         <div style={{
