@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FinalVictoryModal } from '../components/FinalVictoryModal';
+import { GameVictoryScreen } from '../components/GameVictoryScreen';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -11,10 +11,11 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [tappedCount, setTappedCount] = useState<number>(0);
   const [targetCount] = useState<number>(25); // Target set to 25
   const [activePosition, setActivePosition] = useState<{ top: number; left: number }>({ top: 100, left: 100 });
-  const [showWinModal, setShowWinModal] = useState<boolean>(false);
+  const [isWon, setIsWon] = useState<boolean>(false);
 
   useEffect(() => {
     const moveSneaker = () => {
+      if (isWon) return;
       const top = Math.floor(Math.random() * 180) + 20;
       const left = Math.floor(Math.random() * 240) + 20;
       setActivePosition({ top, left });
@@ -22,15 +23,15 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
 
     const interval = setInterval(moveSneaker, 750);
     return () => clearInterval(interval);
-  }, []);
+  }, [isWon]);
 
   const handleSneakerTap = () => {
-    if (showWinModal) return;
+    if (isWon) return;
 
     setTappedCount(prev => {
       const next = prev + 1;
       if (next >= targetCount) {
-        setShowWinModal(true);
+        setIsWon(true);
       }
       return next;
     });
@@ -41,11 +42,27 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
     });
   };
 
+  if (isWon) {
+    return (
+      <GameVictoryScreen
+        gameTitleAr="النقرات السريعة للأحذية"
+        gameTitleEn="Speed Sneaker Tap"
+        scoreTextAr={`${tappedCount}/ ${targetCount} أحذية`}
+        scoreTextEn={`${tappedCount}/ ${targetCount} Sneakers Tapped`}
+        subtitleAr="نقرات سريعة ورائعة! أكملت التحدي الأخير لرحلة الكنز."
+        subtitleEn="Lightning fast taps! You completed the final challenge of the quest."
+        centerEmoji="⚡ 🏆 ✨"
+        isFinalStage={true}
+        onContinue={() => onSuccess(tappedCount, 20)}
+      />
+    );
+  }
+
   return (
     <div className="app-container" style={{ width: '100%', paddingBottom: '70px' }}>
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
-        <h2 className="title-ar">حذاء سريع</h2>
-        <p className="subtitle-en">Fast Shoe</p>
+        <h2 className="title-ar">النقرات السريعة للأحذية</h2>
+        <p className="subtitle-en">Speed Sneaker Tap</p>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
           انقر على الأحذية الظاهرة بسرعة! / Tap the appearing sneakers quickly!
         </p>
@@ -95,13 +112,6 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
           👟
         </button>
       </div>
-
-      {/* Final Victory Modal matching VictoryPage design & content */}
-      {showWinModal && (
-        <FinalVictoryModal
-          onContinue={() => onSuccess(tappedCount, 20)}
-        />
-      )}
     </div>
   );
 };
