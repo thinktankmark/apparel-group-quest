@@ -133,6 +133,14 @@ const AppContent: React.FC = () => {
     };
   };
 
+  const getGameKeyForView = () => {
+    if (targetQrContext?.gameKey) return targetQrContext.gameKey;
+    if (activeClue?.gameKey) return activeClue.gameKey;
+    const seq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
+    const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
+    return gameKeys[Math.min(Math.max(seq - 1, 0), 3)];
+  };
+
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
       {/* Floating Error Toast */}
@@ -258,7 +266,7 @@ const AppContent: React.FC = () => {
       {view === 'GAME' && (
         <div className="app-container" style={{ width: '100%' }}>
           <GameHost
-            gameKey={targetQrContext?.gameKey || activeClue?.gameKey || 'MEMORY_MATCH'}
+            gameKey={getGameKeyForView()}
             onSuccess={handleGameSuccess}
             onFailure={handleGameFailure}
             lang="ar"
