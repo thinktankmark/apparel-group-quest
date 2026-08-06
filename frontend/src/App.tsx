@@ -8,6 +8,45 @@ import { VictoryPage } from './pages/VictoryPage';
 import { GameHost } from './games/GameRegistry';
 import { ScanHandler } from './pages/ScanHandler';
 
+const STORES_LIST = [
+  {
+    id: 'store-skechers',
+    nameAr: 'فرع سكتشرز',
+    nameEn: 'Skechers Store',
+    stationCode: 'SKECHERS',
+    heroImageUrl: '34d55b61686498bafee0e7b9cd22896b69575b91',
+    locationTextAr: 'محطة فرع سكتشرز',
+    locationTextEn: 'Skechers Store Station'
+  },
+  {
+    id: 'store-aco',
+    nameAr: 'فرع أكو',
+    nameEn: 'ACO Store',
+    stationCode: 'ACO',
+    heroImageUrl: 'cca4f63abe8d7095ba2e58420d30d9f620dcac66',
+    locationTextAr: 'محطة فرع أكو',
+    locationTextEn: 'ACO Store Station'
+  },
+  {
+    id: 'store-bhpc',
+    nameAr: 'فرع نادي بيفرلي هيلز للبولو',
+    nameEn: 'BHPC Store',
+    stationCode: 'BHPC',
+    heroImageUrl: '264ac2a5b7a7381daed7e2020fedd3bf698ed358',
+    locationTextAr: 'محطة فرع نادي بيفرلي هيلز للبولو',
+    locationTextEn: 'BHPC Store Station'
+  },
+  {
+    id: 'store-steve-madden',
+    nameAr: 'فرع ستيف مادن',
+    nameEn: 'Steve Madden Store',
+    stationCode: 'STEVE_MADDEN',
+    heroImageUrl: '6b71cb2867429c6763e78bf41f798068e6c6129a',
+    locationTextAr: 'محطة فرع ستيف مادن',
+    locationTextEn: 'Steve Madden Store Station'
+  }
+];
+
 const AppContent: React.FC = () => {
   const { token, player, progress, activeClue, targetQrContext, completeStage, setTargetQrContext, logout } = useAuth();
   const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'VICTORY'>('SIGNUP');
@@ -82,6 +121,18 @@ const AppContent: React.FC = () => {
     setView('LOGIN');
   };
 
+  const getClueForView = () => {
+    if (activeClue) return activeClue;
+    const seq = targetQrContext?.sequenceOrder || 1;
+    const store = STORES_LIST[Math.min(Math.max(seq - 1, 0), 3)];
+    const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
+    return {
+      sequenceOrder: seq,
+      gameKey: targetQrContext?.gameKey || gameKeys[Math.min(Math.max(seq - 1, 0), 3)],
+      store
+    };
+  };
+
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
       {/* Floating Error Toast */}
@@ -143,7 +194,7 @@ const AppContent: React.FC = () => {
           else if (v === 'VICTORY') setView('VICTORY');
           else if (v === 'GAME' || v === 'CLUE') {
             const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
-            const gameKey = gameKeys[Math.min(stationNum - 1, 3)];
+            const gameKey = gameKeys[Math.min(Math.max(stationNum - 1, 0), 3)];
             setTargetQrContext({ storeId: `store-test-${stationNum}`, sequenceOrder: stationNum, gameKey });
             setView(v as any);
           }
@@ -155,7 +206,7 @@ const AppContent: React.FC = () => {
         <SignupPage
           lang="ar"
           onSignupSuccess={() => { setGameError(null); setView('WELCOME'); }}
-          onGoToLogin={() => { setGameError(null); setView('LOGIN'); }}
+          onGoToLogin={() => { setGameError(null); setView('SIGNUP'); }}
         />
       )}
 
@@ -192,22 +243,10 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {view === 'CLUE' && (activeClue || targetQrContext) && (
+      {view === 'CLUE' && (
         <CluePage
           lang="ar"
-          activeClue={activeClue || {
-            sequenceOrder: targetQrContext?.sequenceOrder || 1,
-            gameKey: targetQrContext?.gameKey || 'MEMORY_MATCH',
-            store: {
-              id: 'store-skechers',
-              nameAr: 'فرع سكتشرز',
-              nameEn: 'Skechers Store',
-              stationCode: 'SKECHERS',
-              heroImageUrl: '34d55b61686498bafee0e7b9cd22896b69575b91',
-              locationTextAr: 'محطة فرع سكتشرز',
-              locationTextEn: 'Skechers Store Station'
-            }
-          }}
+          activeClue={getClueForView()}
           onScanStoreQr={(storeCtx) => {
             setGameError(null);
             setTargetQrContext(storeCtx);
