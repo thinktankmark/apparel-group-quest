@@ -25,7 +25,7 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
   isFinalStage = false
 }) => {
   return (
-    <div className="app-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '0px' }}>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Header Logo */}
       <HeaderLogo />
 

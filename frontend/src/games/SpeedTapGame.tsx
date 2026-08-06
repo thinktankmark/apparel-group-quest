@@ -59,7 +59,7 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
   }
 
   return (
-    <div className="app-container" style={{ width: '100%', paddingBottom: '70px' }}>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">النقرات السريعة للأحذية</h2>
         <p className="subtitle-en">Speed Sneaker Tap</p>
