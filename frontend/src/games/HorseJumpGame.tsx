@@ -145,12 +145,12 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         }
       }
 
-      // Visual DOM Updates
+      // Visual DOM Updates with Horizontally Flipped Horse (facing RIGHT)
       const horseEl = document.getElementById('horse-runner-element');
       const obstacleEl = document.getElementById('obstacle-runner-element');
 
       if (horseEl) {
-        horseEl.style.transform = `translate(${s.horseX}px, ${-s.horseY}px)`;
+        horseEl.style.transform = `translate(${s.horseX}px, ${-s.horseY}px) scaleX(-1)`;
       }
       if (obstacleEl) {
         obstacleEl.style.left = `${s.obstaclePos}%`;
@@ -262,7 +262,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
               padding: '20px'
             }}
           >
-            <div style={{ fontSize: '54px', marginBottom: '12px' }}>🐎 🏁</div>
+            <div style={{ fontSize: '54px', marginBottom: '12px', transform: 'scaleX(-1)' }}>🐎</div>
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '6px', textAlign: 'center' }}>
               انقر في أي مكان لبدء اللعبة!
             </h2>
@@ -298,7 +298,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           }} />
         </div>
 
-        {/* Horse Character Element */}
+        {/* Horse Character Element (Flipped horizontally to face RIGHT) */}
         <div
           id="horse-runner-element"
           style={{
@@ -309,7 +309,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             lineHeight: 1,
             zIndex: 10,
             transition: 'none',
-            transform: 'translate(60px, 0px)',
+            transform: 'translate(60px, 0px) scaleX(-1)',
             filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))'
           }}
         >
