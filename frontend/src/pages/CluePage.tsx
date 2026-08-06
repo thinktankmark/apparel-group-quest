@@ -36,30 +36,23 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
 
     return (
       <div style={{
-        background: '#041B4E',
-        border: '1.5px solid #35589A',
-        borderRadius: '10px',
-        padding: '6px 12px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '44px',
-        maxWidth: '48%',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
         flexShrink: 0
       }}>
         {isBhpc && (
           <img
             src="/assets/polo-logo.png"
             alt="Beverly Hills Polo Club"
-            style={{ height: '32px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
         {!isBhpc && isAco && (
           <img
             src="/assets/aco-logo.png"
             alt="Beverly Hills Polo Club"
-            style={{ height: '32px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
           // <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
           //   <span style={{ fontSize: '18px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.5px' }}>
@@ -74,14 +67,14 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
           <img
             src="/assets/skechers-logo.png"
             alt="Skechers"
-            style={{ height: '22px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
         {!isBhpc && !isAco && !isSkechers && isSteveMadden && (
           <img
             src="/assets/steve-madden-logo.png"
             alt="Steve Madden"
-            style={{ height: '20px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
       </div>
