@@ -9,7 +9,7 @@ interface VictoryPageProps {
 
 export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
   return (
-    <div className="app-container" style={{ width: '100%', maxWidth: '500px' }}>
+    <div className="app-container">
       <HeaderLogo />
 
       {/* Arabic Headline (Gold) */}
@@ -42,6 +42,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         fontSize: '16px',
         fontWeight: 700,
         color: '#FEC949',
+        direction: 'ltr',
         textAlign: 'center',
         marginBottom: '4px',
         lineHeight: 1.3
@@ -54,6 +55,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         fontSize: '13px',
         fontWeight: 400,
         color: '#FFFFFF',
+        direction: 'ltr',
         textAlign: 'center',
         marginBottom: '24px',
         lineHeight: 1.4,
@@ -112,7 +114,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
           <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px' }}>
             🎁 جوائز فورية وقسائم شراء حصرية بانتظارك!
           </p>
-          <p style={{ fontSize: '12px', fontWeight: 500, color: '#9BB1DB' }}>
+          <p style={{ fontSize: '12px', fontWeight: 500, color: '#9BB1DB', direction: 'ltr'}}>
             Instant prizes & exclusive vouchers await you!
           </p>
         </div>
