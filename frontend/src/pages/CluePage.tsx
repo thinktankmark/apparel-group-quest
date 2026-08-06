@@ -164,7 +164,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             fontWeight: 700,
             textAlign: 'center'
           }}>
-            <span style={{ flexShrink: '0' }}>📍 </span><span dir="auto"> {store?.locationTextAr || ''} • {store?.locationTextEn || ''}</span>
+            📍 {store?.locationTextAr || ''} • {store?.locationTextEn || ''}
           </div>
         </div>
 
