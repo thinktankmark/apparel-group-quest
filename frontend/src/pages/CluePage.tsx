@@ -153,7 +153,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
         </div>
 
         {/* Location Badge Pill */}
-        <div style={{ padding: '0 16px', marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ padding: '0 16px', marginTop: '12px', direction: 'rtl', display: 'flex', gap:'3px', justifyContent: 'center' }}>
           <div style={{
             background: 'rgba(4, 27, 78, 0.9)',
             border: '1px solid #FEC949',
@@ -165,7 +165,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             fontWeight: 700,
             textAlign: 'center'
           }}>
-            📍 <div>{store?.locationTextAr || ''} • {store?.locationTextEn || ''}</div>
+            📍 <div style={{ direction: 'rtl' }}>{store?.locationTextAr || ''} • {store?.locationTextEn || ''}</div>
           </div>
         </div>
 
