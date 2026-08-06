@@ -61,8 +61,8 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
-      {/* Header Logo */}
-      <HeaderLogo sequenceOrder={4} />
+      {/* Single Header Logo */}
+      <HeaderLogo />
 
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">النقرات السريعة للأحذية</h2>

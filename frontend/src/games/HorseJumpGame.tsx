@@ -205,8 +205,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         WebkitUserSelect: 'none'
       }}
     >
-      {/* Header Logo */}
-      <HeaderLogo sequenceOrder={3} />
+      {/* Single Header Logo */}
+      <HeaderLogo />
 
       {/* Title */}
       <h1 className="title-ar">سباق قفز البولو</h1>
