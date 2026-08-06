@@ -159,12 +159,13 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             border: '1px solid #FEC949',
             borderRadius: '20px',
             padding: '5px 14px',
+            direction: 'ltr',
             color: '#FEC949',
             fontSize: '11.5px',
             fontWeight: 700,
             textAlign: 'center'
           }}>
-            📍 {store?.locationTextAr || ''} • {store?.locationTextEn || ''}
+            📍 <div>{store?.locationTextAr || ''} • {store?.locationTextEn || ''}</div>
           </div>
         </div>
 
