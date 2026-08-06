@@ -27,8 +27,8 @@ const memoryStore = {
       station_code: 'MAIN_BOOTH',
       is_main_booth: true,
       hero_image_url: '7079890257a17cd0d8ca3d93a919734a6125a264',
-      location_text_ar: '📍 قاعة المعرض ٣ • جناح #A-12',
-      location_text_en: '📍 Exhibition Hall 3 • Booth #A-12'
+      location_text_ar: 'قاعة المعرض ٣ • جناح #A-12',
+      location_text_en: 'Exhibition Hall 3 • Booth #A-12'
     },
     {
       id: 'store-skechers',
@@ -38,8 +38,8 @@ const memoryStore = {
       station_code: 'SKECHERS',
       is_main_booth: false,
       hero_image_url: '34d55b61686498bafee0e7b9cd22896b69575b91',
-      location_text_ar: '📍 محطة فرع سكتشرز',
-      location_text_en: '📍 Skechers Store Station'
+      location_text_ar: 'محطة فرع سكتشرز',
+      location_text_en: 'Skechers Store Station'
     },
     {
       id: 'store-aco',
@@ -49,8 +49,8 @@ const memoryStore = {
       station_code: 'ACO',
       is_main_booth: false,
       hero_image_url: 'cca4f63abe8d7095ba2e58420d30d9f620dcac66',
-      location_text_ar: '📍 محطة فرع أكو',
-      location_text_en: '📍 ACO Store Station'
+      location_text_ar: 'محطة فرع أكو',
+      location_text_en: 'ACO Store Station'
     },
     {
       id: 'store-bhpc',
@@ -60,8 +60,8 @@ const memoryStore = {
       station_code: 'BHPC',
       is_main_booth: false,
       hero_image_url: '264ac2a5b7a7381daed7e2020fedd3bf698ed358',
-      location_text_ar: '📍 محطة فرع نادي بيفرلي هيلز للبولو',
-      location_text_en: '📍 BHPC Store Station'
+      location_text_ar: 'محطة فرع نادي بيفرلي هيلز للبولو',
+      location_text_en: 'BHPC Store Station'
     },
     {
       id: 'store-steve-madden',
@@ -71,51 +71,51 @@ const memoryStore = {
       station_code: 'STEVE_MADDEN',
       is_main_booth: false,
       hero_image_url: '6b71cb2867429c6763e78bf41f798068e6c6129a',
-      location_text_ar: '📍 محطة فرع ستيف مادن',
-      location_text_en: '📍 Steve Madden Store Station'
+      location_text_ar: 'محطة فرع ستيف مادن',
+      location_text_en: 'Steve Madden Store Station'
     }
   ],
   sequence: [
     {
       id: 'seq-1',
       event_id: 'event-001',
-      store_id: 'store-skechers',
       sequence_order: 1,
+      store_id: 'store-skechers',
       game_key: 'MEMORY_MATCH',
       qr_token: 'token-skechers-seq-1',
-      qr_signed_jwt: jwt.sign({ storeId: 'store-skechers', sequenceOrder: 1, isMainBooth: false, eventId: 'event-001' }, JWT_SECRET)
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 1, storeId: 'store-skechers', gameKey: 'MEMORY_MATCH' }, JWT_SECRET)
     },
     {
       id: 'seq-2',
       event_id: 'event-001',
-      store_id: 'store-aco',
       sequence_order: 2,
-      game_key: 'SHOE_XO',
+      store_id: 'store-aco',
+      game_key: 'TIC_TAC_TOE',
       qr_token: 'token-aco-seq-2',
-      qr_signed_jwt: jwt.sign({ storeId: 'store-aco', sequenceOrder: 2, isMainBooth: false, eventId: 'event-001' }, JWT_SECRET)
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 2, storeId: 'store-aco', gameKey: 'TIC_TAC_TOE' }, JWT_SECRET)
     },
     {
       id: 'seq-3',
       event_id: 'event-001',
-      store_id: 'store-bhpc',
       sequence_order: 3,
+      store_id: 'store-bhpc',
       game_key: 'HORSE_JUMP',
       qr_token: 'token-bhpc-seq-3',
-      qr_signed_jwt: jwt.sign({ storeId: 'store-bhpc', sequenceOrder: 3, isMainBooth: false, eventId: 'event-001' }, JWT_SECRET)
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 3, storeId: 'store-bhpc', gameKey: 'HORSE_JUMP' }, JWT_SECRET)
     },
     {
       id: 'seq-4',
       event_id: 'event-001',
-      store_id: 'store-steve-madden',
       sequence_order: 4,
+      store_id: 'store-steve-madden',
       game_key: 'SPEED_TAP',
-      qr_token: 'token-stevemadden-seq-4',
-      qr_signed_jwt: jwt.sign({ storeId: 'store-steve-madden', sequenceOrder: 4, isMainBooth: false, eventId: 'event-001' }, JWT_SECRET)
+      qr_token: 'token-steve-seq-4',
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 4, storeId: 'store-steve-madden', gameKey: 'SPEED_TAP' }, JWT_SECRET)
     }
   ],
   mainBoothQr: {
     token: 'token-main-booth',
-    qr_signed_jwt: jwt.sign({ storeId: 'store-main-booth', isMainBooth: true, eventId: 'event-001' }, JWT_SECRET)
+    qr_signed_jwt: jwt.sign({ sequenceOrder: 0, storeId: 'store-main-booth', gameKey: 'REGISTRATION' }, JWT_SECRET)
   },
   players: [],
   progress: [],
@@ -126,48 +126,57 @@ const memoryStore = {
       id: 'admin-001',
       username: 'admin',
       password_hash: 'admin123',
-      role: 'SUPER_ADMIN',
-      created_at: new Date().toISOString()
+      role: 'SUPER_ADMIN'
     }
   ],
   auditLogs: []
 };
 
-// Load Persistent Store from Disk on Startup
+// Persistence Handlers
 function loadStoreFromFile() {
   try {
     if (fs.existsSync(DATA_FILE)) {
-      const data = fs.readFileSync(DATA_FILE, 'utf8');
-      const parsed = JSON.parse(data);
-      if (parsed.players) memoryStore.players = parsed.players;
-      if (parsed.progress) memoryStore.progress = parsed.progress;
-      if (parsed.attempts) memoryStore.attempts = parsed.attempts;
-      if (parsed.prizeCollections) memoryStore.prizeCollections = parsed.prizeCollections;
-      if (parsed.auditLogs) memoryStore.auditLogs = parsed.auditLogs;
-      console.log(`💾 Loaded persistent store from disk: ${memoryStore.players.length} registered players.`);
+      const fileData = fs.readFileSync(DATA_FILE, 'utf8');
+      const json = JSON.parse(fileData);
+
+      if (json.players) memoryStore.players = json.players;
+      if (json.progress) memoryStore.progress = json.progress;
+      if (json.attempts) memoryStore.attempts = json.attempts;
+      if (json.prizeCollections) memoryStore.prizeCollections = json.prizeCollections;
+      if (json.auditLogs) memoryStore.auditLogs = json.auditLogs;
+
+      // Clean up any residual location pin emojis in persistent store
+      if (memoryStore.stores) {
+        memoryStore.stores.forEach(st => {
+          if (st.location_text_ar) st.location_text_ar = st.location_text_ar.replace(/^📍\s*/, '');
+          if (st.location_text_en) st.location_text_en = st.location_text_en.replace(/^📍\s*/, '');
+        });
+      }
+
+      console.log(`💾 Persisted database loaded successfully (${memoryStore.players.length} players).`);
     }
   } catch (err) {
-    console.error('⚠️ Error loading persistent store file:', err.message);
+    console.error('⚠️ Warning reading persistent_store.json:', err.message);
   }
 }
 
-// Save Persistent Store to Disk
 function saveStoreToFile() {
   try {
-    const toSave = {
+    const dataToSave = {
       players: memoryStore.players,
       progress: memoryStore.progress,
       attempts: memoryStore.attempts,
       prizeCollections: memoryStore.prizeCollections,
-      auditLogs: memoryStore.auditLogs
+      auditLogs: memoryStore.auditLogs,
+      stores: memoryStore.stores
     };
-    fs.writeFileSync(DATA_FILE, JSON.stringify(toSave, null, 2), 'utf8');
+    fs.writeFileSync(DATA_FILE, JSON.stringify(dataToSave, null, 2), 'utf8');
   } catch (err) {
-    console.error('⚠️ Error saving persistent store file:', err.message);
+    console.error('⚠️ Warning writing persistent_store.json:', err.message);
   }
 }
 
-// Auto Load on Module Require
+// Load disk state on startup
 loadStoreFromFile();
 
 module.exports = {
