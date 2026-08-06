@@ -45,7 +45,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
           <img
             src="/assets/polo-logo.png"
             alt="Beverly Hills Polo Club"
-            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ maxWidth: '190px', objectFit: 'contain', display: 'block' }}
           />
         )}
         {!isBhpc && isAco && (
