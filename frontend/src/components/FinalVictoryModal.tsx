@@ -7,22 +7,39 @@ interface FinalVictoryModalProps {
 
 export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue }) => {
   return (
-    <div className="modal-overlay" style={{ padding: '16px', overflowY: 'auto' }}>
-      <div className="modal-card" style={{
-        maxWidth: '460px',
-        padding: '24px 18px',
-        background: '#0B193C',
-        border: '2px solid #FEC949',
-        borderRadius: '24px',
-        maxHeight: '90vh',
-        overflowY: 'auto'
+    <div className="modal-overlay" style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      padding: 0,
+      background: 'rgba(3, 37, 126, 0.98)',
+      backdropFilter: 'blur(10px)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      zIndex: 100000,
+      overflowY: 'auto'
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '500px',
+        padding: '60px 20px 20px 20px',
+        background: 'transparent',
+        border: 'none',
+        boxShadow: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        boxSizing: 'border-box'
       }}>
         {/* Top Header Logo */}
         <HeaderLogo />
 
         {/* Arabic Headline (Gold) */}
         <h1 style={{
-          fontSize: '19px',
+          fontSize: '20px',
           fontWeight: 800,
           color: '#FEC949',
           textAlign: 'center',
@@ -34,19 +51,20 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
 
         {/* Arabic Subtitle (White) */}
         <p style={{
-          fontSize: '13px',
+          fontSize: '13.5px',
           fontWeight: 500,
           color: '#FFFFFF',
           textAlign: 'center',
-          marginBottom: '16px',
-          lineHeight: 1.4
+          marginBottom: '20px',
+          lineHeight: 1.4,
+          maxWidth: '440px'
         }}>
           تفضل بزيارة جناح مجموعة أباريل لتدوير العجلة والحصول على جائزتك!
         </p>
 
         {/* English Headline (Gold) */}
         <h2 style={{
-          fontSize: '15px',
+          fontSize: '16px',
           fontWeight: 700,
           color: '#FEC949',
           textAlign: 'center',
@@ -58,12 +76,13 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
 
         {/* English Subtitle (White) */}
         <p style={{
-          fontSize: '12.5px',
+          fontSize: '13px',
           fontWeight: 400,
           color: '#FFFFFF',
           textAlign: 'center',
-          marginBottom: '20px',
-          lineHeight: 1.4
+          marginBottom: '24px',
+          lineHeight: 1.4,
+          maxWidth: '440px'
         }}>
           Meet us at the Apparel Group booth to spin the wheel and get your prize!
         </p>
@@ -73,26 +92,26 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
           width: '100%',
           background: 'rgba(13, 35, 87, 0.95)',
           border: '1.5px solid #35589A',
-          borderRadius: '20px',
-          padding: '14px',
+          borderRadius: '24px',
+          padding: '16px',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
           backdropFilter: 'blur(8px)',
-          marginBottom: '20px',
+          marginBottom: '24px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
         }}>
           {/* Main Booth Photo */}
-          <div style={{ width: '100%', overflow: 'hidden', borderRadius: '14px', marginBottom: '14px' }}>
+          <div style={{ width: '100%', overflow: 'hidden', borderRadius: '16px', marginBottom: '16px' }}>
             <img
               src="/assets/step3.png"
               alt="Apparel Group Main Booth"
               style={{
                 width: '100%',
-                height: '180px',
+                height: '210px',
                 objectFit: 'cover',
                 display: 'block',
-                borderRadius: '14px'
+                borderRadius: '16px'
               }}
             />
           </div>
@@ -102,30 +121,30 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
             background: '#041B4E',
             border: '1.5px solid #FEC949',
             borderRadius: '30px',
-            padding: '6px 16px',
-            marginBottom: '12px',
+            padding: '8px 20px',
+            marginBottom: '16px',
             display: 'flex',
             alignItems: 'center',
             gap: '6px'
           }}>
-            <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#FEC949' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949' }}>
               📍 Apparel Group Main Booth • جناح مجموعة أباريل
             </span>
           </div>
 
           {/* Card Footer Text */}
-          <div style={{ textAlign: 'center', padding: '0 4px' }}>
-            <p style={{ fontSize: '12.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '2px' }}>
+          <div style={{ textAlign: 'center', padding: '0 8px' }}>
+            <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px' }}>
               🎁 جوائز فورية وقسائم شراء حصرية بانتظارك!
             </p>
-            <p style={{ fontSize: '11px', fontWeight: 500, color: '#9BB1DB' }}>
+            <p style={{ fontSize: '12px', fontWeight: 500, color: '#9BB1DB' }}>
               Instant prizes & exclusive vouchers await you!
             </p>
           </div>
         </div>
 
         {/* View Final Result Yellow CTA Button */}
-        <button className="btn-primary" onClick={onContinue} style={{ width: '100%' }}>
+        <button className="btn-primary" onClick={onContinue} style={{ width: '100%', marginBottom: '24px' }}>
           <span className="text-ar">عرض النتيجة النهائية</span>
           <span className="text-en">VIEW FINAL RESULT</span>
         </button>
