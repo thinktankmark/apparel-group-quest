@@ -65,6 +65,7 @@ body {
 .title-ar {
   font-size: 20px;
   font-weight: 800;
+  direction:rtl;
   color: var(--color-accent-gold);
   text-align: center;
   margin-bottom: 6px;
@@ -74,6 +75,7 @@ body {
 .subtitle-en {
   font-size: 13.5px;
   font-weight: 500;
+  direction:ltr;
   color: var(--color-text-secondary);
   text-align: center;
   margin-bottom: 24px;

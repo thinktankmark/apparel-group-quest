@@ -184,10 +184,10 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
 
         {/* Text Content matching Figma */}
         <div style={{ padding: '20px 16px', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px', lineHeight: 1.4 }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, direction:'rtl', color: '#FEC949', marginBottom: '4px', lineHeight: 1.4 }}>
             تفضل بزيارة فرع {store?.nameAr || ''}<br />للحصول على دليلك {getClueOrdinalAr(sequenceOrder)}!
           </h2>
-          <h3 style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF', marginBottom: '16px', lineHeight: 1.4 }}>
+          <h3 style={{ fontSize: '13.5px', fontWeight: 700, direction:'ltr', color: '#FFFFFF', marginBottom: '16px', lineHeight: 1.4 }}>
             Meet us at {store?.nameEn || ''}<br />to get your {getClueOrdinalEn(sequenceOrder)} clue.
           </h3>
         </div>
