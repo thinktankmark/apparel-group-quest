@@ -18,6 +18,15 @@ export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, on
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
+    const viewParam = params.get('view') || params.get('page');
+    const pathName = window.location.pathname.toLowerCase();
+
+    // Direct link to instructions page
+    if (viewParam === 'welcome' || viewParam === 'instructions' || pathName.includes('welcome') || pathName.includes('instructions')) {
+      setLoading(false);
+      onMainBoothScanned();
+      return;
+    }
 
     if (!token) {
       setLoading(false);
@@ -48,27 +57,33 @@ export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, on
       })
       .catch(err => {
         setLoading(false);
-        setError('Network error validating QR token.');
+        setError(err.message || 'Error validating QR token');
       });
   }, []);
 
-  if (loading) {
-    return (
-      <div className="app-container" style={{ justifyContent: 'center' }}>
-        <p style={{ fontSize: '14px', color: '#FEC949', fontWeight: 700 }}>🔍 Validating venue QR code...</p>
-      </div>
-    );
-  }
+  if (!loading && !error) return null;
 
-  if (error) {
-    return (
-      <div className="app-container" style={{ justifyContent: 'center' }}>
-        <div className="error-banner" style={{ textAlign: 'center' }}>
-          ⚠️ {error}
-        </div>
+  return (
+    <div className="modal-overlay">
+      <div className="modal-card">
+        {loading && (
+          <>
+            <span style={{ fontSize: '36px', marginBottom: '12px', animation: 'spin 1s linear infinite' }}>⏳</span>
+            <p style={{ fontSize: '13px', color: '#FEC949', fontWeight: 700 }}>جاري التحقق... / Validating QR Code...</p>
+          </>
+        )}
+        {error && (
+          <>
+            <span style={{ fontSize: '42px', marginBottom: '12px' }}>⚠️</span>
+            <h2 style={{ fontSize: '16px', color: '#FF5252', marginBottom: '8px' }}>رمز غير صالح / Invalid Code</h2>
+            <p style={{ fontSize: '12px', color: '#FFFFFF', marginBottom: '20px' }}>{error}</p>
+            <button className="btn-primary" onClick={() => setError(null)}>
+              <span className="text-ar">إغلاق</span>
+              <span className="text-en">CLOSE</span>
+            </button>
+          </>
+        )}
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 };
