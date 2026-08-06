@@ -11,26 +11,28 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
   const { store, sequenceOrder } = activeClue;
 
   // Storefront images mapping
-  const getStoreImage = (code: string, nameEn: string = '') => {
+  const getStoreImage = (code: string = '', nameEn: string = '', storeId: string = '', seqOrder: number = 1) => {
     const codeUpper = (code || '').toUpperCase();
     const nameUpper = (nameEn || '').toUpperCase();
+    const idUpper = (storeId || '').toUpperCase();
 
-    if (codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC')) return '/assets/polo-store.png';
-    if (codeUpper === 'ACO' || nameUpper.includes('ACO')) return '/assets/aco-store.png';
-    if (codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE')) return '/assets/steve-madden-store.png';
-    if (codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS')) return '/assets/skechers-store.png';
-    return '/assets/skechers-store.png';
+    if (seqOrder === 3 || codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC') || idUpper.includes('BHPC')) return '/assets/polo-store.png';
+    if (seqOrder === 2 || codeUpper === 'ACO' || nameUpper.includes('ACO') || idUpper.includes('ACO')) return '/assets/aco-store.png';
+    if (seqOrder === 4 || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE') || idUpper.includes('STEVE')) return '/assets/steve-madden-store.png';
+    if (seqOrder === 1 || codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS') || idUpper.includes('SKECHERS')) return '/assets/skechers-store.png';
+    return '/assets/polo-store.png';
   };
 
   // Render Official Uploaded Brand Logo PNGs
-  const renderStoreLogo = (code: string, nameEn: string = '') => {
+  const renderStoreLogo = (code: string = '', nameEn: string = '', storeId: string = '', seqOrder: number = 1) => {
     const codeUpper = (code || '').toUpperCase();
     const nameUpper = (nameEn || '').toUpperCase();
+    const idUpper = (storeId || '').toUpperCase();
 
-    const isBhpc = codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC');
-    const isAco = codeUpper === 'ACO' || nameUpper.includes('ACO');
-    const isSkechers = codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS');
-    const isSteveMadden = codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE');
+    const isBhpc = seqOrder === 3 || codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC') || nameUpper.includes('BEVERLY') || idUpper.includes('BHPC');
+    const isAco = seqOrder === 2 || codeUpper === 'ACO' || nameUpper.includes('ACO') || idUpper.includes('ACO');
+    const isSkechers = seqOrder === 1 || codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS') || idUpper.includes('SKECHERS');
+    const isSteveMadden = seqOrder === 4 || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE') || idUpper.includes('STEVE');
 
     return (
       <div style={{
@@ -50,10 +52,10 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
           <img
             src="/assets/polo-logo.png"
             alt="Beverly Hills Polo Club"
-            style={{ height: '30px', maxWidth: '100%', objectFit: 'contain' }}
+            style={{ height: '32px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
-        {isAco && (
+        {!isBhpc && isAco && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
             <span style={{ fontSize: '18px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.5px' }}>
               ΔCO.
@@ -63,24 +65,19 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             </span>
           </div>
         )}
-        {isSkechers && (
+        {!isBhpc && !isAco && isSkechers && (
           <img
             src="/assets/skechers-logo.png"
             alt="Skechers"
-            style={{ height: '22px', maxWidth: '100%', objectFit: 'contain' }}
+            style={{ height: '22px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
-        {isSteveMadden && (
+        {!isBhpc && !isAco && !isSkechers && isSteveMadden && (
           <img
             src="/assets/steve-madden-logo.png"
             alt="Steve Madden"
-            style={{ height: '20px', maxWidth: '100%', objectFit: 'contain' }}
+            style={{ height: '20px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
-        )}
-        {!isBhpc && !isAco && !isSkechers && !isSteveMadden && (
-          <span style={{ fontSize: '13px', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap' }}>
-            {nameEn}
-          </span>
         )}
       </div>
     );
@@ -135,7 +132,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
         </div>
 
         {/* Right: Official Store Brand Logo Container */}
-        {renderStoreLogo(store.stationCode, store.nameEn)}
+        {renderStoreLogo(store?.stationCode, store?.nameEn, store?.id, sequenceOrder)}
       </div>
 
       {/* Main Store Station Card */}
@@ -152,8 +149,8 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
         {/* Storefront Image */}
         <div style={{ width: '100%', position: 'relative', overflow: 'hidden', padding: '12px 12px 0 12px' }}>
           <img
-            src={getStoreImage(store.stationCode, store.nameEn)}
-            alt={store.nameEn}
+            src={getStoreImage(store?.stationCode, store?.nameEn, store?.id, sequenceOrder)}
+            alt={store?.nameEn || 'Store'}
             style={{
               width: '100%',
               height: '190px',
@@ -176,25 +173,25 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             fontWeight: 700,
             textAlign: 'center'
           }}>
-            📍 {store.locationTextAr} • {store.locationTextEn}
+            📍 {store?.locationTextAr || ''} • {store?.locationTextEn || ''}
           </div>
         </div>
 
         {/* Text Content matching Figma */}
         <div style={{ padding: '20px 16px', textAlign: 'center' }}>
           <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px', lineHeight: 1.4 }}>
-            تفضل بزيارة فرع {store.nameAr}<br />للحصول على دليلك {getClueOrdinalAr(sequenceOrder)}!
+            تفضل بزيارة فرع {store?.nameAr || ''}<br />للحصول على دليلك {getClueOrdinalAr(sequenceOrder)}!
           </h2>
           <h3 style={{ fontSize: '13.5px', fontWeight: 700, color: '#FFFFFF', marginBottom: '16px', lineHeight: 1.4 }}>
-            Meet us at {store.nameEn}<br />to get your {getClueOrdinalEn(sequenceOrder)} clue.
+            Meet us at {store?.nameEn || ''}<br />to get your {getClueOrdinalEn(sequenceOrder)} clue.
           </h3>
         </div>
       </div>
 
       {/* CTA Button matching Figma */}
       <button className="btn-primary" style={{ width: '100%' }}>
-        <span className="text-ar">توجه إلى فرع {store.nameAr}</span>
-        <span className="text-en">HEAD TO {store.nameEn.toUpperCase()}</span>
+        <span className="text-ar">توجه إلى فرع {store?.nameAr || ''}</span>
+        <span className="text-en">HEAD TO {(store?.nameEn || '').toUpperCase()}</span>
       </button>
     </div>
   );
