@@ -10,7 +10,7 @@ interface GameProps {
 
 export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [tappedCount, setTappedCount] = useState<number>(0);
-  const [targetCount] = useState<number>(25); // Target set to 25
+  const [targetCount] = useState<number>(20); // Target set to 25
   const [activePosition, setActivePosition] = useState<{ top: number; left: number }>({ top: 100, left: 100 });
   const [isWon, setIsWon] = useState<boolean>(false);
 
