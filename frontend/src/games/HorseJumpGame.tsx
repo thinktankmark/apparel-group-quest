@@ -8,7 +8,7 @@ interface GameProps {
 
 export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [score, setScore] = useState<number>(0);
-  const targetScore = 15;
+  const targetScore = 10; // Target score set to 10
 
   const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
@@ -24,9 +24,9 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     horseY: 0,            // Ground height offset (px)
     velocityY: 0,         // Vertical impulse
     jumpStep: 0,          // Airborne frame counter
-    totalJumpSteps: 34,   // Total frames for smooth forward leap arc
+    totalJumpSteps: 34,   // Total frames for smooth jump
     isJumping: false,     // Airborne status
-    obstaclePos: 100,     // Obstacle X percentage (100% to -40%)
+    obstaclePos: 170,     // 2-second initial delay (spawns 170% offscreen right)
     score: 0,
     isGameOver: false,
     hasPassedObstacle: false
@@ -43,8 +43,9 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   };
 
   const handleStartGame = () => {
-    setHasGameStarted(true);
-    handleJump();
+    if (!hasGameStarted) {
+      setHasGameStarted(true);
+    }
   };
 
   const handleRetry = () => {
@@ -55,7 +56,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       jumpStep: 0,
       totalJumpSteps: 34,
       isJumping: false,
-      obstaclePos: 100,
+      obstaclePos: 170, // Reset to 2-second initial delay
       score: 0,
       isGameOver: false,
       hasPassedObstacle: false
@@ -80,29 +81,29 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       const s = stateRef.current;
 
       if (!s.isGameOver) {
-        // 1. Update Parabolic Jump Trajectory (Balanced forward displacement: +60px)
+        // 1. Vertical Jump Physics
         if (s.isJumping) {
           s.horseY += s.velocityY;
           s.velocityY -= 0.68; // Gravity acceleration
           s.jumpStep += 1;
 
-          // Time-based forward displacement: Takeoff (60px) -> Peak (90px) -> Landing (120px)
+          // Smooth Parabolic Arc
           const timeProgress = Math.min(1.0, s.jumpStep / s.totalJumpSteps);
-          s.horseX = 60 + timeProgress * 60; // Clean forward leap without overshooting
+          s.horseX = 60 + timeProgress * 50; // Smooth forward arc
 
           // Touchdown Landing
           if (s.horseY <= 0) {
             s.horseY = 0;
             s.velocityY = 0;
             s.isJumping = false;
-            s.horseX = 60; // Landed smoothly back on runner track
+            s.horseX = 60; // Landed smoothly back on ground
           }
         } else {
-          s.horseX = 60; // Base runner track position
+          s.horseX = 60; // Base ground position
         }
 
         // 2. Update Oncoming Obstacle Motion
-        const obstacleSpeed = 1.30;
+        const obstacleSpeed = 1.25;
         s.obstaclePos -= obstacleSpeed;
 
         const containerWidth = canvasRef.current?.clientWidth || 460;
@@ -114,10 +115,10 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         const obstacleLeft = obstaclePx - 15;
         const obstacleRight = obstaclePx + 15;
 
-        // 3. Trajectory Clearance Check
+        // 3. Collision Detection
         if (obstacleRight >= horseLeft && obstacleLeft <= horseRight) {
-          // If Horse Y height is less than barrier clearance height (48px) -> Collision!
-          if (s.horseY < 48) {
+          // If Horse Y height is less than barrier clearance height (46px) -> Collision!
+          if (s.horseY < 46) {
             s.isGameOver = true;
             setIsGameOver(true);
             setShowRetryModal(true);
@@ -137,8 +138,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           }
         }
 
-        // Reset Obstacle to Right Side with Increased Spacing (-40%)
-        if (s.obstaclePos <= -40) {
+        // Reset Obstacle to Right Side with Spacing (-35%)
+        if (s.obstaclePos <= -35) {
           s.obstaclePos = 100;
           s.hasPassedObstacle = false;
         }
@@ -240,7 +241,10 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         {/* Tap to Start Overlay */}
         {!hasGameStarted && (
           <div
-            onClick={handleStartGame}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleStartGame();
+            }}
             style={{
               position: 'absolute',
               top: 0,
@@ -318,7 +322,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           style={{
             position: 'absolute',
             bottom: '40px',
-            left: '100%',
+            left: '170%',
             fontSize: '36px',
             lineHeight: 1,
             zIndex: 9,
@@ -334,7 +338,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       <div style={{ width: '100%', maxWidth: '460px', marginTop: '20px' }}>
         <button
           className="btn-primary"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             if (!hasGameStarted) handleStartGame();
             else handleJump();
           }}
