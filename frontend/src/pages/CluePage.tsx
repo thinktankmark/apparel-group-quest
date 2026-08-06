@@ -153,12 +153,13 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
         </div>
 
         {/* Location Badge Pill */}
-        <div style={{ padding: '0 16px', marginTop: '12px', direction: 'rtl', display: 'flex', gap:'3px', justifyContent: 'center' }}>
+        <div style={{ padding: '0 16px', marginTop: '12px', display: 'flex', gap:'3px', justifyContent: 'center' }}>
           <div style={{
             background: 'rgba(4, 27, 78, 0.9)',
             border: '1px solid #FEC949',
             borderRadius: '20px',
             padding: '5px 14px',
+            display: 'flex',
             direction: 'ltr',
             color: '#FEC949',
             fontSize: '11.5px',
