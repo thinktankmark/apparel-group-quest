@@ -10,7 +10,7 @@ interface GameProps {
 
 export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [score, setScore] = useState<number>(0);
-  const targetScore = 10; // Target score set to 10
+  const targetScore = 5; // Target score set to 10
 
   const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
