@@ -104,7 +104,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
           alignItems: 'center',
           gap: '6px'
         }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, direction: 'rtl', color: '#FEC949' }}>
+          <span style={{ fontSize: '12px', fontWeight: 700, direction: 'ltr', color: '#FEC949' }}>
             📍 Apparel Group Main Booth • جناح مجموعة أباريل
           </span>
         </div>
