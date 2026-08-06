@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 :root {
   --color-bg-primary: #03257E;
   --color-bg-overlay: rgba(3, 37, 126, 0.80);
@@ -18,15 +20,16 @@
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-* {
+*, *::before, *::after, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, div, a {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  font-family: var(--font-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   background-color: #01123e;
   color: var(--color-text-white);
   min-height: 100vh;
@@ -52,8 +55,8 @@ body {
 
 .app-container {
   width: 100%;
-  max-width: 400px;
-  padding: 40px 15px 20px !important;
+  max-width: 500px;
+  padding: 60px 20px 20px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,21 +68,21 @@ body {
 .title-ar {
   font-size: 20px;
   font-weight: 800;
-  direction:rtl;
   color: var(--color-accent-gold);
   text-align: center;
   margin-bottom: 6px;
   line-height: 1.4;
+  font-family: 'Inter', sans-serif !important;
 }
 
 .subtitle-en {
   font-size: 13.5px;
   font-weight: 500;
-  direction:ltr;
   color: var(--color-text-secondary);
   text-align: center;
   margin-bottom: 24px;
   line-height: 1.4;
+  font-family: 'Inter', sans-serif !important;
 }
 
 /* Primary Yellow Button */
@@ -91,7 +94,7 @@ body {
   border: none;
   border-radius: 14px;
   padding: 14px 20px;
-  font-family: var(--font-main);
+  font-family: 'Inter', sans-serif !important;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -111,7 +114,6 @@ body {
 .btn-primary .text-ar {
   font-size: 15px;
   font-weight: 800;
-  direction:rtl !important;
   line-height: 1.2;
 }
 
@@ -119,7 +121,6 @@ body {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  direction:ltr !important;
   opacity: 0.9;
   margin-top: 2px;
 }
@@ -133,7 +134,7 @@ body {
   border: 1.5px solid var(--color-accent-gold);
   border-radius: 14px;
   padding: 12px 20px;
-  font-family: var(--font-main);
+  font-family: 'Inter', sans-serif !important;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -155,6 +156,7 @@ body {
   font-weight: 600;
   color: var(--color-text-secondary);
   margin-bottom: 6px;
+  font-family: 'Inter', sans-serif !important;
 }
 
 .input-field {
@@ -166,6 +168,7 @@ body {
   color: var(--color-text-white);
   font-size: 14px;
   outline: none;
+  font-family: 'Inter', sans-serif !important;
   transition: border-color 0.2s ease;
 }
 
@@ -217,6 +220,7 @@ body {
   align-items: center;
   text-align: center;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+  font-family: 'Inter', sans-serif !important;
 }
 
 /* Keyframe Animations */
