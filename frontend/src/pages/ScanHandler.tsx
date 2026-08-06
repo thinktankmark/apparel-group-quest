@@ -7,10 +7,11 @@ const API_BASE = (import.meta.env.VITE_API_URL || 'https://apparel-hunt-api.onre
 interface ScanHandlerProps {
   onMainBoothScanned: () => void;
   onStoreQrScanned: (storeData: { storeId: string; sequenceOrder: number; gameKey: string }) => void;
+  onAdminTestPreview?: (testView: string, stationNumber: number) => void;
   lang: Language;
 }
 
-export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, onStoreQrScanned }) => {
+export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, onStoreQrScanned, onAdminTestPreview }) => {
   const { setMainBoothToken, setTargetQrContext } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,13 +19,13 @@ export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, on
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
-    const viewParam = params.get('view') || params.get('page');
-    const pathName = window.location.pathname.toLowerCase();
+    const testView = params.get('test_view');
+    const stationNum = parseInt(params.get('station') || '1', 10);
 
-    // Direct link to instructions page
-    if (viewParam === 'welcome' || viewParam === 'instructions' || pathName.includes('welcome') || pathName.includes('instructions')) {
+    // Admin testing preview override link (?test_view=WELCOME | CLUE | GAME | VICTORY)
+    if (testView && onAdminTestPreview) {
       setLoading(false);
-      onMainBoothScanned();
+      onAdminTestPreview(testView, stationNum);
       return;
     }
 

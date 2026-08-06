@@ -83,7 +83,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'space-between', position: 'relative' }}>
+    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
       {/* Floating Error Toast */}
       {gameError && (
         <div style={{
@@ -136,6 +136,18 @@ const AppContent: React.FC = () => {
           setTargetQrContext(storeCtx);
           setView('LOGIN');
         }}
+        onAdminTestPreview={(testView, stationNum) => {
+          setGameError(null);
+          const v = testView.toUpperCase();
+          if (v === 'WELCOME' || v === 'INSTRUCTIONS') setView('WELCOME');
+          else if (v === 'VICTORY') setView('VICTORY');
+          else if (v === 'GAME' || v === 'CLUE') {
+            const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
+            const gameKey = gameKeys[Math.min(stationNum - 1, 3)];
+            setTargetQrContext({ storeId: `store-test-${stationNum}`, sequenceOrder: stationNum, gameKey });
+            setView(v as any);
+          }
+        }}
       />
 
       {/* Views Router */}
@@ -180,10 +192,22 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {view === 'CLUE' && activeClue && (
+      {view === 'CLUE' && (activeClue || targetQrContext) && (
         <CluePage
           lang="ar"
-          activeClue={activeClue}
+          activeClue={activeClue || {
+            sequenceOrder: targetQrContext?.sequenceOrder || 1,
+            gameKey: targetQrContext?.gameKey || 'MEMORY_MATCH',
+            store: {
+              id: 'store-skechers',
+              nameAr: 'فرع سكتشرز',
+              nameEn: 'Skechers Store',
+              stationCode: 'SKECHERS',
+              heroImageUrl: '34d55b61686498bafee0e7b9cd22896b69575b91',
+              locationTextAr: 'محطة فرع سكتشرز',
+              locationTextEn: 'Skechers Store Station'
+            }
+          }}
           onScanStoreQr={(storeCtx) => {
             setGameError(null);
             setTargetQrContext(storeCtx);

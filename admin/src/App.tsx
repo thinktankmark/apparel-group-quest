@@ -317,6 +317,46 @@ export const App: React.FC = () => {
                 <h2 style={{ fontSize: '32px', color: '#E040FB', margin: '8px 0 0 0' }}>{analytics.completionRate}%</h2>
               </div>
             </div>
+
+            {/* Admin Testing Preview Links Card */}
+            <div style={{ background: '#152B5B', border: '1.5px solid #FEC949', borderRadius: '16px', padding: '24px', marginBottom: '32px' }}>
+              <h3 style={{ color: '#FEC949', margin: '0 0 8px 0', fontSize: '16px' }}>🧪 Admin Testing Preview Links (Non-destructive)</h3>
+              <p style={{ color: '#9BB1DB', fontSize: '12px', marginBottom: '16px' }}>
+                Use these direct links to preview and test any page or minigame without altering real player database records or registration flows.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=WELCOME" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FEC949', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  📖 Welcome Instructions Page ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=CLUE&station=1" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🔍 Station 1 Clue (Skechers) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=GAME&station=1" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#38EF7D', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🎮 Minigame 1 (Memory Match) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=CLUE&station=2" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🔍 Station 2 Clue (ACO) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=GAME&station=2" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#38EF7D', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🎮 Minigame 2 (XO Challenge) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=CLUE&station=3" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🔍 Station 3 Clue (BHPC) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=GAME&station=3" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#38EF7D', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🎮 Minigame 3 (Polo Jump) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=CLUE&station=4" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🔍 Station 4 Clue (Steve Madden) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=GAME&station=4" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#38EF7D', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🎮 Minigame 4 (Speed Tap) ↗
+                </a>
+                <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=VICTORY" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#E040FB', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                  🏆 Victory Congratulatory Screen ↗
+                </a>
+              </div>
+            </div>
           </div>
         )}
 
