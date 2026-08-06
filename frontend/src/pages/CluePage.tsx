@@ -111,21 +111,14 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
       }}>
         {/* Left: Apparel Group Main Logo Container */}
         <div style={{
-          background: 'rgba(4, 27, 78, 0.7)',
-          border: '1.5px solid #35589A',
-          borderRadius: '10px',
-          padding: '5px 10px',
           display: 'flex',
           alignItems: 'center',
-          minHeight: '44px',
-          maxWidth: '48%',
-          boxSizing: 'border-box',
           flexShrink: 0
         }}>
           <img
             src="/assets/apparel-logo.png"
             alt="Apparel Group"
-            style={{ height: '32px', maxWidth: '100%', objectFit: 'contain' }}
+            style={{ maxWidth: '100%', objectFit: 'contain' }}
           />
         </div>
 
