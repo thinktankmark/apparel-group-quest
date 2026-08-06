@@ -8,8 +8,6 @@ interface VictoryPageProps {
 }
 
 export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
-  const userId = player ? (player.phoneNumber?.replace(/\D/g, '').slice(-8) || player.email?.split('@')[0] || '47846214') : '47846214';
-
   return (
     <div className="app-container" style={{ width: '100%', maxWidth: '500px' }}>
       <HeaderLogo />
@@ -78,10 +76,10 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         flexDirection: 'column',
         alignItems: 'center'
       }}>
-        {/* Main Booth Image */}
+        {/* Main Booth Photo */}
         <div style={{ width: '100%', overflow: 'hidden', borderRadius: '16px', marginBottom: '16px' }}>
           <img
-            src="/assets/step1.png"
+            src="/assets/step3.png"
             alt="Apparel Group Main Booth"
             style={{
               width: '100%',

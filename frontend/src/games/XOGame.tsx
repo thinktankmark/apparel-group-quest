@@ -28,11 +28,10 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     return null;
   };
 
-  // Smart AI Strategy: Competitive on attempts #1 and #2, then AI lets player win on attempt #3 max!
+  // Smart AI Strategy: Competitive initially, opens winning opportunities for player
   const getSmartAiMove = (b: (string | null)[], attempts: number): number => {
     const emptyIndices = b.map((val, i) => val === null ? i : null).filter(val => val !== null) as number[];
 
-    // 1. Can AI ('👠') win in 1 move? Take it if attempt < 3
     if (attempts < 3) {
       for (const line of winningLines) {
         const aiCount = line.filter(idx => b[idx] === '👠').length;
@@ -43,7 +42,6 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
       }
     }
 
-    // 2. Can Player ('👟') win in 1 move? Block it if attempt < 3
     if (attempts < 3) {
       for (const line of winningLines) {
         const playerCount = line.filter(idx => b[idx] === '👟').length;
@@ -54,7 +52,6 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
       }
     }
 
-    // 3. Max 3 Tries Mercy: On attempt 3+, AI leaves open winning opportunities for player!
     if (b[4] === null && attempts < 3) return 4;
 
     const openCorners = [0, 2, 6, 8].filter(idx => b[idx] === null);
@@ -125,34 +122,23 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
         </p>
       </div>
 
-      {/* Turn & Attempt HUD */}
+      {/* Turn HUD (Clean, no attempt count mentioned) */}
       <div style={{
         display: 'flex',
-        gap: '12px',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: '20px'
+        marginBottom: '24px'
       }}>
         <div style={{
           background: 'rgba(254, 201, 73, 0.18)',
-          border: '1px solid #FEC949',
+          border: '1.5px solid #FEC949',
           borderRadius: '20px',
-          padding: '6px 16px',
+          padding: '8px 20px',
           color: '#FEC949',
-          fontSize: '13px',
+          fontSize: '13.5px',
           fontWeight: 700
         }}>
-          {isPlayerTurn ? 'دورك / Your Turn 👟' : 'دور الذكاء الاصطناعي... / AI Thinking... 嘧'}
-        </div>
-        <div style={{
-          background: 'rgba(140, 230, 61, 0.18)',
-          border: '1px solid #8CE63D',
-          borderRadius: '20px',
-          padding: '6px 12px',
-          color: '#8CE63D',
-          fontSize: '11.5px',
-          fontWeight: 700
-        }}>
-          المحاولة / Attempt #{attemptCount} (Max 3)
+          {isPlayerTurn ? 'دورك / Your Turn 👟' : 'دور الذكاء الاصطناعي... / AI Thinking... 👠'}
         </div>
       </div>
 
@@ -199,8 +185,8 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
               {winner === 'TIE' ? 'Game Tied!' : 'AI Won this round!'}
             </h3>
             <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginBottom: '24px' }}>
-              اضغط لإعادة المحاولة وهزيمة الذكاء الاصطناعي. (المحاولة القادمة #{attemptCount})<br />
-              Tap retry to beat the AI. (Next Attempt #{attemptCount})
+              اضغط لإعادة المحاولة وهزيمة الذكاء الاصطناعي.<br />
+              Tap retry to beat the AI and proceed.
             </p>
             <button className="btn-primary" onClick={resetGame}>
               <span className="text-ar">إعادة المحاولة</span>
@@ -215,7 +201,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
         <div className="modal-overlay">
           <div className="modal-card">
             <span style={{ fontSize: '48px', marginBottom: '12px' }}>🎉 🏆</span>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#8CE63D', marginBottom: '4px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
               تهانينا! لقد فزت بالجولة!
             </h2>
             <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '12px' }}>

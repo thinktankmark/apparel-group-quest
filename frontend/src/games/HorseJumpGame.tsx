@@ -10,6 +10,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [score, setScore] = useState<number>(0);
   const targetScore = 15;
 
+  const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
   const [showWinModal, setShowWinModal] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -41,6 +42,11 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     s.hasPassedObstacle = false;
   };
 
+  const handleStartGame = () => {
+    setHasGameStarted(true);
+    handleJump();
+  };
+
   const handleRetry = () => {
     stateRef.current = {
       horseX: 60,
@@ -58,11 +64,12 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     setShowRetryModal(false);
     setShowWinModal(false);
     setIsGameOver(false);
+    setHasGameStarted(false);
   };
 
   // 60FPS Physics Loop
   useEffect(() => {
-    if (isGameOver || showWinModal || showRetryModal) return;
+    if (!hasGameStarted || isGameOver || showWinModal || showRetryModal) return;
 
     let lastTime = performance.now();
 
@@ -138,27 +145,17 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       }
 
       // Visual DOM Updates
-      if (canvasRef.current && !s.isGameOver) {
-        const horseEl = canvasRef.current.querySelector('.horse-runner') as HTMLElement;
-        const obstacleEl = canvasRef.current.querySelector('.obstacle-runner') as HTMLElement;
-        const shadowEl = canvasRef.current.querySelector('.horse-shadow') as HTMLElement;
+      const horseEl = document.getElementById('horse-runner-element');
+      const obstacleEl = document.getElementById('obstacle-runner-element');
 
-        if (horseEl) {
-          horseEl.style.bottom = `${35 + s.horseY}px`;
-          horseEl.style.left = `${s.horseX}px`;
-        }
-        if (shadowEl) {
-          shadowEl.style.left = `${s.horseX + 8}px`;
-          shadowEl.style.opacity = `${Math.max(0.1, 1 - s.horseY / 120)}`;
-        }
-        if (obstacleEl) {
-          obstacleEl.style.left = `${s.obstaclePos}%`;
-        }
+      if (horseEl) {
+        horseEl.style.transform = `translate(${s.horseX}px, ${-s.horseY}px)`;
+      }
+      if (obstacleEl) {
+        obstacleEl.style.left = `${s.obstaclePos}%`;
       }
 
-      if (!s.isGameOver) {
-        animationFrameId.current = requestAnimationFrame(loop);
-      }
+      animationFrameId.current = requestAnimationFrame(loop);
     };
 
     animationFrameId.current = requestAnimationFrame(loop);
@@ -168,176 +165,223 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [isGameOver, showWinModal, showRetryModal]);
+  }, [hasGameStarted, isGameOver, showWinModal, showRetryModal]);
 
   return (
-    <div className="app-container" style={{ width: '100%', paddingBottom: '80px' }}>
-      <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
-        <h2 className="title-ar">تحدي قفز البولو</h2>
-        <p className="subtitle-en">Polo Jump Challenge</p>
-      </div>
+    <div
+      className="app-container"
+      onClick={() => {
+        if (!hasGameStarted) {
+          handleStartGame();
+        } else {
+          handleJump();
+        }
+      }}
+      style={{
+        width: '100%',
+        paddingBottom: '40px',
+        userSelect: 'none',
+        WebkitUserSelect: 'none'
+      }}
+    >
+      {/* Title */}
+      <h1 className="title-ar">سباق قفز البولو</h1>
+      <h2 className="subtitle-en">Beverly Hills Polo Club — Jump Challenge</h2>
 
-      {/* Score HUD */}
+      {/* Target Score & Progress HUD */}
       <div style={{
         width: '100%',
-        maxWidth: '500px',
+        maxWidth: '460px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         background: 'rgba(21, 43, 91, 0.9)',
         border: '1.5px solid #35589A',
-        borderRadius: '12px',
-        padding: '10px 16px',
+        borderRadius: '16px',
+        padding: '12px 20px',
         marginBottom: '16px'
       }}>
-        <span style={{ fontSize: '14px', fontWeight: 700, color: '#FEC949' }}>
-          Score: {score} / {targetScore}
-        </span>
-        <span style={{ fontSize: '13px', fontWeight: 700, color: '#8CE63D' }}>
-          الهدف: 15 قفزة / Target: 15 Jumps
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'start' }}>
+          <span style={{ fontSize: '11px', color: '#9BB1DB' }}>النقاط / Score</span>
+          <span style={{ fontSize: '20px', fontWeight: 800, color: '#FEC949' }}>
+            {score} / {targetScore}
+          </span>
+        </div>
+
+        <div style={{
+          background: 'rgba(254, 201, 73, 0.18)',
+          border: '1px solid #FEC949',
+          borderRadius: '20px',
+          padding: '6px 14px',
+          color: '#FEC949',
+          fontSize: '12px',
+          fontWeight: 700
+        }}>
+          {hasGameStarted ? 'انقر للقفز! 🏇 Tap to Jump!' : 'جاهز؟ 🏇 Ready?'}
+        </div>
       </div>
 
-      {/* Runner Track */}
+      {/* 2D Canvas Runner Container */}
       <div
         ref={canvasRef}
-        onClick={handleJump}
         style={{
           width: '100%',
-          maxWidth: '500px',
-          height: '270px',
-          background: 'linear-gradient(180deg, #0B193C 0%, #041B4E 60%, #152B5B 100%)',
-          border: '1.5px solid #35589A',
+          maxWidth: '460px',
+          height: '240px',
+          background: 'linear-gradient(180deg, #091D4A 0%, #152B5B 70%, #213F7C 100%)',
+          border: '2px solid #FEC949',
           borderRadius: '20px',
           position: 'relative',
           overflow: 'hidden',
-          cursor: 'pointer',
-          marginBottom: '20px',
-          userSelect: 'none',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
+          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          cursor: 'pointer'
         }}
       >
-        {/* Animated Ground Runner Track */}
+        {/* Tap to Start Overlay */}
+        {!hasGameStarted && (
+          <div
+            onClick={handleStartGame}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(3, 37, 126, 0.88)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 50,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '20px',
+              padding: '20px'
+            }}
+          >
+            <div style={{ fontSize: '54px', marginBottom: '12px' }}>🐎 🏁</div>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '6px', textAlign: 'center' }}>
+              انقر في أي مكان لبدء اللعبة!
+            </h2>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '20px', textAlign: 'center' }}>
+              Tap anywhere to start the game!
+            </h3>
+            <button className="btn-primary" style={{ maxWidth: '260px', pointerEvents: 'none' }}>
+              <span className="text-ar">ابدأ اللعبة الآن</span>
+              <span className="text-en">START GAME</span>
+            </button>
+          </div>
+        )}
+
+        {/* Dynamic Track Background */}
         <div style={{
           position: 'absolute',
-          bottom: '0',
-          left: '0',
-          right: '0',
-          height: '35px',
-          background: '#04153B',
-          borderTop: '2px solid #35589A',
-          display: 'flex',
-          alignItems: 'center'
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '40px',
+          background: '#1A3673',
+          borderTop: '3px solid #FEC949'
         }}>
+          {/* Dashed Moving Track Lines */}
           <div style={{
             width: '100%',
-            height: '2px',
-            background: 'repeating-linear-gradient(90deg, #FEC949, #FEC949 20px, transparent 20px, transparent 40px)',
-            animation: 'dashMove 0.8s linear infinite'
+            height: '100%',
+            backgroundImage: 'repeating-linear-gradient(90deg, #FEC949 0, #FEC949 15px, transparent 15px, transparent 30px)',
+            backgroundSize: '30px 4px',
+            backgroundPosition: '0 18px',
+            backgroundRepeat: 'repeat-x',
+            opacity: 0.6
           }} />
         </div>
 
-        {/* Dynamic Shadow */}
+        {/* Horse Character Element */}
         <div
-          className="horse-shadow"
+          id="horse-runner-element"
           style={{
             position: 'absolute',
-            bottom: '30px',
-            left: '68px',
-            width: '40px',
-            height: '8px',
-            borderRadius: '50%',
-            background: 'rgba(0,0,0,0.5)',
-            transition: 'left 0.016s linear, opacity 0.016s linear'
-          }}
-        />
-
-        {/* Horse Sprite */}
-        <div
-          className="horse-runner"
-          style={{
-            position: 'absolute',
-            bottom: '35px',
-            left: '60px',
-            fontSize: '52px',
-            transform: 'scaleX(-1)',
-            transition: 'left 0.016s linear, bottom 0.016s linear',
-            zIndex: 2,
-            filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.4))'
+            bottom: '40px',
+            left: '0px',
+            fontSize: '44px',
+            lineHeight: 1,
+            zIndex: 10,
+            transition: 'none',
+            transform: 'translate(60px, 0px)',
+            filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))'
           }}
         >
-          🏇
+          🐎
         </div>
 
-        {/* Moving Barrier */}
+        {/* Obstacle Barrier Element */}
         <div
-          className="obstacle-runner"
+          id="obstacle-runner-element"
           style={{
             position: 'absolute',
-            bottom: '35px',
+            bottom: '40px',
             left: '100%',
-            fontSize: '34px',
-            transform: 'translateX(-50%)',
-            zIndex: 1,
-            transition: 'left 0.016s linear'
+            fontSize: '36px',
+            lineHeight: 1,
+            zIndex: 9,
+            transition: 'none',
+            filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))'
           }}
         >
           🚧
         </div>
-
-        {/* Tap Instruction */}
-        <div style={{
-          position: 'absolute',
-          bottom: '8px',
-          width: '100%',
-          textAlign: 'center',
-          fontSize: '12px',
-          color: '#FEC949',
-          fontWeight: 700,
-          textShadow: '0 1px 3px rgba(0,0,0,0.9)',
-          zIndex: 3
-        }}>
-          انقر للقفز فوق العقبة! 👆 / Tap screen to jump over barrier!
-        </div>
       </div>
 
-      {/* Collision Retry Modal */}
+      {/* Tap Instruction Button */}
+      <div style={{ width: '100%', maxWidth: '460px', marginTop: '20px' }}>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            if (!hasGameStarted) handleStartGame();
+            else handleJump();
+          }}
+        >
+          <span className="text-ar">{hasGameStarted ? '⚡ انقر للقفز فوق الحواجز! ⚡' : '🚀 انقر هنا لبدء اللعبة 🚀'}</span>
+          <span className="text-en">{hasGameStarted ? 'TAP TO JUMP OVER BARRIERS!' : 'TAP HERE TO START GAME'}</span>
+        </button>
+      </div>
+
+      {/* Defeat Modal */}
       {showRetryModal && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>💥 🏇</span>
+            <span style={{ fontSize: '48px', marginBottom: '12px' }}>💥 🐎</span>
             <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#FF5252', marginBottom: '4px' }}>
-              اصطدمت بالعقبة!
+              اصطدمت بالحاجز!
             </h2>
             <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
-              You touched the obstacle!
+              You hit the barrier!
             </h3>
-            <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginBottom: '24px' }}>
-              اضغط لإعادة المحاولة للوصول إلى 15 قفزة.<br />Tap retry to reach 15 jumps.
+            <p style={{ fontSize: '12px', color: '#9BB1DB', marginBottom: '24px' }}>
+              نقاطك الحالية: <strong style={{ color: '#FEC949' }}>{score} / {targetScore}</strong><br />
+              انقر لإعادة المحاولة ومواصلة السباق.
             </p>
             <button className="btn-primary" onClick={handleRetry}>
               <span className="text-ar">إعادة المحاولة</span>
-              <span className="text-en">RETRY GAME</span>
+              <span className="text-en">RETRY JUMP</span>
             </button>
           </div>
         </div>
       )}
 
-      {/* Win Modal */}
+      {/* Victory Modal */}
       {showWinModal && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>⭐ 🏆</span>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#8CE63D', marginBottom: '4px' }}>
-              تهانينا! حققت 15 قفزة بنجاح!
+            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🎉 🏆</span>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
+              تهانينا! أكملت سباق قفز البولو بنجاح!
             </h2>
-            <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '12px' }}>
-              CONGRATULATIONS! 15 JUMPS REACHED!
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '12px' }}>
+              CONGRATULATIONS! YOU COMPLETED THE CHALLENGE!
             </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء استثنائي! لقد فتحت الدليل التالي لرحلة الكنز.<br />Great job! You unlocked the next clue.
+            <p style={{ fontSize: '12px', color: '#9BB1DB', marginBottom: '24px' }}>
+              حققت {targetScore} قفزات ناجحة! فتحت الدليل التالي لرحلة الكنز.
             </p>
-            <button className="btn-primary" onClick={() => onSuccess(score, 25)}>
+            <button className="btn-primary" onClick={() => onSuccess(score, 45)}>
               <span className="text-ar">احصل على دليلك التالي</span>
               <span className="text-en">GET YOUR NEXT CLUE</span>
             </button>
