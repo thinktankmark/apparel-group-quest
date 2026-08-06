@@ -69,6 +69,9 @@ const AppContent: React.FC = () => {
 
   // Handle View State Transitions & Single Source of Truth Progress Protection
   useEffect(() => {
+    const isTestPreview = new URLSearchParams(window.location.search).has('test_view');
+    if (isTestPreview) return; // Skip progress lockouts when using admin test preview links!
+
     if (progress?.isCompleted) {
       setView('VICTORY');
       return;
