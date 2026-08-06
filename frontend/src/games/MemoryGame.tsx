@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { HeaderLogo } from '../components/HeaderLogo';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -75,7 +76,10 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div className="app-container" style={{ width: '100%', paddingBottom: '70px' }}>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
+      {/* Header Logo */}
+      <HeaderLogo sequenceOrder={1} />
+
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">تحدي مطابقة الأزواج</h2>
         <p className="subtitle-en">Shoe Memory Match</p>

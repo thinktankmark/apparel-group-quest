@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GameVictoryScreen } from '../components/GameVictoryScreen';
+import { HeaderLogo } from '../components/HeaderLogo';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -187,7 +188,6 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   return (
     <div
-      className="app-container"
       onClick={() => {
         if (!hasGameStarted) {
           handleStartGame();
@@ -197,11 +197,17 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       }}
       style={{
         width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         paddingBottom: '40px',
         userSelect: 'none',
         WebkitUserSelect: 'none'
       }}
     >
+      {/* Header Logo */}
+      <HeaderLogo sequenceOrder={3} />
+
       {/* Title */}
       <h1 className="title-ar">سباق قفز البولو</h1>
       <h2 className="subtitle-en">Beverly Hills Polo Club — Jump Challenge</h2>

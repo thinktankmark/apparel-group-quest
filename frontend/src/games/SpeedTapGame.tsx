@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GameVictoryScreen } from '../components/GameVictoryScreen';
+import { HeaderLogo } from '../components/HeaderLogo';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -60,6 +61,9 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
+      {/* Header Logo */}
+      <HeaderLogo sequenceOrder={4} />
+
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">النقرات السريعة للأحذية</h2>
         <p className="subtitle-en">Speed Sneaker Tap</p>
