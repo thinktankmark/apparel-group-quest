@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FinalVictoryModal } from '../components/FinalVictoryModal';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -95,26 +96,11 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
         </button>
       </div>
 
-      {/* Victory Modal */}
+      {/* Final Victory Modal matching VictoryPage design & content */}
       {showWinModal && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🏆</span>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#8CE63D', marginBottom: '4px' }}>
-              🎉 تهانينا! أكملت التحدي الأخير بنجاح!
-            </h2>
-            <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '12px' }}>
-              CONGRATULATIONS! FINAL CHALLENGE COMPLETED!
-            </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              انتقل الآن إلى الجناح الرئيسي لاستلام هديتك! / Visit our booth to claim your gift!
-            </p>
-            <button className="btn-primary" onClick={() => onSuccess(tappedCount, 20)}>
-              <span className="text-ar">عرض النتيجة النهائية</span>
-              <span className="text-en">VIEW FINAL RESULT</span>
-            </button>
-          </div>
-        </div>
+        <FinalVictoryModal
+          onContinue={() => onSuccess(tappedCount, 20)}
+        />
       )}
     </div>
   );
