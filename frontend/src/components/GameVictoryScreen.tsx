@@ -25,7 +25,7 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
   isFinalStage = false
 }) => {
   return (
-    <div className="app-container" style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="app-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '0 !important' }}>
       {/* Header Logo */}
       <HeaderLogo />
 
@@ -85,7 +85,7 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
           textAlign: 'center'
         }}>
           <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#8CE63D' }}>
-            ⭐ {scoreTextAr} / {scoreTextEn} ⭐
+            ⭐ {scoreTextEn} ⭐
           </span>
         </div>
 
@@ -112,12 +112,12 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
         width: '100%',
         background: '#8CE63D',
         borderRadius: '24px',
-        padding: '12px 16px',
+        padding: '1px 16px 2px',
         textAlign: 'center',
         marginBottom: '16px',
         boxShadow: '0 4px 16px rgba(140, 230, 61, 0.4)'
       }}>
-        <span style={{ fontSize: '14px', fontWeight: 800, color: '#041B4E', letterSpacing: '0.5px' }}>
+        <span style={{ fontSize: '11px', fontWeight: 800, color: '#041B4E', letterSpacing: '0.5px' }}>
           100% COMPLETE!
         </span>
       </div>
