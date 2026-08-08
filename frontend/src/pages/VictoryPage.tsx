@@ -19,7 +19,8 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         color: '#FEC949',
         textAlign: 'center',
         marginBottom: '6px',
-        lineHeight: 1.3
+        lineHeight: 1.3,
+        direction: 'rtl'
       }}>
         لقد أكملت تحديك الأخير بنجاح!
       </h1>
@@ -32,17 +33,19 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         textAlign: 'center',
         marginBottom: '20px',
         lineHeight: 1.4,
-        maxWidth: '440px'
+        maxWidth: '440px',
+        direction: 'rtl'
       }}>
         تفضل بزيارة جناح مجموعة أباريل لتدوير العجلة والحصول على جائزتك!
       </p>
 
-      {/* English Headline (Gold) */}
+      {/* English Headline (Gold - LTR) */}
       <h2 style={{
         fontSize: '16px',
         fontWeight: 700,
         color: '#FEC949',
         direction: 'ltr',
+        unicodeBidi: 'isolate',
         textAlign: 'center',
         marginBottom: '4px',
         lineHeight: 1.3
@@ -50,12 +53,13 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         You have completed your last challenge!
       </h2>
 
-      {/* English Subtitle (White) */}
+      {/* English Subtitle (White - LTR) */}
       <p style={{
         fontSize: '13px',
         fontWeight: 400,
         color: '#FFFFFF',
         direction: 'ltr',
+        unicodeBidi: 'isolate',
         textAlign: 'center',
         marginBottom: '24px',
         lineHeight: 1.4,
@@ -93,7 +97,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
           />
         </div>
 
-        {/* Location Pill Badge matching Figma Screenshot */}
+        {/* Location Pill Badge */}
         <div style={{
           background: '#041B4E',
           border: '1.5px solid #FEC949',
@@ -104,17 +108,17 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
           alignItems: 'center',
           gap: '6px'
         }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, direction: 'ltr', color: '#FEC949' }}>
-            📍 Apparel Group Main Booth • جناح مجموعة أباريل
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949' }}>
+            📍 <span style={{ direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>Apparel Group Main Booth</span> • جناح مجموعة أباريل
           </span>
         </div>
 
-        {/* Card Footer Text matching Figma Screenshot */}
+        {/* Card Footer Text */}
         <div style={{ textAlign: 'center', padding: '0 8px' }}>
-          <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px' }}>
+          <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px', direction: 'rtl' }}>
             🎁 جوائز فورية وقسائم شراء حصرية بانتظارك!
           </p>
-          <p style={{ fontSize: '12px', fontWeight: 500, color: '#9BB1DB', direction: 'ltr'}}>
+          <p style={{ fontSize: '12px', fontWeight: 500, color: '#9BB1DB', direction: 'ltr', unicodeBidi: 'isolate' }}>
             Instant prizes & exclusive vouchers await you!
           </p>
         </div>

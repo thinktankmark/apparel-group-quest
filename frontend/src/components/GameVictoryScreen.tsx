@@ -31,10 +31,10 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
 
       {/* Game Title */}
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '16px' }}>
-        <h2 className="title-ar" style={{ fontSize: '22px', fontWeight: 800, color: '#FEC949', marginBottom: '2px' }}>
+        <h2 className="title-ar" style={{ fontSize: '22px', fontWeight: 800, color: '#FEC949', marginBottom: '2px', direction: 'rtl' }}>
           {gameTitleAr}
         </h2>
-        <p className="subtitle-en" style={{ fontSize: '14px', fontWeight: 600, color: '#FFFFFF', margin: 0 }}>
+        <p className="subtitle-en" style={{ fontSize: '14px', fontWeight: 600, color: '#FFFFFF', margin: 0, direction: 'ltr', unicodeBidi: 'isolate' }}>
           {gameTitleEn}
         </p>
       </div>
@@ -50,15 +50,17 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
         marginBottom: '16px',
         boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
       }}>
-        <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px', lineHeight: 1.3 }}>
+        <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px', lineHeight: 1.3, direction: 'rtl' }}>
           🎉 {isFinalStage ? 'تهانينا! أكملت التحدي بنجاح!' : 'تهانينا! أكملت التحدي بنجاح!'}
         </h3>
-        <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px', lineHeight: 1.3, letterSpacing: '0.3px' }}>
-          {isFinalStage ? 'CONGRATULATIONS! CHALLENGE COMPLETED!' : 'CONGRATULATIONS! CHALLENGE COMPLETED!'}
+        <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px', lineHeight: 1.3, letterSpacing: '0.3px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+          {isFinalStage ? 'CONGRATULATIONS! FINAL CHALLENGE COMPLETED!' : 'CONGRATULATIONS! CHALLENGE COMPLETED!'}
         </h4>
-        <p style={{ fontSize: '11.5px', color: '#D0DCF2', margin: 0, lineHeight: 1.4 }}>
-          {subtitleAr}<br />
-          <span style={{ fontSize: '11px', color: '#9BB1DB' }}>{subtitleEn}</span>
+        <p style={{ fontSize: '11.5px', color: '#D0DCF2', margin: 0, lineHeight: 1.4, direction: 'rtl' }}>
+          {subtitleAr}
+        </p>
+        <p style={{ fontSize: '11px', color: '#9BB1DB', margin: '2px 0 0 0', direction: 'ltr', unicodeBidi: 'isolate' }}>
+          {subtitleEn}
         </p>
       </div>
 
@@ -84,7 +86,7 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
           marginBottom: '24px',
           textAlign: 'center'
         }}>
-          <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#8CE63D' }}>
+          <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#8CE63D', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>
             ⭐ {scoreTextEn} ⭐
           </span>
         </div>
@@ -117,7 +119,7 @@ export const GameVictoryScreen: React.FC<GameVictoryScreenProps> = ({
         marginBottom: '16px',
         boxShadow: '0 4px 16px rgba(140, 230, 61, 0.4)'
       }}>
-        <span style={{ fontSize: '11px', fontWeight: 800, color: '#041B4E', letterSpacing: '0.5px' }}>
+        <span style={{ fontSize: '11px', fontWeight: 800, color: '#041B4E', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>
           100% COMPLETE!
         </span>
       </div>
