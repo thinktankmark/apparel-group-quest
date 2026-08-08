@@ -183,7 +183,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
 
       {/* CTA Button matching Figma */}
       <button className="btn-primary" style={{ width: '100%' }}>
-        <span className="text-ar">توجه إلى فرع {store?.nameAr || ''}</span>
+        <span className="text-ar">توجه إلى  {store?.nameAr || ''}</span>
         <span className="text-en">HEAD TO {(store?.nameEn || '').toUpperCase()}</span>
       </button>
     </div>
