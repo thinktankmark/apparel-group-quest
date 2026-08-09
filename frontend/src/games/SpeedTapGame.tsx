@@ -84,7 +84,7 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
         marginBottom: '16px'
       }}>
         <span style={{ fontSize: '14px', fontWeight: 800, color: '#8CE63D', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>
-          ⭐ {tappedCount} / {targetCount} Sneakers Tapped ⭐
+          ⭐ Sneakers Tapped {tappedCount} / {targetCount} ⭐
         </span>
       </div>
 
