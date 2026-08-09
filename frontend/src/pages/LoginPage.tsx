@@ -31,10 +31,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       if (err.error === 'ACCOUNT_NOT_FOUND' || err.showBoothPopup) {
         setErrorMsg(
           <>
-            <span dir="rtl" style={{ display: 'block', color: '#ffffff' }}>
+            <span dir="rtl" style={{ display: 'block', color: '#ffffff', fontWeight:'400' }}>
               ⚠️ الحساب غير موجود. يرجى التحقق من الرقم أو البريد الإلكتروني.
             </span>
-            <span dir="ltr" style={{ display: 'block' }}>
+            <span dir="ltr" style={{ display: 'block', fontWeight:'400' }}>
               ⚠️ Account doesn't exist. Please check your number or email.
             </span>
           </>
