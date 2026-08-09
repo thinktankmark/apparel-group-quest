@@ -28,20 +28,23 @@ const getPlayerProgress = (req, res) => {
     memoryStore.progress.push(progress);
     saveStoreToFile();
   } else {
-    // Reset/Ensure progress uses fixed store sequence
-    progress.store_sequence = getFixedStoreSequence();
-    saveStoreToFile();
+    // Ensure store_sequence is always populated with 4 stations
+    if (!progress.store_sequence || progress.store_sequence.length < 4) {
+      progress.store_sequence = getFixedStoreSequence();
+      saveStoreToFile();
+    }
   }
 
-  // Find active store clue for current sequence order
+  // Find ONLY the current active sequence item & store details
+  const currentSeqItem = memoryStore.sequence.find(s => s.sequence_order === progress.current_sequence_order);
   let activeClue = null;
-  if (!progress.is_completed) {
-    const currentStoreId = progress.store_sequence[progress.current_sequence_order - 1] || 'store-skechers';
-    const store = memoryStore.stores.find(s => s.id === currentStoreId);
+
+  if (currentSeqItem) {
+    const store = memoryStore.stores.find(s => s.id === currentSeqItem.store_id);
     if (store) {
       activeClue = {
-        sequenceOrder: progress.current_sequence_order,
-        gameKey: getGameKeyForStore(store.id),
+        sequenceOrder: currentSeqItem.sequence_order,
+        gameKey: currentSeqItem.game_key,
         store: {
           id: store.id,
           nameAr: store.name_ar,
@@ -65,7 +68,7 @@ const getPlayerProgress = (req, res) => {
     progress: {
       currentSequenceOrder: progress.current_sequence_order,
       storeSequence: progress.store_sequence,
-      isCompleted: progress.is_completed,
+      isCompleted: !!progress.is_completed,
       completedAt: progress.completed_at
     },
     activeClue
@@ -112,13 +115,14 @@ const completeGame = (req, res) => {
 
   if (isSuccess || seqOrderInt === 1) {
     if (seqOrderInt === progress.current_sequence_order) {
-      const maxSequence = progress.store_sequence.length;
+      const maxSequence = 4; // Guaranteed 4 stations: Skechers (1), ACO (2), BHPC (3), Steve Madden (4)
 
       if (seqOrderInt >= maxSequence) {
         progress.is_completed = true;
         progress.completed_at = new Date().toISOString();
       } else {
         progress.current_sequence_order = seqOrderInt + 1;
+        progress.is_completed = false;
       }
       progress.updated_at = new Date().toISOString();
     }
@@ -154,7 +158,7 @@ const completeGame = (req, res) => {
     progress: {
       currentSequenceOrder: progress.current_sequence_order,
       storeSequence: progress.store_sequence,
-      isCompleted: progress.is_completed,
+      isCompleted: !!progress.is_completed,
       completedAt: progress.completed_at
     },
     nextClue

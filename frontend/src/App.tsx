@@ -48,8 +48,8 @@ const STORES_LIST = [
 ];
 
 const AppContent: React.FC = () => {
-  const { token, player, progress, activeClue, targetQrContext, isLoadingProgress, completeStage, setTargetQrContext, logout } = useAuth();
-  const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'VICTORY'>('SIGNUP');
+  const { token, player, progress, activeClue, targetQrContext, completeStage, setTargetQrContext, logout, isLoadingProgress } = useAuth();
+  const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'VICTORY'>('LOGIN');
   const [gameError, setGameError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -107,8 +107,8 @@ const AppContent: React.FC = () => {
     const isTestPreview = new URLSearchParams(window.location.search).has('test_view');
     if (isTestPreview) return; // Skip progress lockouts when using admin test preview links!
 
-    if (view === 'LOGIN' || view === 'SIGNUP') {
-      return;
+    if (!token) {
+      return; // Unauthenticated users stay on LOGIN or SIGNUP
     }
 
     if (progress?.isCompleted) {
@@ -116,7 +116,7 @@ const AppContent: React.FC = () => {
       return;
     }
 
-    if (token && !isLoadingProgress) {
+    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP') {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
         validateAndRouteStoreScan(targetCtx);
@@ -131,6 +131,7 @@ const AppContent: React.FC = () => {
       setTargetQrContext(null);
       setGameError(null);
 
+      // ONLY Station 4 completion (result.progress.isCompleted) triggers final VictoryPage!
       if (result.progress?.isCompleted) {
         setView('VICTORY');
       } else {
@@ -154,7 +155,7 @@ const AppContent: React.FC = () => {
 
   const getClueForView = () => {
     if (activeClue) return activeClue;
-    const seq = targetQrContext?.sequenceOrder || 1;
+    const seq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
     const store = STORES_LIST[Math.min(Math.max(seq - 1, 0), 3)];
     const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
     return {
@@ -254,31 +255,15 @@ const AppContent: React.FC = () => {
 
       {view === 'WELCOME' && (
         <WelcomePage
-          onStart={() => {
-            setGameError(null);
-            if (progress?.isCompleted) {
-              setView('VICTORY');
-            } else {
-              const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
-              if (targetCtx) {
-                validateAndRouteStoreScan(targetCtx);
-              } else {
-                setView('CLUE');
-              }
-            }
-          }}
+          onStart={() => { setGameError(null); setView('CLUE'); }}
         />
       )}
 
       {view === 'LOGIN' && (
         <LoginPage
           lang="ar"
-          onLoginSuccess={() => {
+          onLoginSuccess={(freshSeqOrder) => {
             setGameError(null);
-            if (progress?.isCompleted) {
-              setView('VICTORY');
-              return;
-            }
             const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
             if (targetCtx) {
               validateAndRouteStoreScan(targetCtx);
@@ -297,7 +282,7 @@ const AppContent: React.FC = () => {
           onScanStoreQr={(storeCtx) => {
             setGameError(null);
             setTargetQrContext(storeCtx);
-            setView('GAME');
+            validateAndRouteStoreScan(storeCtx);
           }}
         />
       )}
