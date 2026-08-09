@@ -60,7 +60,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
           <input
             type="text"
             className="input-field"
-            placeholder="أدخل اسمك الكامل / Enter full name"
+            placeholder="Enter full name / أدخل اسمك الكامل"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             required
@@ -68,7 +68,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
         </div>
 
         <div className="input-group">
-          <label className="input-label">البريد الإلكتروني / Email Address</label>
+          <label className="input-label">Email Address / البريد الإلكتروني</label>
           <input
             type="email"
             className={`input-field ${emailError ? 'error' : ''}`}
@@ -81,7 +81,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
         </div>
 
         <div className="input-group">
-          <label className="input-label">رقم الهاتف / Phone Number</label>
+          <label className="input-label">Phone Number / رقم الهاتف</label>
           <input
             type="tel"
             className={`input-field ${phoneError ? 'error' : ''}`}
