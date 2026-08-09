@@ -19,7 +19,8 @@ const SHOE_IMAGES = [
   '/assets/skechers-2.png',
   '/assets/skechers-3.png',
   '/assets/skechers-4.png',
-  '/assets/skechers-5.png'
+  '/assets/skechers-5.png',
+  '/assets/skechers-6.png'
 ];
 
 export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
@@ -113,11 +114,11 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
         </span>
       </div>
 
-      {/* Grid Canvas */}
+      {/* Grid Canvas (4 Columns x 3 Rows = 12 Cards) */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        gap: '8px',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '10px',
         width: '100%',
         maxWidth: '380px'
       }}>
@@ -126,8 +127,8 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
             key={index}
             onClick={() => handleCardClick(index)}
             style={{
-              height: '72px',
-              borderRadius: '12px',
+              height: '85px',
+              borderRadius: '14px',
               border: card.isMatched ? '2px solid #8CE63D' : card.isFlipped ? '2px solid #FEC949' : '1.5px solid #35589A',
               background: card.isFlipped || card.isMatched ? '#FFFFFF' : 'linear-gradient(135deg, #152B5B 0%, #03257E 100%)',
               cursor: 'pointer',
@@ -136,17 +137,17 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
               alignItems: 'center',
               transition: 'transform 0.2s ease, background-color 0.2s ease',
               boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-              padding: '4px'
+              padding: '6px'
             }}
           >
             {card.isFlipped || card.isMatched ? (
               <img
                 src={card.imageSrc}
                 alt="Skechers Shoe"
-                style={{ width: '100%', height: 'auto', maxHeight: '55px', objectFit: 'contain' }}
+                style={{ width: '100%', height: 'auto', maxHeight: '68px', objectFit: 'contain' }}
               />
             ) : (
-              <span style={{ fontSize: '20px', color: '#FEC949' }}>❓</span>
+              <span style={{ fontSize: '22px', color: '#FEC949' }}>❓</span>
             )}
           </button>
         ))}
