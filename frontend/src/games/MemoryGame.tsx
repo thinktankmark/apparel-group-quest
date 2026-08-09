@@ -130,7 +130,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
               height: '85px',
               borderRadius: '14px',
               border: card.isMatched ? '2px solid #8CE63D' : card.isFlipped ? '2px solid #FEC949' : '1.5px solid #35589A',
-              background: card.isFlipped || card.isMatched ? '#FFFFFF' : 'linear-gradient(135deg, #152B5B 0%, #03257E 100%)',
+              background: card.isFlipped || card.isMatched ? '#0b286d' : 'linear-gradient(135deg, #152B5B 0%, #03257E 100%)',
               cursor: 'pointer',
               display: 'flex',
               justifyContent: 'center',
