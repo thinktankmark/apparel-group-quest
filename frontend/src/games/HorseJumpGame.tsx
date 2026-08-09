@@ -91,8 +91,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       const s = stateRef.current;
 
       if (!s.isGameOver) {
-        // 1. Continuous Parallax Track Scrolling
-        s.trackOffset = (s.trackOffset + 6) % 60;
+        // 1. Continuous Parallax Track Scrolling (Slowed down to 2.5px per frame for smooth motion)
+        s.trackOffset = (s.trackOffset + 2.5) % 60;
 
         // 2. Airborne Physics with Forward Leap Arc & Landing Ahead
         if (s.isJumping) {
@@ -341,7 +341,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Horse Character Element (Leaps forward & lands ahead on track) */}
+        {/* Horse Character Element */}
         <div
           id="horse-runner-element"
           style={{
