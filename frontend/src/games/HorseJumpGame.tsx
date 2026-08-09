@@ -408,7 +408,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
               CONGRATULATIONS! POLO CHALLENGE CLEARED!
             </h3>
             <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. <br/> <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
             </p>
             <button className="btn-primary" onClick={() => onSuccess(score, 45)}>
               <span className="text-ar">احصل على دليلك التالي</span>

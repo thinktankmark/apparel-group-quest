@@ -150,7 +150,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
               CONGRATULATIONS! YOU WIN!
             </h3>
             <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. <br/> <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
             </p>
             <button className="btn-primary" onClick={() => onSuccess(100, Math.max(90 - timeLeft, 10))}>
               <span className="text-ar">احصل على دليلك التالي</span>
