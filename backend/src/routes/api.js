@@ -26,6 +26,7 @@ router.post('/player/game-complete', authenticatePlayer, validateGameProgression
 router.post('/admin/login', adminController.adminLogin);
 router.get('/admin/analytics', authenticateAdmin, adminController.getAnalytics);
 router.get('/admin/players', authenticateAdmin, adminController.searchPlayers);
+router.get('/admin/players/export', authenticateAdmin, adminController.exportPlayersCsv);
 router.post('/admin/prizes/collect', authenticateAdmin, adminController.collectPrize);
 router.delete('/admin/players/:playerId', authenticateAdmin, adminController.deletePlayer);
 router.get('/admin/otps', authenticateAdmin, adminController.getActiveOtps);

@@ -147,6 +147,51 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleExportPlayersCsv = () => {
+    if (!players || players.length === 0) {
+      setActionMsg('⚠️ No player records available to export.');
+      return;
+    }
+
+    const headers = [
+      'Player ID',
+      'Full Name',
+      'Email Address',
+      'Phone Number',
+      'Registration Date',
+      'Current Station Progress',
+      'Event Completed',
+      'Completion Date',
+      'Prize Handed Over',
+      'Prize Handover Date'
+    ];
+
+    const rows = players.map(p => [
+      `"${p.id || ''}"`,
+      `"${(p.fullName || '').replace(/"/g, '""')}"`,
+      `"${(p.email || '').replace(/"/g, '""')}"`,
+      `"${(p.phoneNumber || '').replace(/"/g, '""')}"`,
+      `"${p.registeredAt ? new Date(p.registeredAt).toLocaleString() : ''}"`,
+      `"Station ${p.currentSequenceOrder || 1} of 4"`,
+      `"${p.isCompleted ? 'Yes' : 'No'}"`,
+      `"${p.completedAt ? new Date(p.completedAt).toLocaleString() : 'N/A'}"`,
+      `"${p.isPrizeCollected ? 'Yes' : 'No'}"`,
+      `"${p.prizeCollectedAt ? new Date(p.prizeCollectedAt).toLocaleString() : 'N/A'}"`
+    ]);
+
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Apparel_Group_Scavenger_Hunt_Players_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setActionMsg('📥 Player data exported successfully to CSV!');
+  };
+
   const handleMarkPrizeCollected = async (playerId: string) => {
     if (!token) return;
     try {
@@ -253,9 +298,17 @@ export const App: React.FC = () => {
           <h1 style={{ fontSize: '18px', color: '#FEC949', margin: 0 }}>Apparel Group Scavenger Hunt — Admin Portal</h1>
           <span style={{ fontSize: '12px', color: '#9BB1DB' }}>Event Operational Dashboard & Verification</span>
         </div>
-        <button onClick={handleLogout} style={{ background: 'rgba(220,53,69,0.3)', border: '1px solid #FF5252', color: '#FFB8B8', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>
-          Logout 🚪
-        </button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <button
+            onClick={handleExportPlayersCsv}
+            style={{ background: '#8CE63D', border: 'none', color: '#041B4E', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 800 }}
+          >
+            📥 Export Excel / CSV
+          </button>
+          <button onClick={handleLogout} style={{ background: 'rgba(220,53,69,0.3)', border: '1px solid #FF5252', color: '#FFB8B8', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>
+            Logout 🚪
+          </button>
+        </div>
       </header>
 
       {/* Action Notification Toast */}
@@ -387,6 +440,12 @@ export const App: React.FC = () => {
                 }}
                 style={{ flex: 1, padding: '12px 16px', background: '#152B5B', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', fontSize: '14px' }}
               />
+              <button
+                onClick={handleExportPlayersCsv}
+                style={{ padding: '12px 20px', background: '#8CE63D', border: 'none', borderRadius: '8px', color: '#041B4E', fontWeight: 800, fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                📥 Export CSV / Excel
+              </button>
             </div>
 
             <div style={{ background: '#152B5B', border: '1px solid #35589A', borderRadius: '12px', overflow: 'hidden' }}>

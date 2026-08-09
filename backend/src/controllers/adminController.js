@@ -61,12 +61,14 @@ const searchPlayers = (req, res) => {
     return res.json(results);
   }
 
-  const q = search.trim().toLowerCase();
-  const matchedPlayers = memoryStore.players.filter(p =>
-    p.email.toLowerCase().includes(q) || p.phone_number.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')) || p.full_name.toLowerCase().includes(q)
+  const query = search.toLowerCase();
+  const filtered = memoryStore.players.filter(p =>
+    (p.full_name && p.full_name.toLowerCase().includes(query)) ||
+    (p.email && p.email.toLowerCase().includes(query)) ||
+    (p.phone_number && p.phone_number.includes(query))
   );
 
-  const results = matchedPlayers.map(p => {
+  const results = filtered.map(p => {
     const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
     const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
     return {
@@ -86,9 +88,47 @@ const searchPlayers = (req, res) => {
   return res.json(results);
 };
 
+// GET /api/admin/players/export
+const exportPlayersCsv = (req, res) => {
+  const headers = [
+    'Player ID',
+    'Full Name',
+    'Email Address',
+    'Phone Number',
+    'Registration Date',
+    'Current Station Progress',
+    'Event Completed',
+    'Completion Date',
+    'Prize Handed Over',
+    'Prize Handover Date'
+  ];
+
+  const rows = memoryStore.players.map(p => {
+    const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
+    const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
+    return [
+      `"${p.id || ''}"`,
+      `"${(p.full_name || '').replace(/"/g, '""')}"`,
+      `"${(p.email || '').replace(/"/g, '""')}"`,
+      `"${(p.phone_number || '').replace(/"/g, '""')}"`,
+      `"${p.created_at ? new Date(p.created_at).toISOString() : ''}"`,
+      `"Station ${prog.current_sequence_order || 1} of 4"`,
+      `"${prog.is_completed ? 'Yes' : 'No'}"`,
+      `"${prog.completed_at ? new Date(prog.completed_at).toISOString() : 'N/A'}"`,
+      `"${prize ? 'Yes' : 'No'}"`,
+      `"${prize ? new Date(prize.collected_at).toISOString() : 'N/A'}"`
+    ];
+  });
+
+  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename=Apparel_Group_Scavenger_Hunt_Players_${new Date().toISOString().slice(0,10)}.csv`);
+  return res.status(200).send(csvContent);
+};
+
 // POST /api/admin/prizes/collect
 const collectPrize = (req, res) => {
-  const { playerId, notes } = req.body;
+  const { playerId } = req.body;
   const admin = req.admin;
 
   if (!playerId) {
@@ -97,41 +137,34 @@ const collectPrize = (req, res) => {
 
   const player = memoryStore.players.find(p => p.id === playerId);
   if (!player) {
-    return res.status(404).json({ error: 'PLAYER_NOT_FOUND', message: 'Player not found.' });
+    return res.status(404).json({ error: 'PLAYER_NOT_FOUND', message: 'Player record not found.' });
   }
 
-  const progress = memoryStore.progress.find(p => p.player_id === playerId);
-  if (!progress || !progress.is_completed) {
-    return res.status(400).json({
-      error: 'QUEST_NOT_COMPLETED',
-      message: 'Player has not completed all scavenger hunt challenges yet.'
-    });
+  const prog = memoryStore.progress.find(pr => pr.player_id === playerId);
+  if (!prog || !prog.is_completed) {
+    return res.status(400).json({ error: 'HUNT_NOT_COMPLETED', message: 'Player has not completed all 4 stations yet.' });
   }
 
-  const existingCollection = memoryStore.prizeCollections.find(pc => pc.player_id === playerId);
-  if (existingCollection) {
-    return res.status(409).json({
-      error: 'PRIZE_ALREADY_COLLECTED',
-      message: `Prize was already collected on ${new Date(existingCollection.collected_at).toLocaleString()}.`,
-      collectedAt: existingCollection.collected_at
-    });
+  let prize = memoryStore.prizeCollections.find(pc => pc.player_id === playerId);
+  if (prize) {
+    return res.status(400).json({ error: 'PRIZE_ALREADY_COLLECTED', message: 'Prize has already been collected for this player.' });
   }
 
-  const newCollection = {
+  prize = {
     id: `prize-${Date.now()}`,
     player_id: playerId,
     collected_at: new Date().toISOString(),
-    collected_by_admin_id: admin.id,
-    notes: notes || 'Prize marked as collected at Main Booth'
+    verified_by_admin_id: admin.adminId
   };
 
-  memoryStore.prizeCollections.push(newCollection);
+  memoryStore.prizeCollections.push(prize);
 
+  // Audit Log Entry
   memoryStore.auditLogs.push({
-    id: `log-${Date.now()}`,
-    admin_id: admin.id,
-    action: 'MARK_PRIZE_COLLECTED',
-    details: { playerId, playerName: player.full_name, playerEmail: player.email },
+    id: `audit-${Date.now()}`,
+    admin_id: admin.adminId,
+    action: 'PRIZE_COLLECTED',
+    details: { playerId, playerName: player.full_name },
     created_at: new Date().toISOString()
   });
 
@@ -139,7 +172,7 @@ const collectPrize = (req, res) => {
 
   return res.json({
     message: 'Prize marked as collected successfully',
-    collection: newCollection
+    prizeCollection: prize
   });
 };
 
@@ -150,53 +183,59 @@ const deletePlayer = (req, res) => {
 
   const playerIndex = memoryStore.players.findIndex(p => p.id === playerId);
   if (playerIndex === -1) {
-    return res.status(404).json({ error: 'PLAYER_NOT_FOUND', message: 'Player not found.' });
+    return res.status(404).json({ error: 'PLAYER_NOT_FOUND', message: 'Player record not found.' });
   }
 
-  const deletedPlayer = memoryStore.players[playerIndex];
+  const playerName = memoryStore.players[playerIndex].full_name;
 
-  // Delete player, progress, attempts, and prize collections
+  // Remove player, progress, attempts, and prize collections
   memoryStore.players.splice(playerIndex, 1);
   memoryStore.progress = memoryStore.progress.filter(p => p.player_id !== playerId);
   memoryStore.attempts = memoryStore.attempts.filter(a => a.player_id !== playerId);
   memoryStore.prizeCollections = memoryStore.prizeCollections.filter(pc => pc.player_id !== playerId);
 
+  // Audit Log Entry
   memoryStore.auditLogs.push({
-    id: `log-${Date.now()}`,
-    admin_id: admin.id,
-    action: 'DELETE_PLAYER',
-    details: { playerId, playerName: deletedPlayer.full_name, playerEmail: deletedPlayer.email, playerPhone: deletedPlayer.phone_number },
+    id: `audit-${Date.now()}`,
+    admin_id: admin.adminId,
+    action: 'PLAYER_DELETED',
+    details: { playerId, playerName },
     created_at: new Date().toISOString()
   });
 
   saveStoreToFile();
 
   return res.json({
-    message: 'Player deleted successfully',
-    playerId
+    message: `Player "${playerName}" deleted successfully.`
   });
 };
 
-// GET /api/admin/otps (Active OTP Lookup Helper)
+// GET /api/admin/otps
 const getActiveOtps = (req, res) => {
   const { otpStoreMap } = require('./authController');
-  const list = [];
-  if (otpStoreMap) {
-    otpStoreMap.forEach((val, key) => {
-      if (Date.now() < val.expiresAt) {
-        list.push({ email: key, otpCode: val.otp, expiresAt: val.expiresAt });
-      }
-    });
+  const otps = [];
+  const now = Date.now();
+
+  for (const [key, data] of otpStoreMap.entries()) {
+    if (data && data.expiresAt > now) {
+      otps.push({
+        email: key,
+        otpCode: data.code,
+        expiresAt: data.expiresAt
+      });
+    }
   }
-  return res.json(list);
+
+  return res.json(otps);
 };
 
-// GET /api/admin/stores/sequence (Includes Main Booth Registration QR + Station 1-4 QRs)
+// GET /api/admin/stores/sequence
 const getStoreSequence = (req, res) => {
-  const mainBoothStore = memoryStore.stores.find(st => st.id === 'store-main-booth') || {
+  const mainBoothStore = memoryStore.stores.find(s => s.is_main_booth) || {
     id: 'store-main-booth',
-    name_ar: 'جناح مجموعة أباريل الرئيسي',
-    name_en: 'Apparel Group Main Booth'
+    nameAr: 'جناح مجموعة أباريل الرئيسي',
+    nameEn: 'Apparel Group Main Booth',
+    stationCode: 'MAIN_BOOTH'
   };
 
   const mainBoothItem = {
@@ -232,6 +271,7 @@ module.exports = {
   adminLogin,
   getAnalytics,
   searchPlayers,
+  exportPlayersCsv,
   collectPrize,
   deletePlayer,
   getActiveOtps,
