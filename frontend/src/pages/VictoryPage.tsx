@@ -83,7 +83,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         alignItems: 'center'
       }}>
         {/* Main Booth Photo */}
-        <div style={{ width: '100%', overflow: 'hidden', borderRadius: '16px', marginBottom: '16px' }}>
+        <div style={{ width: '100%', overflow: 'hidden', borderRadius: '16px', marginBottom: '0' }}>
           <img
             src="/assets/main-booth.png"
             alt="Apparel Group Main Booth"

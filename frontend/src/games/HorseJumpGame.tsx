@@ -127,7 +127,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
         // Horse Bounding Box
         const horseLeft = s.horseX + 8;
-        const horseRight = s.horseX + 38;
+        const horseRight = s.horseX + 42;
         const obstacleLeft = obstaclePx - 10;
         const obstacleRight = obstaclePx + 10;
 
@@ -171,14 +171,14 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
         if (s.isJumping) {
           // Dynamic tilt during forward jump arc
-          tiltDeg = s.velocityY > 0 ? -12 : 4;
+          tiltDeg = s.velocityY > 0 ? -10 : 3;
         } else {
           // Galloping stride bobbing & tilt rhythm
           gallopBob = Math.sin(currentTime / 70) * 3;
-          tiltDeg = Math.sin(currentTime / 90) * 4;
+          tiltDeg = Math.sin(currentTime / 90) * 3;
         }
 
-        horseEl.style.transform = `translate(${s.horseX}px, ${-(s.horseY + gallopBob)}px) scaleX(-1) rotate(${tiltDeg}deg)`;
+        horseEl.style.transform = `translate(${s.horseX}px, ${-(s.horseY + gallopBob)}px) rotate(${tiltDeg}deg)`;
       }
 
       if (obstacleEl) {
@@ -324,20 +324,27 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Horse Character Element */}
+        {/* Official Beverly Hills Polo Club Rider Character Image */}
         <div
           id="horse-runner-element"
           style={{
             position: 'absolute',
-            bottom: '44px',
+            bottom: '40px',
             left: '0px',
-            fontSize: '44px',
-            lineHeight: 1,
             zIndex: 10,
             transition: 'none'
           }}
         >
-          🏇
+          <img
+            src="/assets/polo-rider.png"
+            alt="BHPC Polo Rider"
+            style={{
+              width: '58px',
+              height: 'auto',
+              display: 'block',
+              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.5))'
+            }}
+          />
         </div>
 
         {/* Oncoming Hurdle Barrier Obstacle */}
@@ -408,7 +415,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
               CONGRATULATIONS! POLO CHALLENGE CLEARED!
             </h3>
             <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. <br/> <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
             </p>
             <button className="btn-primary" onClick={() => onSuccess(score, 45)}>
               <span className="text-ar">احصل على دليلك التالي</span>
