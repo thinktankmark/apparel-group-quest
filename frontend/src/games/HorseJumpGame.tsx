@@ -20,13 +20,17 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const animationFrameId = useRef<number | null>(null);
 
-  // Real-time Smooth Endless Runner Physics Engine
+  // Real-time Forward-Landing Runner Physics Engine
   const stateRef = useRef({
-    horseX: 70,           // Fixed steady runner horizontal position (px)
+    horseX: 45,           // Current runner horizontal position (px)
     horseY: 0,            // Vertical jump height (px)
     velocityY: 0,         // Vertical impulse velocity
     isJumping: false,     // Airborne status
-    obstaclePos: 180,     // Initial spawn position (180% offscreen right)
+    jumpStartX: 45,       // X position at start of jump
+    jumpTargetX: 85,      // Landed X position ahead on track
+    jumpFrame: 0,         // Airborne frame counter
+    totalJumpFrames: 42,  // Total airborne frames
+    obstaclePos: 180,     // Initial hurdle spawn position (180% offscreen right)
     trackOffset: 0,       // Background track parallax scroll offset (px)
     score: 0,
     isGameOver: false,
@@ -38,7 +42,10 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     if (s.isJumping || s.isGameOver || showRetryModal || showWinModal) return;
 
     s.isJumping = true;
-    s.velocityY = 11.5; // Smooth upward vertical jump impulse
+    s.velocityY = 11.8; // Upward jump impulse
+    s.jumpStartX = s.horseX;
+    s.jumpTargetX = Math.min(s.horseX + 40, 160); // Target landing position ahead on track
+    s.jumpFrame = 0;
     s.hasPassedObstacle = false;
   };
 
@@ -50,10 +57,14 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   const handleRetry = () => {
     stateRef.current = {
-      horseX: 70,
+      horseX: 45,
       horseY: 0,
       velocityY: 0,
       isJumping: false,
+      jumpStartX: 45,
+      jumpTargetX: 85,
+      jumpFrame: 0,
+      totalJumpFrames: 42,
       obstaclePos: 180,
       trackOffset: 0,
       score: 0,
@@ -67,7 +78,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     setHasGameStarted(false);
   };
 
-  // 60FPS Endless Runner Physics & Animation Loop
+  // 60FPS Runner Physics Loop
   useEffect(() => {
     if (!hasGameStarted || isGameOver || showWinModal || showRetryModal) return;
 
@@ -83,16 +94,28 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         // 1. Continuous Parallax Track Scrolling
         s.trackOffset = (s.trackOffset + 6) % 60;
 
-        // 2. Smooth Vertical Jump Physics (No horizontal X shifting - lands at same steady runner position)
+        // 2. Airborne Physics with Forward Leap Arc & Landing Ahead
         if (s.isJumping) {
-          s.horseY += s.velocityY;
-          s.velocityY -= 0.52; // Comfortable floaty gravity
+          s.jumpFrame += 1;
+          const progress = Math.min(1.0, s.jumpFrame / s.totalJumpFrames);
 
-          // Smooth Touchdown Landing back on track
+          // Smoothly advance X forward during jump arc so it lands ahead
+          s.horseX = s.jumpStartX + ((s.jumpTargetX - s.jumpStartX) * progress);
+
+          s.horseY += s.velocityY;
+          s.velocityY -= 0.52; // Floaty gravity
+
+          // Touchdown Landing Ahead on Track
           if (s.horseY <= 0) {
             s.horseY = 0;
             s.velocityY = 0;
             s.isJumping = false;
+            s.horseX = s.jumpTargetX; // Lands at the new forward position ahead!
+          }
+        } else {
+          // Gentle, natural return drift toward base position so player can leap forward again
+          if (s.horseX > 45) {
+            s.horseX = Math.max(45, s.horseX - 0.35);
           }
         }
 
@@ -103,13 +126,13 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         const containerWidth = canvasRef.current?.clientWidth || 460;
         const obstaclePx = (s.obstaclePos / 100) * containerWidth;
 
-        // Horse Bounding Box at fixed steady X position (70px)
+        // Horse Bounding Box
         const horseLeft = s.horseX + 8;
         const horseRight = s.horseX + 38;
         const obstacleLeft = obstaclePx - 10;
         const obstacleRight = obstaclePx + 10;
 
-        // 4. Collision Detection (32px vertical clearance required)
+        // 4. Collision Detection (32px clearance required)
         if (obstacleRight >= horseLeft && obstacleLeft <= horseRight) {
           if (s.horseY < 32) {
             s.isGameOver = true;
@@ -138,7 +161,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         }
       }
 
-      // Visual DOM Updates (Galloping Bobbing + Smooth Rotation + Track Motion)
+      // Visual DOM Updates (Forward Landing + Gallop Stride + Track Motion)
       const horseEl = document.getElementById('horse-runner-element');
       const obstacleEl = document.getElementById('obstacle-runner-element');
       const trackEl = document.getElementById('runner-track-element');
@@ -148,8 +171,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         let tiltDeg = 0;
 
         if (s.isJumping) {
-          // Tilt upward during jump ascent, level out during descent
-          tiltDeg = s.velocityY > 0 ? -10 : 4;
+          // Dynamic tilt during forward jump arc
+          tiltDeg = s.velocityY > 0 ? -12 : 4;
         } else {
           // Galloping stride bobbing & tilt rhythm
           gallopBob = Math.sin(currentTime / 70) * 3;
@@ -318,7 +341,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Horse Character Element (Flipped horizontally to face RIGHT + Gallop Stride + Jump Arc) */}
+        {/* Horse Character Element (Leaps forward & lands ahead on track) */}
         <div
           id="horse-runner-element"
           style={{
