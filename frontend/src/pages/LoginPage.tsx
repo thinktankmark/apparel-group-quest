@@ -60,13 +60,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       <HeaderLogo />
 
       <h1 className="title-ar" style={{ fontSize: '18px', marginBottom: '4px' }}>
-        لقد كشفت عن دليل / You found a clue!
+        لقد كشفت عن دليل
       </h1>
-      <h2 style={{ fontSize: '13px', color: '#FFFFFF', textAlign: 'center', marginBottom: '24px' }}>
+      <h2 style={{ fontSize: '13px', color: '#FFFFFF', textAlign: 'center', marginBottom: '15px' }}>
         سجّل الدخول برقم هاتفك أو بريدك الإلكتروني لتبدأ التحدّي الآن<br />
-        <span style={{ fontSize: '12px', color: '#9BB1DB', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block', marginTop: '2px' }}>
+      </h2>
+      <h1 className="title-ar" style={{ fontSize: '18px', marginBottom: '4px' }}>
+       You found a clue!
+      </h1>
+      <h2 style={{ fontSize: '13px', color: '#9BB1DB', textAlign: 'center', direction: 'ltr', marginBottom: '24px' }}>
           Login with your phone number or email to play the challenge.
-        </span>
       </h2>
 
       <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px', direction:'ltr', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
