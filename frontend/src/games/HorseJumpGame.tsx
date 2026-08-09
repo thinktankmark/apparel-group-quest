@@ -91,8 +91,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       const s = stateRef.current;
 
       if (!s.isGameOver) {
-        // 1. Continuous Parallax Track Scrolling (Slowed down to 2.5px per frame for smooth motion)
-        s.trackOffset = (s.trackOffset + 2.5) % 60;
+        // 1. Continuous Parallax Track Scrolling (Gentle 1.2px per frame)
+        s.trackOffset = (s.trackOffset + 1.2) % 60;
 
         // 2. Airborne Physics with Forward Leap Arc & Landing Ahead
         if (s.isJumping) {
@@ -119,8 +119,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           }
         }
 
-        // 3. Oncoming Hurdle Motion
-        const obstacleSpeed = 0.55;
+        // 3. Oncoming Hurdle Motion (Comfortable 0.38 speed)
+        const obstacleSpeed = 0.38;
         s.obstaclePos -= obstacleSpeed;
 
         const containerWidth = canvasRef.current?.clientWidth || 460;
