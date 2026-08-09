@@ -74,7 +74,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
           <img
             src="/assets/crocs-logo.png"
             alt="Crocs"
-            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ maxWidth: '110px', objectFit: 'contain', display: 'block' }}
           />
         )}
       </div>
