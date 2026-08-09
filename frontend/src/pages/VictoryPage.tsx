@@ -103,6 +103,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
           border: '1.5px solid #FEC949',
           borderRadius: '30px',
           padding: '8px 20px',
+          direction:'rtl',
           marginBottom: '16px',
           display: 'flex',
           alignItems: 'center',
