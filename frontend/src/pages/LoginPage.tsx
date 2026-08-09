@@ -29,7 +29,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       onLoginSuccess(seqOrder);
     } catch (err: any) {
       if (err.error === 'ACCOUNT_NOT_FOUND' || err.showBoothPopup) {
-        setErrorMsg('⚠️ الحساب غير موجود. يرجى التحقق من الرقم أو البريد الإلكتروني. / Account doesn\'t exist. Please check your number or email.');
+        setErrorMsg(
+          <>
+            <span dir="rtl" style={{ display: 'block' }}>
+              ⚠️ الحساب غير موجود. يرجى التحقق من الرقم أو البريد الإلكتروني.
+            </span>
+            <span dir="ltr" style={{ display: 'block' }}>
+              Account doesn't exist. Please check your number or email.
+            </span>
+          </>
+        );
       } else {
         setErrorMsg(err.message || 'Login failed. Please check your credentials.');
       }
