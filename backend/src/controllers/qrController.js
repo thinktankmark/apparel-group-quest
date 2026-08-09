@@ -40,8 +40,8 @@ const validateQrToken = (req, res) => {
     targetStoreId = 'store-skechers';
   } else if (cleanToken.includes('bhpc') || cleanToken.includes('polo')) {
     targetStoreId = 'store-bhpc';
-  } else if (cleanToken.includes('steve') || cleanToken.includes('madden')) {
-    targetStoreId = 'store-steve-madden';
+  } else if (cleanToken.includes('crocs')) {
+    targetStoreId = 'store-crocs';
   } else {
     // Search sequence tokens or verify JWT
     const matchedSeq = memoryStore.sequence.find(s => s.qr_token === token || s.qr_token.toLowerCase() === cleanToken);

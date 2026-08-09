@@ -18,7 +18,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
 
     if (seqOrder === 3 || codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC') || idUpper.includes('BHPC')) return '/assets/polo-store.png';
     if (seqOrder === 2 || codeUpper === 'ACO' || nameUpper.includes('ACO') || idUpper.includes('ACO')) return '/assets/aco-store.png';
-    if (seqOrder === 4 || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE') || idUpper.includes('STEVE')) return '/assets/steve-madden-store.png';
+    if (seqOrder === 4 || codeUpper === 'CROCS' || nameUpper.includes('CROCS') || idUpper.includes('CROCS')) return '/assets/crocs-store.png';
     if (seqOrder === 1 || codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS') || idUpper.includes('SKECHERS')) return '/assets/skechers-store.png';
     return '/assets/polo-store.png';
   };
@@ -32,7 +32,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
     const isBhpc = seqOrder === 3 || codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC') || nameUpper.includes('BEVERLY') || idUpper.includes('BHPC');
     const isAco = seqOrder === 2 || codeUpper === 'ACO' || nameUpper.includes('ACO') || idUpper.includes('ACO');
     const isSkechers = seqOrder === 1 || codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS') || idUpper.includes('SKECHERS');
-    const isSteveMadden = seqOrder === 4 || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE') || idUpper.includes('STEVE');
+    const isCrocs = seqOrder === 4 || codeUpper === 'CROCS' || nameUpper.includes('CROCS') || idUpper.includes('CROCS');
 
     return (
       <div style={{
@@ -70,10 +70,10 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
-        {!isBhpc && !isAco && !isSkechers && isSteveMadden && (
+        {!isBhpc && !isAco && !isSkechers && isCrocs && (
           <img
-            src="/assets/steve-madden-logo.png"
-            alt="Steve Madden"
+            src="/assets/crocs-logo.png"
+            alt="Crocs"
             style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}

@@ -123,7 +123,7 @@
       "store_sequence": [
         "store-skechers",
         "store-aco",
-        "store-steve-madden",
+        "store-crocs",
         "store-bhpc"
       ],
       "is_completed": false,
@@ -135,7 +135,7 @@
       "player_id": "player-1786254669530",
       "current_sequence_order": 1,
       "store_sequence": [
-        "store-steve-madden",
+        "store-crocs",
         "store-aco",
         "store-skechers",
         "store-bhpc"
@@ -152,7 +152,7 @@
         "store-skechers",
         "store-aco",
         "store-bhpc",
-        "store-steve-madden"
+        "store-crocs"
       ],
       "is_completed": true,
       "completed_at": "2026-08-09T06:13:26.908Z",
@@ -166,7 +166,7 @@
         "store-skechers",
         "store-aco",
         "store-bhpc",
-        "store-steve-madden"
+        "store-crocs"
       ],
       "is_completed": true,
       "completed_at": "2026-08-09T06:45:18.177Z",
@@ -180,7 +180,7 @@
         "store-skechers",
         "store-aco",
         "store-bhpc",
-        "store-steve-madden"
+        "store-crocs"
       ],
       "is_completed": true,
       "completed_at": "2026-08-09T07:23:58.953Z",
@@ -194,7 +194,7 @@
         "store-skechers",
         "store-aco",
         "store-bhpc",
-        "store-steve-madden"
+        "store-crocs"
       ],
       "is_completed": true,
       "completed_at": "2026-08-09T07:37:53.877Z",
@@ -208,7 +208,7 @@
         "store-skechers",
         "store-aco",
         "store-bhpc",
-        "store-steve-madden"
+        "store-crocs"
       ],
       "is_completed": true,
       "completed_at": "2026-08-09T08:02:06.951Z",
@@ -650,15 +650,15 @@
       "location_text_en": "BHPC Store Station"
     },
     {
-      "id": "store-steve-madden",
+      "id": "store-crocs",
       "event_id": "event-001",
-      "name_ar": "فرع ستيف مادن",
-      "name_en": "Steve Madden Store",
-      "station_code": "STEVE_MADDEN",
+      "name_ar": "فرع كروكس",
+      "name_en": "Crocs Store",
+      "station_code": "CROCS",
       "is_main_booth": false,
       "hero_image_url": "6b71cb2867429c6763e78bf41f798068e6c6129a",
-      "location_text_ar": "محطة فرع ستيف مادن",
-      "location_text_en": "Steve Madden Store Station"
+      "location_text_ar": "محطة فرع كروكس",
+      "location_text_en": "Crocs Store Station"
     }
   ]
 }

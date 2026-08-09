@@ -64,15 +64,15 @@ const memoryStore = {
       location_text_en: 'BHPC Store Station'
     },
     {
-      id: 'store-steve-madden',
+      id: 'store-crocs',
       event_id: 'event-001',
-      name_ar: 'فرع ستيف مادن',
-      name_en: 'Steve Madden Store',
-      station_code: 'STEVE_MADDEN',
+      name_ar: 'فرع كروكس',
+      name_en: 'Crocs Store',
+      station_code: 'CROCS',
       is_main_booth: false,
       hero_image_url: '6b71cb2867429c6763e78bf41f798068e6c6129a',
-      location_text_ar: 'محطة فرع ستيف مادن',
-      location_text_en: 'Steve Madden Store Station'
+      location_text_ar: 'محطة فرع كروكس',
+      location_text_en: 'Crocs Store Station'
     }
   ],
   sequence: [
@@ -107,10 +107,10 @@ const memoryStore = {
       id: 'seq-4',
       event_id: 'event-001',
       sequence_order: 4,
-      store_id: 'store-steve-madden',
+      store_id: 'store-crocs',
       game_key: 'SPEED_TAP',
-      qr_token: 'token-steve-seq-4',
-      qr_signed_jwt: jwt.sign({ sequenceOrder: 4, storeId: 'store-steve-madden', gameKey: 'SPEED_TAP' }, JWT_SECRET)
+      qr_token: 'token-crocs-seq-4',
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 4, storeId: 'store-crocs', gameKey: 'SPEED_TAP' }, JWT_SECRET)
     }
   ],
   mainBoothQr: {
@@ -180,7 +180,7 @@ function saveStoreToFile() {
 loadStoreFromFile();
 
 function getFixedStoreSequence() {
-  return ['store-skechers', 'store-aco', 'store-bhpc', 'store-steve-madden'];
+  return ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
 }
 
 module.exports = {

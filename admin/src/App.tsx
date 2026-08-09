@@ -400,7 +400,7 @@ export const App: React.FC = () => {
                   🎮 Minigame 3 (Polo Jump) ↗
                 </a>
                 <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=CLUE&station=4" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
-                  🔍 Station 4 Clue (Steve Madden) ↗
+                  🔍 Station 4 Clue (Crocs) ↗
                 </a>
                 <a href="https://apparel-scavenger-hunt.vercel.app/?test_view=GAME&station=4" target="_blank" rel="noreferrer" style={{ padding: '10px 14px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#38EF7D', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
                   🎮 Minigame 4 (Speed Tap) ↗
