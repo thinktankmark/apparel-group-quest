@@ -35,7 +35,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
 
     if (attempts < 3) {
       for (const line of winningLines) {
-        const aiCount = line.filter(idx => b[idx] === '👠').length;
+        const aiCount = line.filter(idx => b[idx] === 'PINK_SHOE').length;
         const emptyCount = line.filter(idx => b[idx] === null).length;
         if (aiCount === 2 && emptyCount === 1) {
           return line.find(idx => b[idx] === null)!;
@@ -45,7 +45,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
 
     if (attempts < 3) {
       for (const line of winningLines) {
-        const playerCount = line.filter(idx => b[idx] === '👟').length;
+        const playerCount = line.filter(idx => b[idx] === 'GREEN_SHOE').length;
         const emptyCount = line.filter(idx => b[idx] === null).length;
         if (playerCount === 2 && emptyCount === 1) {
           return line.find(idx => b[idx] === null)!;
@@ -67,7 +67,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     if (board[idx] || !isPlayerTurn || winner) return;
 
     const newBoard = [...board];
-    newBoard[idx] = '👟'; // Player symbol
+    newBoard[idx] = 'GREEN_SHOE'; // Player symbol
     setBoard(newBoard);
 
     const winResult = checkWinner(newBoard);
@@ -82,7 +82,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     setTimeout(() => {
       const aiMove = getSmartAiMove(newBoard, attemptCount);
       if (aiMove !== undefined && newBoard[aiMove] === null) {
-        newBoard[aiMove] = '👠'; // AI symbol
+        newBoard[aiMove] = 'PINK_SHOE'; // AI symbol
         setBoard(newBoard);
 
         const aiWinResult = checkWinner(newBoard);
@@ -97,7 +97,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   const handleGameOver = (res: string) => {
     setWinner(res);
-    if (res === '👟') {
+    if (res === 'GREEN_SHOE') {
       setShowWinModal(true);
     } else {
       setAttemptCount(prev => prev + 1);
@@ -122,27 +122,40 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
         <h2 className="title-ar">تحدي XO للأحذية</h2>
         <p className="subtitle-en">Shoes XO Challenge</p>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
-          اهزم الذكاء الاصطناعي في تحدي XO للمتابعة. / <span style={{direction:'ltr'}}>Beat the AI in XO Challenge to proceed.</span>
+          اهزم الذكاء الاصطناعي في تحدي XO للمتابعة. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Beat the AI in XO Challenge to proceed.</span>
         </p>
       </div>
 
-      {/* Turn HUD (Clean, no attempt count mentioned) */}
+      {/* Turn HUD */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: '24px'
+        marginBottom: '20px'
       }}>
         <div style={{
           background: 'rgba(254, 201, 73, 0.18)',
           border: '1.5px solid #FEC949',
           borderRadius: '20px',
-          padding: '8px 20px',
+          padding: '8px 18px',
           color: '#FEC949',
-          fontSize: '13.5px',
-          fontWeight: 700
+          fontSize: '13px',
+          fontWeight: 700,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
         }}>
-          {isPlayerTurn ? 'دورك / Your Turn 👟' : 'دور الذكاء الاصطناعي... / AI Thinking... 👠'}
+          {isPlayerTurn ? (
+            <>
+              <span>دورك / Your Turn</span>
+              <img src="/assets/xo-shoe-green.png" alt="Green Croc" style={{ width: '28px', height: 'auto' }} />
+            </>
+          ) : (
+            <>
+              <span>دور الذكاء الاصطناعي... / AI Thinking...</span>
+              <img src="/assets/xo-shoe-pink.png" alt="Pink Croc" style={{ width: '28px', height: 'auto' }} />
+            </>
+          )}
         </div>
       </div>
 
@@ -162,17 +175,30 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
             style={{
               height: '95px',
               background: '#152B5B',
-              border: '1.5px solid #35589A',
+              border: cell === 'GREEN_SHOE' ? '2px solid #8CE63D' : cell === 'PINK_SHOE' ? '2px solid #FF5252' : '1.5px solid #35589A',
               borderRadius: '16px',
-              fontSize: '42px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               cursor: 'pointer',
-              transition: 'transform 0.15s ease'
+              transition: 'transform 0.15s ease',
+              padding: '6px'
             }}
           >
-            {cell}
+            {cell === 'GREEN_SHOE' && (
+              <img
+                src="/assets/xo-shoe-green.png"
+                alt="Green Croc Shoe"
+                style={{ width: '74px', height: 'auto', display: 'block', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}
+              />
+            )}
+            {cell === 'PINK_SHOE' && (
+              <img
+                src="/assets/xo-shoe-pink.png"
+                alt="Pink Croc Shoe"
+                style={{ width: '74px', height: 'auto', display: 'block', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}
+              />
+            )}
           </button>
         ))}
       </div>
@@ -181,11 +207,13 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
       {showRetryModal && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🤖 👠</span>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '12px' }}>
+              <img src="/assets/xo-shoe-pink.png" alt="Pink Croc" style={{ width: '50px', height: 'auto' }} />
+            </div>
             <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#FF5252', marginBottom: '4px' }}>
               {winner === 'TIE' ? 'تعادل!' : 'فاز الذكاء الاصطناعي!'}
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, direction:'ltr', color: '#FFFFFF', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, direction: 'ltr', unicodeBidi: 'isolate', color: '#FFFFFF', marginBottom: '8px' }}>
               {winner === 'TIE' ? 'Game Tied!' : 'AI Won this round!'}
             </h3>
             <button className="btn-primary" onClick={resetGame}>
@@ -200,15 +228,17 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
       {showWinModal && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🎉 🏆</span>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '12px' }}>
+              <img src="/assets/xo-shoe-green.png" alt="Green Croc" style={{ width: '56px', height: 'auto' }} />
+            </div>
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
               تهانينا! لقد فزت بالجولة!
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction:'ltr', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
               CONGRATULATIONS! YOU WIN!
             </h3>
             <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز.<br/> <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
             </p>
             <button className="btn-primary" onClick={() => onSuccess(100, 30)}>
               <span className="text-ar">احصل على دليلك التالي</span>
