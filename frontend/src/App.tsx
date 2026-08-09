@@ -48,7 +48,7 @@ const STORES_LIST = [
 ];
 
 const AppContent: React.FC = () => {
-  const { token, player, progress, activeClue, targetQrContext, completeStage, setTargetQrContext, logout } = useAuth();
+  const { token, player, progress, activeClue, targetQrContext, isLoadingProgress, completeStage, setTargetQrContext, logout } = useAuth();
   const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'VICTORY'>('SIGNUP');
   const [gameError, setGameError] = useState<string | null>(null);
 
@@ -68,32 +68,22 @@ const AppContent: React.FC = () => {
   }, [gameError]);
 
   const validateAndRouteStoreScan = (storeCtx: { storeId: string; sequenceOrder: number; gameKey: string }) => {
+    if (isLoadingProgress) return; // Wait for backend progress to load!
+
     const currentSeq = progress?.currentSequenceOrder || 1;
     const activeStoreId = activeClue?.store?.id;
 
-    const storeSeq = progress?.storeSequence;
     let isCompletedStore = false;
     let isCurrentActiveStore = false;
 
     if (activeStoreId) {
-      isCurrentActiveStore = storeCtx.storeId === activeStoreId;
+      isCurrentActiveStore = storeCtx.storeId === activeStoreId || storeCtx.sequenceOrder === activeClue?.sequenceOrder;
     } else {
       isCurrentActiveStore = storeCtx.sequenceOrder === currentSeq;
     }
 
-    if (storeSeq && Array.isArray(storeSeq)) {
-      const scannedIdx = storeSeq.indexOf(storeCtx.storeId);
-      if (scannedIdx !== -1) {
-        if (scannedIdx < currentSeq - 1) {
-          isCompletedStore = true;
-        } else if (scannedIdx === currentSeq - 1) {
-          isCurrentActiveStore = true;
-        }
-      }
-    } else {
-      if (storeCtx.sequenceOrder < currentSeq) {
-        isCompletedStore = true;
-      }
+    if (storeCtx.sequenceOrder < currentSeq) {
+      isCompletedStore = true;
     }
 
     if (isCurrentActiveStore) {
@@ -104,8 +94,9 @@ const AppContent: React.FC = () => {
       setTargetQrContext(null);
       setView('CLUE');
     } else {
-      const activeName = activeClue?.store?.nameEn ? ` (${activeClue.store.nameEn})` : '';
-      setGameError(`⚠️ لم تقم بفتح هذا الموقع بعد. دليلك الحالي للمتجر المطلوب${activeName}. / You haven't unlocked this location yet. Your active clue is for target store${activeName}.`);
+      const activeNameEn = activeClue?.store?.nameEn || (currentSeq === 2 ? 'ACO Store' : currentSeq === 3 ? 'BHPC Store' : currentSeq === 4 ? 'Steve Madden Store' : 'Skechers Store');
+      const activeNameAr = activeClue?.store?.nameAr || (currentSeq === 2 ? 'فرع أكو' : currentSeq === 3 ? 'فرع نادي بيفرلي هيلز للبولو' : currentSeq === 4 ? 'فرع ستيف مادن' : 'فرع سكتشرز');
+      setGameError(`⚠️ لم تقم بفتح هذا الموقع بعد. دليلك الحالي هو: ${activeNameAr}. / You haven't unlocked this location yet. Your active clue is for: ${activeNameEn}.`);
       setTargetQrContext(null);
       setView('CLUE');
     }
@@ -121,13 +112,13 @@ const AppContent: React.FC = () => {
       return;
     }
 
-    if (token && view !== 'LOGIN') {
+    if (token && view !== 'LOGIN' && !isLoadingProgress) {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
         validateAndRouteStoreScan(targetCtx);
       }
     }
-  }, [token, progress, targetQrContext, activeClue, view]);
+  }, [token, progress, targetQrContext, activeClue, isLoadingProgress, view]);
 
   const handleGameSuccess = async (score: number, durationSeconds: number) => {
     const currentSeq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;

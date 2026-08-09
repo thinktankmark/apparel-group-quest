@@ -36,6 +36,7 @@ interface AuthContextType {
   activeClue: ActiveClue | null;
   mainBoothToken: string | null;
   targetQrContext: { storeId: string; sequenceOrder: number; gameKey: string } | null;
+  isLoadingProgress: boolean;
   setMainBoothToken: (token: string | null) => void;
   setTargetQrContext: (context: { storeId: string; sequenceOrder: number; gameKey: string } | null) => void;
   login: (phoneNumber: string) => Promise<any>;
@@ -55,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
   const [progress, setProgress] = useState<Progress | null>(null);
   const [activeClue, setActiveClue] = useState<ActiveClue | null>(null);
+  const [isLoadingProgress, setIsLoadingProgress] = useState<boolean>(!!token);
   const [mainBoothToken, setMainBoothToken] = useState<string | null>(sessionStorage.getItem('ag_main_booth_token'));
   const [targetQrContext, setTargetQrContext] = useState<{ storeId: string; sequenceOrder: number; gameKey: string } | null>(() => {
     const saved = sessionStorage.getItem('ag_target_qr');
@@ -64,11 +66,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (token) {
       refreshProgress();
+    } else {
+      setIsLoadingProgress(false);
     }
   }, [token]);
 
   const refreshProgress = async () => {
-    if (!token) return;
+    if (!token) {
+      setIsLoadingProgress(false);
+      return;
+    }
     try {
       const res = await fetch(`${API_BASE}/api/player/progress`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -84,6 +91,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (err) {
       console.error('Failed to fetch player progress:', err);
+    } finally {
+      setIsLoadingProgress(false);
     }
   };
 
@@ -160,6 +169,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       activeClue,
       mainBoothToken,
       targetQrContext,
+      isLoadingProgress,
       setMainBoothToken: (t) => {
         setMainBoothToken(t);
         if (t) sessionStorage.setItem('ag_main_booth_token', t);
