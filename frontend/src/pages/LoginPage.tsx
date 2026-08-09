@@ -28,9 +28,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       const seqOrder = data?.progress?.currentSequenceOrder || 1;
       onLoginSuccess(seqOrder);
     } catch (err: any) {
-      if (err.showBoothPopup || err.error === 'ACCOUNT_NOT_FOUND') {
-        setErrorMsg(err.message || '⚠️ الحساب غير موجود. يرجى التحقق من الرقم/البريد أو زيارة جناحنا للتسجيل.');
-        setShowBoothModal(true);
+      if (err.error === 'ACCOUNT_NOT_FOUND' || err.showBoothPopup) {
+        setErrorMsg('⚠️ الحساب غير موجود. يرجى التحقق من الرقم أو البريد الإلكتروني. / Account doesn\'t exist. Please check your number or email.');
       } else {
         setErrorMsg(err.message || 'Login failed. Please check your credentials.');
       }
@@ -56,7 +55,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       </h1>
       <h2 style={{ fontSize: '13px', color: '#FFFFFF', textAlign: 'center', marginBottom: '24px' }}>
         سجّل الدخول برقم هاتفك أو بريدك الإلكتروني لتبدأ التحدّي الآن<br />
-        <span style={{ fontSize: '12px', color: '#9BB1DB' }}>Login with your phone number or email to play the challenge.</span>
+        <span style={{ fontSize: '12px', color: '#9BB1DB', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block', marginTop: '2px' }}>
+          Login with your phone number or email to play the challenge.
+        </span>
       </h2>
 
       <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -78,8 +79,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
         </div>
 
         {errorMsg && (
-          <div className="error-banner">
-            ⚠️ {errorMsg}
+          <div className="error-banner" style={{
+            width: '100%',
+            background: 'rgba(220, 53, 69, 0.25)',
+            border: '1.5px solid #FF5252',
+            borderRadius: '12px',
+            padding: '12px 14px',
+            color: '#FFB8B8',
+            fontSize: '12px',
+            fontWeight: 600,
+            textAlign: 'center',
+            marginBottom: '16px',
+            lineHeight: 1.4
+          }}>
+            {errorMsg}
           </div>
         )}
 
