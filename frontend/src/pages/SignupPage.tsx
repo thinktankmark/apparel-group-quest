@@ -50,7 +50,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
       <HeaderLogo />
 
       {/* Title */}
-      <h1 className="title-ar">رحلة البحث عن الكنز — سجل معلوماتك لتنضم إلى المغامرة!</h1>
+      <h1 className="title-ar">رحلة البحث عن الكنز — سجل معلوماتك انضمّ إلى المغامرة!</h1>
       <h2 className="subtitle-en">Apparel Scavenger Hunt — Register to join the adventure!</h2>
 
       {/* Registration Form */}
@@ -108,7 +108,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
       {/* Switch to Login */}
       <div style={{ textAlign: 'center', marginTop: '12px' }}>
         <p style={{ fontSize: '12px', color: '#9BB1DB' }}>
-          لديك حساب بالفعل؟ / Already have an account?{' '}
+          لديك حساب؟ / Already have an account?{' '}
           <button
             onClick={onGoToLogin}
             style={{ background: 'none', border: 'none', color: '#FEC949', textDecoration: 'underline', fontWeight: 700, cursor: 'pointer', fontSize: '12px' }}

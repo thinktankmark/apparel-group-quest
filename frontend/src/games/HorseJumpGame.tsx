@@ -98,10 +98,10 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             s.horseY = 0;
             s.velocityY = 0;
             s.isJumping = false;
-            s.horseX = 60;
+            s.horseX = 90;
           }
         } else {
-          s.horseX = 60; // Base ground position
+          s.horseX = 90; // Base ground position
         }
 
         // 2. Smooth Oncoming Obstacle Motion (Slower, comfortable speed)
