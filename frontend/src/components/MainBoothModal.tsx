@@ -30,14 +30,14 @@ export const MainBoothModal: React.FC<MainBoothModalProps> = ({ isOpen, onClose,
         <h2 style={{ fontSize: '17px', fontWeight: 700, color: '#FEC949', marginBottom: '4px' }}>
           {t.boothPopupTitle}
         </h2>
-        <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '16px' }}>
+        <h3 style={{ fontSize: '14px', fontWeight: 700, direction: 'ltr', color: '#FFFFFF', marginBottom: '16px' }}>
           {t.boothPopupSubtitle}
         </h3>
 
         <p style={{ fontSize: '11.5px', color: '#FFFFFF', marginBottom: '8px', lineHeight: 1.4 }}>
           {t.boothPopupBodyAr}
         </p>
-        <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px', lineHeight: 1.4 }}>
+        <p style={{ fontSize: '11px', color: '#9BB1DB', direction: 'ltr', marginBottom: '24px', lineHeight: 1.4 }}>
           {t.boothPopupBodyEn}
         </p>
 
