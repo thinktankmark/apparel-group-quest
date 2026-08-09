@@ -98,21 +98,21 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         </div>
 
         {/* Location Pill Badge */}
-        <div style={{
+        {/* <div style={{
           background: '#041B4E',
           border: '1.5px solid #FEC949',
           borderRadius: '30px',
           padding: '8px 20px',
-          direction:'rtl',
           marginBottom: '16px',
           display: 'flex',
           alignItems: 'center',
-          gap: '6px'
+          gap: '6px',
+           fontSize: '12px', 
+           fontWeight: 700, 
+           color: '#FEC949'
         }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#FEC949' }}>
             📍 <span style={{ direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>Apparel Group Main Booth</span> • جناح مجموعة أباريل
-          </span>
-        </div>
+        </div> */}
 
         {/* Card Footer Text */}
         <div style={{ textAlign: 'center', padding: '0 8px' }}>
