@@ -10,7 +10,7 @@ interface GameProps {
 
 export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [score, setScore] = useState<number>(0);
-  const targetScore = 5; // Target score set to 10
+  const targetScore = 5;
 
   const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
@@ -22,13 +22,12 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   // Real-time Smooth Endless Runner Physics Engine
   const stateRef = useRef({
-    horseX: 60,           // Base ground position (px)
-    horseY: 0,            // Ground height offset (px)
-    velocityY: 0,         // Vertical impulse
-    jumpStep: 0,          // Airborne frame counter
-    totalJumpSteps: 40,   // Total frames for smooth floaty jump
+    horseX: 70,           // Fixed steady runner horizontal position (px)
+    horseY: 0,            // Vertical jump height (px)
+    velocityY: 0,         // Vertical impulse velocity
     isJumping: false,     // Airborne status
-    obstaclePos: 190,     // 3.5s initial delay (spawns 190% offscreen right)
+    obstaclePos: 180,     // Initial spawn position (180% offscreen right)
+    trackOffset: 0,       // Background track parallax scroll offset (px)
     score: 0,
     isGameOver: false,
     hasPassedObstacle: false
@@ -39,8 +38,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     if (s.isJumping || s.isGameOver || showRetryModal || showWinModal) return;
 
     s.isJumping = true;
-    s.velocityY = 12.5; // Smooth vertical jump impulse
-    s.jumpStep = 0;
+    s.velocityY = 11.5; // Smooth upward vertical jump impulse
     s.hasPassedObstacle = false;
   };
 
@@ -52,13 +50,12 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   const handleRetry = () => {
     stateRef.current = {
-      horseX: 60,
+      horseX: 70,
       horseY: 0,
       velocityY: 0,
-      jumpStep: 0,
-      totalJumpSteps: 40,
       isJumping: false,
-      obstaclePos: 190, // Reset with 3.5s initial delay
+      obstaclePos: 180,
+      trackOffset: 0,
       score: 0,
       isGameOver: false,
       hasPassedObstacle: false
@@ -70,7 +67,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     setHasGameStarted(false);
   };
 
-  // Smooth 60FPS Physics Loop
+  // 60FPS Endless Runner Physics & Animation Loop
   useEffect(() => {
     if (!hasGameStarted || isGameOver || showWinModal || showRetryModal) return;
 
@@ -83,52 +80,46 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       const s = stateRef.current;
 
       if (!s.isGameOver) {
-        // 1. Smooth Vertical Jump Physics
+        // 1. Continuous Parallax Track Scrolling
+        s.trackOffset = (s.trackOffset + 6) % 60;
+
+        // 2. Smooth Vertical Jump Physics (No horizontal X shifting - lands at same steady runner position)
         if (s.isJumping) {
           s.horseY += s.velocityY;
-          s.velocityY -= 0.55; // Floaty, comfortable gravity
-          s.jumpStep += 1;
+          s.velocityY -= 0.52; // Comfortable floaty gravity
 
-          // Parabolic forward arc
-          const timeProgress = Math.min(1.0, s.jumpStep / s.totalJumpSteps);
-          s.horseX = 60 + timeProgress * 25;
-
-          // Smooth Touchdown Landing
+          // Smooth Touchdown Landing back on track
           if (s.horseY <= 0) {
             s.horseY = 0;
             s.velocityY = 0;
             s.isJumping = false;
-            s.horseX = 85;
           }
-        } else {
-          s.horseX = 100; // Base ground position
         }
 
-        // 2. Smooth Oncoming Obstacle Motion (Slower, comfortable speed)
-        const obstacleSpeed = 0.52; // Slower speed so players can easily react and jump
+        // 3. Oncoming Hurdle Motion
+        const obstacleSpeed = 0.55;
         s.obstaclePos -= obstacleSpeed;
 
         const containerWidth = canvasRef.current?.clientWidth || 460;
         const obstaclePx = (s.obstaclePos / 100) * containerWidth;
 
-        // Horse & Obstacle Bounding Boxes with forgiving hitboxes
-        const horseLeft = s.horseX + 10;
-        const horseRight = s.horseX + 35;
+        // Horse Bounding Box at fixed steady X position (70px)
+        const horseLeft = s.horseX + 8;
+        const horseRight = s.horseX + 38;
         const obstacleLeft = obstaclePx - 10;
         const obstacleRight = obstaclePx + 10;
 
-        // 3. Fair Collision Detection
+        // 4. Collision Detection (32px vertical clearance required)
         if (obstacleRight >= horseLeft && obstacleLeft <= horseRight) {
-          // If Horse Y height is less than 30px clearance -> Collision!
-          if (s.horseY < 30) {
+          if (s.horseY < 32) {
             s.isGameOver = true;
             setIsGameOver(true);
             setShowRetryModal(true);
           }
         }
 
-        // 4. Score Increment on Clean Clearance
-        if (s.obstaclePos < 5 && !s.hasPassedObstacle && !s.isGameOver) {
+        // 5. Score Increment on Clean Clearance
+        if (obstacleRight < horseLeft && !s.hasPassedObstacle && !s.isGameOver) {
           s.hasPassedObstacle = true;
           s.score += 1;
           setScore(s.score);
@@ -141,21 +132,39 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         }
 
         // Reset Obstacle to Right Side with ample spacing (130%)
-        if (s.obstaclePos <= -25) {
+        if (s.obstaclePos <= -20) {
           s.obstaclePos = 130;
           s.hasPassedObstacle = false;
         }
       }
 
-      // Visual DOM Updates with Horizontally Flipped Horse (facing RIGHT)
+      // Visual DOM Updates (Galloping Bobbing + Smooth Rotation + Track Motion)
       const horseEl = document.getElementById('horse-runner-element');
       const obstacleEl = document.getElementById('obstacle-runner-element');
+      const trackEl = document.getElementById('runner-track-element');
 
       if (horseEl) {
-        horseEl.style.transform = `translate(${s.horseX}px, ${-s.horseY}px) scaleX(-1)`;
+        let gallopBob = 0;
+        let tiltDeg = 0;
+
+        if (s.isJumping) {
+          // Tilt upward during jump ascent, level out during descent
+          tiltDeg = s.velocityY > 0 ? -10 : 4;
+        } else {
+          // Galloping stride bobbing & tilt rhythm
+          gallopBob = Math.sin(currentTime / 70) * 3;
+          tiltDeg = Math.sin(currentTime / 90) * 4;
+        }
+
+        horseEl.style.transform = `translate(${s.horseX}px, ${-(s.horseY + gallopBob)}px) scaleX(-1) rotate(${tiltDeg}deg)`;
       }
+
       if (obstacleEl) {
         obstacleEl.style.left = `${s.obstaclePos}%`;
+      }
+
+      if (trackEl) {
+        trackEl.style.backgroundPosition = `${-s.trackOffset}px 18px`;
       }
 
       animationFrameId.current = requestAnimationFrame(loop);
@@ -170,7 +179,21 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
     };
   }, [hasGameStarted, isGameOver, showWinModal, showRetryModal]);
 
-
+  if (showWinModal) {
+    return (
+      <GameVictoryScreen
+        gameTitleAr="سباق قفز البولو"
+        gameTitleEn="Beverly Hills Polo Club — Jump Challenge"
+        scoreTextAr={`${score}/ ${targetScore} قفزات`}
+        scoreTextEn={`${score}/ ${targetScore} Obstacles Cleared`}
+        subtitleAr="قفزات رائعة ومتقنة! أكملت التحدي بنجاح."
+        subtitleEn="Flawless jumps! You cleared all polo hurdles."
+        centerEmoji="🏇 🏆 ✨"
+        isFinalStage={false}
+        onContinue={() => onSuccess(score, 45)}
+      />
+    );
+  }
 
   return (
     <div
@@ -260,7 +283,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px' }}>
               انقر على الشاشة للبدء!
             </h2>
-            <h3 style={{ fontSize: '12px', fontWeight: 600, direction:'ltr', color: '#FFFFFF', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '12px', fontWeight: 600, color: '#FFFFFF', marginBottom: '16px' }}>
               Tap anywhere to start the game!
             </h3>
             <button className="btn-primary" style={{ maxWidth: '260px', pointerEvents: 'none' }}>
@@ -270,34 +293,37 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           </div>
         )}
 
-        {/* Dynamic Track Background */}
+        {/* Dynamic Endless Runner Track Background */}
         <div style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          height: '40px',
+          height: '44px',
           background: '#1A3673',
           borderTop: '3px solid #FEC949'
         }}>
-          {/* Dashed Moving Track Lines */}
-          <div style={{
-            width: '100%',
-            height: '100%',
-            backgroundImage: 'repeating-linear-gradient(90deg, #FEC949 0, #FEC949 15px, transparent 15px, transparent 30px)',
-            backgroundSize: '30px 4px',
-            backgroundPosition: '0 18px',
-            backgroundRepeat: 'repeat-x',
-            opacity: 0.6
-          }} />
+          {/* Dashed Moving Track Lines (Parallax Scrolling) */}
+          <div
+            id="runner-track-element"
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundImage: 'repeating-linear-gradient(90deg, #FEC949 0, #FEC949 20px, transparent 20px, transparent 40px)',
+              backgroundSize: '40px 4px',
+              backgroundPosition: '0px 18px',
+              backgroundRepeat: 'repeat-x',
+              opacity: 0.7
+            }}
+          />
         </div>
 
-        {/* Horse Character Element (Flipped horizontally to face RIGHT) */}
+        {/* Horse Character Element (Flipped horizontally to face RIGHT + Gallop Stride + Jump Arc) */}
         <div
           id="horse-runner-element"
           style={{
             position: 'absolute',
-            bottom: '40px',
+            bottom: '44px',
             left: '0px',
             fontSize: '44px',
             lineHeight: 1,
@@ -313,8 +339,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
           id="obstacle-runner-element"
           style={{
             position: 'absolute',
-            bottom: '40px',
-            left: '190%',
+            bottom: '44px',
+            left: '180%',
             fontSize: '32px',
             lineHeight: 1,
             zIndex: 9,
@@ -341,28 +367,6 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         <span className="text-en">{hasGameStarted ? 'TAP TO JUMP!' : 'TAP TO START!'}</span>
       </button>
 
-      {/* Win Modal Popup Card */}
-      {showWinModal && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🎉 🏆</span>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
-              تهانينا! لقد فزت بالجولة!
-            </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction:'ltr', marginBottom: '12px' }}>
-              CONGRATULATIONS! YOU WIN!
-            </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
-            </p>
-            <button className="btn-primary" onClick={() => onSuccess(score, 45)}>
-              <span className="text-ar">احصل على دليلك التالي</span>
-              <span className="text-en">GET YOUR NEXT CLUE</span>
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Retry Modal */}
       {showRetryModal && (
         <div className="modal-overlay">
@@ -371,7 +375,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FF5252', marginBottom: '4px' }}>
               اصطدمت بالحاجز!
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, direction:'ltr', color: '#FFFFFF', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
               You hit the barrier!
             </h3>
             <p style={{ fontSize: '12px', color: '#9BB1DB', marginBottom: '24px' }}>
@@ -380,7 +384,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             </p>
             <button className="btn-primary" onClick={handleRetry}>
               <span className="text-ar">إعادة المحاولة</span>
-              <span className="text-en">TAP TO TRY AGAIN</span>
+              <span className="text-en">RETRY JUMP</span>
             </button>
           </div>
         </div>
