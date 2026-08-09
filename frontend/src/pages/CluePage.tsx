@@ -18,7 +18,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
 
     if (seqOrder === 3 || codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC') || idUpper.includes('BHPC')) return '/assets/polo-store.png';
     if (seqOrder === 2 || codeUpper === 'ACO' || nameUpper.includes('ACO') || idUpper.includes('ACO')) return '/assets/aco-store.png';
-    if (seqOrder === 4 || codeUpper === 'CROCS' || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('CROCS') || nameUpper.includes('STEVE') || idUpper.includes('CROCS')) return '/assets/steve-madden-store.png';
+    if (seqOrder === 4 || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE') || idUpper.includes('STEVE')) return '/assets/steve-madden-store.png';
     if (seqOrder === 1 || codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS') || idUpper.includes('SKECHERS')) return '/assets/skechers-store.png';
     return '/assets/polo-store.png';
   };
@@ -32,7 +32,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
     const isBhpc = seqOrder === 3 || codeUpper === 'BHPC' || nameUpper.includes('POLO') || nameUpper.includes('BHPC') || nameUpper.includes('BEVERLY') || idUpper.includes('BHPC');
     const isAco = seqOrder === 2 || codeUpper === 'ACO' || nameUpper.includes('ACO') || idUpper.includes('ACO');
     const isSkechers = seqOrder === 1 || codeUpper === 'SKECHERS' || nameUpper.includes('SKECHERS') || idUpper.includes('SKECHERS');
-    const isCrocs = seqOrder === 4 || codeUpper === 'CROCS' || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('CROCS') || nameUpper.includes('STEVE') || idUpper.includes('CROCS');
+    const isSteveMadden = seqOrder === 4 || codeUpper === 'STEVE_MADDEN' || nameUpper.includes('STEVE') || idUpper.includes('STEVE');
 
     return (
       <div style={{
@@ -51,9 +51,17 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
         {!isBhpc && isAco && (
           <img
             src="/assets/aco-logo.png"
-            alt="ACO Store"
+            alt="Beverly Hills Polo Club"
             style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
+          // <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
+          //   <span style={{ fontSize: '18px', fontWeight: 900, color: '#FFFFFF', letterSpacing: '0.5px' }}>
+          //     ΔCO.
+          //   </span>
+          //   <span style={{ fontSize: '7.5px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '1px', marginTop: '1px' }}>
+          //     athletesco
+          //   </span>
+          // </div>
         )}
         {!isBhpc && !isAco && isSkechers && (
           <img
@@ -62,11 +70,11 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
-        {(!isBhpc && !isAco && !isSkechers && isCrocs) && (
+        {!isBhpc && !isAco && !isSkechers && isSteveMadden && (
           <img
-            src="/assets/crocs-logo.png"
-            alt="Crocs"
-            style={{ maxWidth: '140px', objectFit: 'contain', display: 'block', filter: 'brightness(0) invert(1)' }}
+            src="/assets/steve-madden-logo.png"
+            alt="Steve Madden"
+            style={{ maxWidth: '100%', objectFit: 'contain', display: 'block' }}
           />
         )}
       </div>
@@ -95,96 +103,89 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        gap: '16px',
         marginBottom: '20px',
-        padding: '0 4px'
+        direction: 'ltr',
+        padding: '0 4px',
+        boxSizing: 'border-box'
       }}>
-        {/* Apparel Group Corporate Logo */}
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        {/* Left: Apparel Group Main Logo Container */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexShrink: 0
+        }}>
           <img
             src="/assets/apparel-logo.png"
-            alt="Apparel Group Logo"
+            alt="Apparel Group"
+            style={{ maxWidth: '100%', objectFit: 'contain' }}
+          />
+        </div>
+
+        {/* Right: Official Store Brand Logo Container */}
+        {renderStoreLogo(store?.stationCode, store?.nameEn, store?.id, sequenceOrder)}
+      </div>
+
+      {/* Main Store Station Card */}
+      <div style={{
+        width: '100%',
+        background: 'rgba(21, 43, 91, 0.92)',
+        border: '1.5px solid #35589A',
+        borderRadius: '20px',
+        overflow: 'hidden',
+        boxShadow: '0 8px 28px rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(8px)',
+        marginBottom: '20px'
+      }}>
+        {/* Storefront Image */}
+        <div style={{ width: '100%', position: 'relative', overflow: 'hidden', padding: '12px 12px 0 12px' }}>
+          <img
+            src={getStoreImage(store?.stationCode, store?.nameEn, store?.id, sequenceOrder)}
+            alt={store?.nameEn || 'Store'}
             style={{
-              width: '115px',
-              maxHeight: '44px',
-              objectFit: 'contain'
+              width: '100%',
+              height: '190px',
+              objectFit: 'cover',
+              borderRadius: '14px',
+              border: '1px solid #35589A'
             }}
           />
         </div>
 
-        {/* Dynamic Store Brand Logo */}
-        <div style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          {renderStoreLogo(store?.stationCode, store?.nameEn, store?.id, sequenceOrder)}
-        </div>
-      </div>
-
-      <div className="location-pill" style={{ marginBottom: '16px' }}>
-        <span className="icon">📍</span>
-        <span className="text-ar">الدليل {getClueOrdinalAr(sequenceOrder)}: ابحث عن المحطة</span>
-        <span className="text-en">Clue #{sequenceOrder}: Find the station</span>
-      </div>
-
-      <h1 className="title-ar" style={{ fontSize: '20px', marginBottom: '4px' }}>
-        أنت قريب جداً!
-      </h1>
-      <h2 style={{ fontSize: '13.5px', color: '#FFFFFF', textAlign: 'center', marginBottom: '20px', fontWeight: 600, direction: 'ltr', unicodeBidi: 'isolate' }}>
-        You're almost there!
-      </h2>
-
-      {/* Target Store Hero Image Card */}
-      <div style={{
-        width: '100%',
-        maxWidth: '500px',
-        background: '#152B5B',
-        border: '1.5px solid #35589A',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        marginBottom: '24px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
-      }}>
-        <div style={{ width: '100%', height: '180px', position: 'relative', overflow: 'hidden' }}>
-          <img
-            src={getStoreImage(store?.stationCode, store?.nameEn, store?.id, sequenceOrder)}
-            alt={store?.nameEn || 'Store Station'}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+        {/* Location Badge Pill */}
+        <div style={{ padding: '0 16px', marginTop: '12px', display: 'flex', gap:'3px', justifyContent: 'center' }}>
           <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '60px',
-            background: 'linear-gradient(to top, #152B5B, transparent)'
-          }} />
+            background: 'rgba(4, 27, 78, 0.9)',
+            border: '1px solid #FEC949',
+            borderRadius: '20px',
+            padding: '5px 14px',
+            display: 'flex',
+            direction: 'ltr',
+            color: '#FEC949',
+            fontSize: '11.5px',
+            fontWeight: 700,
+            textAlign: 'center'
+          }}>
+            📍 <div style={{ direction: 'rtl' }}>{store?.locationTextAr || ''} • {store?.locationTextEn || ''}</div>
+          </div>
         </div>
 
-        <div style={{ padding: '16px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px', direction: 'rtl' }}>
-            {store?.nameAr || (sequenceOrder === 4 ? 'فرع كروكس' : 'فرع المحطة')}
+        {/* Text Content matching Figma */}
+        <div style={{ padding: '20px 16px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, direction:'rtl', color: '#FEC949', marginBottom: '4px', lineHeight: 1.4 }}>
+            تفضل بزيارة  {store?.nameAr || ''}<br />للحصول على دليلك {getClueOrdinalAr(sequenceOrder)}!
+          </h2>
+          <h3 style={{ fontSize: '13.5px', fontWeight: 700, direction:'ltr', color: '#FFFFFF', marginBottom: '16px', lineHeight: 1.4 }}>
+            Meet us at {store?.nameEn || ''}<br />to get your {getClueOrdinalEn(sequenceOrder)} clue.
           </h3>
-          <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', margin: 0, direction: 'ltr', unicodeBidi: 'isolate' }}>
-            {store?.nameEn || (sequenceOrder === 4 ? 'Crocs Store' : 'Station Store')}
-          </h4>
         </div>
       </div>
 
-      {/* Next Step Instructions Card */}
-      <div style={{
-        width: '100%',
-        maxWidth: '500px',
-        background: 'rgba(21, 43, 91, 0.6)',
-        border: '1.5px solid #FEC949',
-        borderRadius: '16px',
-        padding: '18px 16px',
-        textAlign: 'center',
-        marginBottom: '20px'
-      }}>
-        <p style={{ fontSize: '13px', fontWeight: 700, color: '#FEC949', marginBottom: '6px', lineHeight: 1.4, direction: 'rtl' }}>
-          ابحث عن رمـز الاستجابة السريعة (QR) في الفرع وامسحه لتشغيل التحدي!
-        </p>
-        <p style={{ fontSize: '12px', color: '#D0DCF2', margin: 0, lineHeight: 1.4, direction: 'ltr', unicodeBidi: 'isolate' }}>
-          Look for the QR code at the store and scan it to launch the challenge!
-        </p>
-      </div>
+      {/* CTA Button matching Figma */}
+      <button className="btn-primary" style={{ width: '100%' }}>
+        <span className="text-ar">توجه إلى  {store?.nameAr || ''}</span>
+        <span className="text-en">HEAD TO {(store?.nameEn || '').toUpperCase()}</span>
+      </button>
     </div>
   );
 };
