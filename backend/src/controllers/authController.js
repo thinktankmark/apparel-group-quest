@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { memoryStore, JWT_SECRET, saveStoreToFile } = require('../db/store');
+const { memoryStore, JWT_SECRET, saveStoreToFile, getRandomizedStoreSequence } = require('../db/store');
 const { sendOtpEmail } = require('../utils/mailer');
 
 // In-Memory OTP Cache Store (email -> { otp: string, expiresAt: number })
@@ -129,11 +129,13 @@ const register = (req, res) => {
 
   memoryStore.players.push(newPlayer);
 
-  // 4. Initialize Player Progress (Sequence 1)
+  // 4. Initialize Player Progress (Sequence 1 with Randomized Clues)
+  const storeSeq = getRandomizedStoreSequence();
   const newProgress = {
     id: `prog-${Date.now()}`,
     player_id: newPlayer.id,
     current_sequence_order: 1,
+    store_sequence: storeSeq,
     is_completed: false,
     completed_at: null,
     updated_at: new Date().toISOString()

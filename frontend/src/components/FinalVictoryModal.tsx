@@ -69,6 +69,7 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
           color: '#FEC949',
           textAlign: 'center',
           marginBottom: '4px',
+          direction:'ltr',
           lineHeight: 1.3
         }}>
           You have completed your last challenge!
@@ -81,6 +82,7 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
           color: '#FFFFFF',
           textAlign: 'center',
           marginBottom: '24px',
+          direction:'ltr',
           lineHeight: 1.4,
           maxWidth: '440px'
         }}>
@@ -137,7 +139,7 @@ export const FinalVictoryModal: React.FC<FinalVictoryModalProps> = ({ onContinue
             <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px' }}>
               🎁 جوائز فورية وقسائم شراء حصرية بانتظارك!
             </p>
-            <p style={{ fontSize: '12px', fontWeight: 500, color: '#9BB1DB' }}>
+            <p style={{ fontSize: '12px', fontWeight: 500, direction:'ltr', color: '#9BB1DB' }}>
               Instant prizes & exclusive vouchers await you!
             </p>
           </div>

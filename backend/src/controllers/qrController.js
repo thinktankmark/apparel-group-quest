@@ -9,36 +9,20 @@ const validateQrToken = (req, res) => {
     return res.status(400).json({ error: 'MISSING_TOKEN', message: 'QR token is required.' });
   }
 
-  // 1. Check known mock tokens or verify JWT signature
-  let decoded;
-  try {
-    if (token === 'token-main-booth') {
-      decoded = { isMainBooth: true, storeId: 'store-main-booth', eventId: 'event-001' };
-    } else {
-      const matchedSeq = memoryStore.sequence.find(s => s.qr_token === token);
-      if (matchedSeq) {
-        decoded = {
-          storeId: matchedSeq.store_id,
-          sequenceOrder: matchedSeq.sequence_order,
-          gameKey: matchedSeq.game_key,
-          isMainBooth: false,
-          eventId: matchedSeq.event_id
-        };
-      } else {
-        decoded = jwt.verify(token, JWT_SECRET);
-      }
-    }
-  } catch (err) {
-    return res.status(400).json({
-      error: 'INVALID_QR_TOKEN',
-      message: 'The scanned QR code is invalid, expired, or tampered with.'
-    });
-  }
+  const cleanToken = token.trim().toLowerCase();
 
-  // 2. Main Booth QR
-  if (decoded.isMainBooth) {
-    const mainBoothToken = jwt.sign({ isMainBooth: true, eventId: decoded.eventId }, JWT_SECRET, { expiresIn: '1h' });
-    const mainBoothStore = memoryStore.stores.find(s => s.is_main_booth);
+  // 1. Main Booth QR check
+  if (cleanToken === 'token-main-booth' || cleanToken === 'main-booth' || cleanToken.includes('main-booth')) {
+    const mainBoothToken = jwt.sign({ isMainBooth: true, eventId: 'event-001' }, JWT_SECRET, { expiresIn: '1h' });
+    const mainBoothStore = memoryStore.stores.find(s => s.is_main_booth) || {
+      id: 'store-main-booth',
+      name_ar: 'جناح مجموعة أباريل الرئيسي',
+      name_en: 'Apparel Group Main Booth',
+      station_code: 'MAIN_BOOTH',
+      is_main_booth: true,
+      location_text_ar: 'قاعة المعرض ٣ • جناح #A-12',
+      location_text_en: 'Exhibition Hall 3 • Booth #A-12'
+    };
 
     return res.json({
       isMainBooth: true,
@@ -47,19 +31,56 @@ const validateQrToken = (req, res) => {
     });
   }
 
-  // 3. Store Checkpoint QR
-  const seqItem = memoryStore.sequence.find(s => s.store_id === decoded.storeId);
-  const storeItem = memoryStore.stores.find(s => s.id === decoded.storeId);
+  // 2. Identify Store Location from Token
+  let targetStoreId = null;
 
-  if (!seqItem || !storeItem) {
+  if (cleanToken.includes('aco')) {
+    targetStoreId = 'store-aco';
+  } else if (cleanToken.includes('skecher')) {
+    targetStoreId = 'store-skechers';
+  } else if (cleanToken.includes('bhpc') || cleanToken.includes('polo')) {
+    targetStoreId = 'store-bhpc';
+  } else if (cleanToken.includes('steve') || cleanToken.includes('madden')) {
+    targetStoreId = 'store-steve-madden';
+  } else {
+    // Search sequence tokens or verify JWT
+    const matchedSeq = memoryStore.sequence.find(s => s.qr_token === token || s.qr_token.toLowerCase() === cleanToken);
+    if (matchedSeq) {
+      targetStoreId = matchedSeq.store_id;
+    } else {
+      try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        targetStoreId = decoded.storeId;
+      } catch (err) {
+        // Fallback check against store IDs
+        const storeMatch = memoryStore.stores.find(s => s.id.toLowerCase() === cleanToken || s.station_code.toLowerCase() === cleanToken);
+        if (storeMatch) {
+          targetStoreId = storeMatch.id;
+        }
+      }
+    }
+  }
+
+  if (!targetStoreId) {
+    return res.status(400).json({
+      error: 'INVALID_QR_TOKEN',
+      message: 'The scanned QR code is invalid, expired, or tampered with.'
+    });
+  }
+
+  const storeItem = memoryStore.stores.find(s => s.id === targetStoreId);
+  const seqItem = memoryStore.sequence.find(s => s.store_id === targetStoreId);
+
+  if (!storeItem) {
     return res.status(404).json({ error: 'STORE_NOT_FOUND', message: 'Store location for this QR code was not found.' });
   }
 
   return res.json({
     isMainBooth: false,
     store: storeItem,
-    sequenceOrder: seqItem.sequence_order,
-    gameKey: seqItem.game_key
+    storeId: storeItem.id,
+    sequenceOrder: seqItem ? seqItem.sequence_order : 1,
+    gameKey: seqItem ? seqItem.game_key : 'TIC_TAC_TOE'
   });
 };
 

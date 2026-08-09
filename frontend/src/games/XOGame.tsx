@@ -122,7 +122,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
         <h2 className="title-ar">تحدي XO للأحذية</h2>
         <p className="subtitle-en">Shoes XO Challenge</p>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
-          اهزم الذكاء الاصطناعي في تحدي XO للمتابعة. / Beat the AI in XO Challenge to proceed.
+          اهزم الذكاء الاصطناعي في تحدي XO للمتابعة. / <span style={{direction:'ltr'}}>Beat the AI in XO Challenge to proceed.</span>
         </p>
       </div>
 
@@ -208,11 +208,11 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
               تهانينا! لقد فزت بالجولة!
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction:'ltr', marginBottom: '12px' }}>
               CONGRATULATIONS! YOU WIN!
             </h3>
             <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / Great job! You unlocked the next clue.
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
             </p>
             <button className="btn-primary" onClick={() => onSuccess(100, 30)}>
               <span className="text-ar">احصل على دليلك التالي</span>

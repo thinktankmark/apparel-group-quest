@@ -1,4 +1,14 @@
-const { memoryStore, saveStoreToFile } = require('../db/store');
+const { memoryStore, saveStoreToFile, getRandomizedStoreSequence } = require('../db/store');
+
+function getGameKeyForStore(storeId) {
+  const item = memoryStore.sequence.find(s => s.store_id === storeId);
+  if (item) return item.game_key;
+  if (storeId === 'store-skechers') return 'MEMORY_MATCH';
+  if (storeId === 'store-aco') return 'TIC_TAC_TOE';
+  if (storeId === 'store-bhpc') return 'HORSE_JUMP';
+  if (storeId === 'store-steve-madden') return 'SPEED_TAP';
+  return 'TIC_TAC_TOE';
+}
 
 // GET /api/player/progress
 const getPlayerProgress = (req, res) => {
@@ -10,33 +20,38 @@ const getPlayerProgress = (req, res) => {
       id: `prog-${Date.now()}`,
       player_id: player.id,
       current_sequence_order: 1,
+      store_sequence: getRandomizedStoreSequence(),
       is_completed: false,
       completed_at: null,
       updated_at: new Date().toISOString()
     };
     memoryStore.progress.push(progress);
     saveStoreToFile();
+  } else if (!progress.store_sequence || !Array.isArray(progress.store_sequence) || progress.store_sequence.length === 0) {
+    progress.store_sequence = getRandomizedStoreSequence();
+    saveStoreToFile();
   }
 
-  // Find ONLY the current active sequence item & store details
-  const currentSeqItem = memoryStore.sequence.find(s => s.sequence_order === progress.current_sequence_order);
+  // Find active store clue for current sequence order
   let activeClue = null;
-
-  if (currentSeqItem) {
-    const store = memoryStore.stores.find(s => s.id === currentSeqItem.store_id);
-    activeClue = {
-      sequenceOrder: currentSeqItem.sequence_order,
-      gameKey: currentSeqItem.game_key,
-      store: {
-        id: store.id,
-        nameAr: store.name_ar,
-        nameEn: store.name_en,
-        stationCode: store.station_code,
-        heroImageUrl: store.hero_image_url,
-        locationTextAr: store.location_text_ar,
-        locationTextEn: store.location_text_en
-      }
-    };
+  if (!progress.is_completed) {
+    const currentStoreId = progress.store_sequence[progress.current_sequence_order - 1];
+    const store = memoryStore.stores.find(s => s.id === currentStoreId);
+    if (store) {
+      activeClue = {
+        sequenceOrder: progress.current_sequence_order,
+        gameKey: getGameKeyForStore(store.id),
+        store: {
+          id: store.id,
+          nameAr: store.name_ar,
+          nameEn: store.name_en,
+          stationCode: store.station_code,
+          heroImageUrl: store.hero_image_url,
+          locationTextAr: store.location_text_ar,
+          locationTextEn: store.location_text_en
+        }
+      };
+    }
   }
 
   return res.json({
@@ -48,6 +63,7 @@ const getPlayerProgress = (req, res) => {
     },
     progress: {
       currentSequenceOrder: progress.current_sequence_order,
+      storeSequence: progress.store_sequence,
       isCompleted: progress.is_completed,
       completedAt: progress.completed_at
     },
@@ -61,20 +77,22 @@ const completeGame = (req, res) => {
   const { sequenceOrder, score, durationSeconds, isSuccess } = req.body;
 
   const seqOrderInt = parseInt(sequenceOrder, 10);
-  const progress = memoryStore.progress.find(p => p.player_id === player.id);
+  let progress = memoryStore.progress.find(p => p.player_id === player.id);
 
   if (!progress) {
     return res.status(400).json({ error: 'PROGRESS_NOT_FOUND', message: 'Player progress not found.' });
+  }
+
+  if (!progress.store_sequence || !Array.isArray(progress.store_sequence) || progress.store_sequence.length === 0) {
+    progress.store_sequence = getRandomizedStoreSequence();
   }
 
   if (seqOrderInt > progress.current_sequence_order) {
     return res.status(403).json({ error: 'LOCATION_LOCKED', message: "You haven't unlocked this location yet." });
   }
 
-  const seqItem = memoryStore.sequence.find(s => s.sequence_order === seqOrderInt);
-  if (!seqItem) {
-    return res.status(404).json({ error: 'SEQUENCE_NOT_FOUND', message: 'Sequence stage not found.' });
-  }
+  const currentStoreId = progress.store_sequence[seqOrderInt - 1] || progress.store_sequence[0];
+  const gameKey = getGameKeyForStore(currentStoreId);
 
   const attemptCount = memoryStore.attempts.filter(
     a => a.player_id === player.id && a.sequence_order === seqOrderInt
@@ -84,7 +102,7 @@ const completeGame = (req, res) => {
     id: `att-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
     player_id: player.id,
     sequence_order: seqOrderInt,
-    game_key: seqItem.game_key,
+    game_key: gameKey,
     attempt_number: attemptCount,
     is_success: !!isSuccess,
     score: score || 0,
@@ -95,7 +113,7 @@ const completeGame = (req, res) => {
 
   if (isSuccess || seqOrderInt === 1) {
     if (seqOrderInt === progress.current_sequence_order) {
-      const maxSequence = memoryStore.sequence.length;
+      const maxSequence = progress.store_sequence.length;
 
       if (seqOrderInt >= maxSequence) {
         progress.is_completed = true;
@@ -112,12 +130,12 @@ const completeGame = (req, res) => {
 
   let nextClue = null;
   if (!progress.is_completed) {
-    const nextSeqItem = memoryStore.sequence.find(s => s.sequence_order === progress.current_sequence_order);
-    if (nextSeqItem) {
-      const nextStore = memoryStore.stores.find(s => s.id === nextSeqItem.store_id);
+    const nextStoreId = progress.store_sequence[progress.current_sequence_order - 1];
+    const nextStore = memoryStore.stores.find(s => s.id === nextStoreId);
+    if (nextStore) {
       nextClue = {
-        sequenceOrder: nextSeqItem.sequence_order,
-        gameKey: nextSeqItem.game_key,
+        sequenceOrder: progress.current_sequence_order,
+        gameKey: getGameKeyForStore(nextStore.id),
         store: {
           id: nextStore.id,
           nameAr: nextStore.name_ar,
@@ -136,6 +154,7 @@ const completeGame = (req, res) => {
     isSuccess: isSuccess || seqOrderInt === 1,
     progress: {
       currentSequenceOrder: progress.current_sequence_order,
+      storeSequence: progress.store_sequence,
       isCompleted: progress.is_completed,
       completedAt: progress.completed_at
     },

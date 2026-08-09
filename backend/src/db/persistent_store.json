@@ -26,6 +26,24 @@
       "phone_number": "+966561348",
       "registered_at_store_id": "store-main-booth",
       "created_at": "2026-08-05T13:08:41.747Z"
+    },
+    {
+      "id": "player-1786254669525",
+      "event_id": "event-001",
+      "full_name": "Test Player One",
+      "email": "test1_1786254669525@example.com",
+      "phone_number": "+971506475352",
+      "registered_at_store_id": "store-main-booth",
+      "created_at": "2026-08-09T05:51:09.525Z"
+    },
+    {
+      "id": "player-1786254669530",
+      "event_id": "event-001",
+      "full_name": "Test Player Two",
+      "email": "test2_1786254669530@example.com",
+      "phone_number": "+971555135254",
+      "registered_at_store_id": "store-main-booth",
+      "created_at": "2026-08-09T05:51:09.530Z"
     }
   ],
   "progress": [
@@ -52,6 +70,34 @@
       "is_completed": true,
       "completed_at": "2026-08-05T13:21:26.617Z",
       "updated_at": "2026-08-05T13:21:26.617Z"
+    },
+    {
+      "id": "prog-1786254669525",
+      "player_id": "player-1786254669525",
+      "current_sequence_order": 2,
+      "store_sequence": [
+        "store-skechers",
+        "store-aco",
+        "store-steve-madden",
+        "store-bhpc"
+      ],
+      "is_completed": false,
+      "completed_at": null,
+      "updated_at": "2026-08-09T05:51:09.529Z"
+    },
+    {
+      "id": "prog-1786254669530",
+      "player_id": "player-1786254669530",
+      "current_sequence_order": 1,
+      "store_sequence": [
+        "store-steve-madden",
+        "store-aco",
+        "store-skechers",
+        "store-bhpc"
+      ],
+      "is_completed": false,
+      "completed_at": null,
+      "updated_at": "2026-08-09T05:51:09.530Z"
     }
   ],
   "attempts": [
@@ -208,8 +254,76 @@
       "score": 25,
       "duration_seconds": 20,
       "created_at": "2026-08-05T13:21:26.617Z"
+    },
+    {
+      "id": "att-1786254669529-bniq",
+      "player_id": "player-1786254669525",
+      "sequence_order": 1,
+      "game_key": "MEMORY_MATCH",
+      "attempt_number": 1,
+      "is_success": true,
+      "score": 100,
+      "duration_seconds": 30,
+      "created_at": "2026-08-09T05:51:09.529Z"
     }
   ],
   "prizeCollections": [],
-  "auditLogs": []
+  "auditLogs": [],
+  "stores": [
+    {
+      "id": "store-main-booth",
+      "event_id": "event-001",
+      "name_ar": "جناح مجموعة أباريل الرئيسي",
+      "name_en": "Apparel Group Main Booth",
+      "station_code": "MAIN_BOOTH",
+      "is_main_booth": true,
+      "hero_image_url": "7079890257a17cd0d8ca3d93a919734a6125a264",
+      "location_text_ar": "قاعة المعرض ٣ • جناح #A-12",
+      "location_text_en": "Exhibition Hall 3 • Booth #A-12"
+    },
+    {
+      "id": "store-skechers",
+      "event_id": "event-001",
+      "name_ar": "فرع سكتشرز",
+      "name_en": "Skechers Store",
+      "station_code": "SKECHERS",
+      "is_main_booth": false,
+      "hero_image_url": "34d55b61686498bafee0e7b9cd22896b69575b91",
+      "location_text_ar": "محطة فرع سكتشرز",
+      "location_text_en": "Skechers Store Station"
+    },
+    {
+      "id": "store-aco",
+      "event_id": "event-001",
+      "name_ar": "فرع أكو",
+      "name_en": "ACO Store",
+      "station_code": "ACO",
+      "is_main_booth": false,
+      "hero_image_url": "cca4f63abe8d7095ba2e58420d30d9f620dcac66",
+      "location_text_ar": "محطة فرع أكو",
+      "location_text_en": "ACO Store Station"
+    },
+    {
+      "id": "store-bhpc",
+      "event_id": "event-001",
+      "name_ar": "فرع نادي بيفرلي هيلز للبولو",
+      "name_en": "BHPC Store",
+      "station_code": "BHPC",
+      "is_main_booth": false,
+      "hero_image_url": "264ac2a5b7a7381daed7e2020fedd3bf698ed358",
+      "location_text_ar": "محطة فرع نادي بيفرلي هيلز للبولو",
+      "location_text_en": "BHPC Store Station"
+    },
+    {
+      "id": "store-steve-madden",
+      "event_id": "event-001",
+      "name_ar": "فرع ستيف مادن",
+      "name_en": "Steve Madden Store",
+      "station_code": "STEVE_MADDEN",
+      "is_main_booth": false,
+      "hero_image_url": "6b71cb2867429c6763e78bf41f798068e6c6129a",
+      "location_text_ar": "محطة فرع ستيف مادن",
+      "location_text_en": "Steve Madden Store Station"
+    }
+  ]
 }

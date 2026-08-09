@@ -179,8 +179,20 @@ function saveStoreToFile() {
 // Load disk state on startup
 loadStoreFromFile();
 
+function getRandomizedStoreSequence() {
+  const storeIds = ['store-skechers', 'store-aco', 'store-bhpc', 'store-steve-madden'];
+  const shuffled = [...storeIds];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 module.exports = {
   memoryStore,
   JWT_SECRET,
-  saveStoreToFile
+  saveStoreToFile,
+  getRandomizedStoreSequence
 };
+

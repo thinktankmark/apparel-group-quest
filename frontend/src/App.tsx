@@ -67,6 +67,50 @@ const AppContent: React.FC = () => {
     }
   }, [gameError]);
 
+  const validateAndRouteStoreScan = (storeCtx: { storeId: string; sequenceOrder: number; gameKey: string }) => {
+    const currentSeq = progress?.currentSequenceOrder || 1;
+    const activeStoreId = activeClue?.store?.id;
+
+    const storeSeq = progress?.storeSequence;
+    let isCompletedStore = false;
+    let isCurrentActiveStore = false;
+
+    if (activeStoreId) {
+      isCurrentActiveStore = storeCtx.storeId === activeStoreId;
+    } else {
+      isCurrentActiveStore = storeCtx.sequenceOrder === currentSeq;
+    }
+
+    if (storeSeq && Array.isArray(storeSeq)) {
+      const scannedIdx = storeSeq.indexOf(storeCtx.storeId);
+      if (scannedIdx !== -1) {
+        if (scannedIdx < currentSeq - 1) {
+          isCompletedStore = true;
+        } else if (scannedIdx === currentSeq - 1) {
+          isCurrentActiveStore = true;
+        }
+      }
+    } else {
+      if (storeCtx.sequenceOrder < currentSeq) {
+        isCompletedStore = true;
+      }
+    }
+
+    if (isCurrentActiveStore) {
+      setGameError(null);
+      setView('GAME');
+    } else if (isCompletedStore) {
+      setGameError("⚠️ لقد أكملت هذا الموقع بالفعل. / You have already completed this location.");
+      setTargetQrContext(null);
+      setView('CLUE');
+    } else {
+      const activeName = activeClue?.store?.nameEn ? ` (${activeClue.store.nameEn})` : '';
+      setGameError(`⚠️ لم تقم بفتح هذا الموقع بعد. دليلك الحالي للمتجر المطلوب${activeName}. / You haven't unlocked this location yet. Your active clue is for target store${activeName}.`);
+      setTargetQrContext(null);
+      setView('CLUE');
+    }
+  };
+
   // Handle View State Transitions & Single Source of Truth Progress Protection
   useEffect(() => {
     const isTestPreview = new URLSearchParams(window.location.search).has('test_view');
@@ -80,21 +124,10 @@ const AppContent: React.FC = () => {
     if (token && view !== 'LOGIN') {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
-        const currentSeq = progress?.currentSequenceOrder || 1;
-        if (targetCtx.sequenceOrder === currentSeq) {
-          setView('GAME');
-        } else if (targetCtx.sequenceOrder < currentSeq) {
-          setGameError("⚠️ لقد أكملت هذا الموقع بالفعل. / You have already completed this location.");
-          setTargetQrContext(null);
-          setView('CLUE');
-        } else {
-          setGameError("⚠️ لم تقم بفتح هذا الموقع بعد. / You haven't unlocked this location yet.");
-          setTargetQrContext(null);
-          setView('CLUE');
-        }
+        validateAndRouteStoreScan(targetCtx);
       }
     }
-  }, [token, progress, targetQrContext, view]);
+  }, [token, progress, targetQrContext, activeClue, view]);
 
   const handleGameSuccess = async (score: number, durationSeconds: number) => {
     const currentSeq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
@@ -196,16 +229,7 @@ const AppContent: React.FC = () => {
           setGameError(null);
           setTargetQrContext(storeCtx);
           if (token) {
-            const currentSeq = progress?.currentSequenceOrder || 1;
-            if (storeCtx.sequenceOrder === currentSeq) {
-              setView('GAME');
-            } else if (storeCtx.sequenceOrder < currentSeq) {
-              setGameError("⚠️ لقد أكملت هذا الموقع بالفعل. / You have already completed this location.");
-              setView('CLUE');
-            } else {
-              setGameError("⚠️ لم تقم بفتح هذا الموقع بعد. / You haven't unlocked this location yet.");
-              setView('CLUE');
-            }
+            validateAndRouteStoreScan(storeCtx);
           } else {
             setView('LOGIN');
           }
@@ -242,22 +266,11 @@ const AppContent: React.FC = () => {
       {view === 'LOGIN' && (
         <LoginPage
           lang="ar"
-          onLoginSuccess={(freshSeqOrder) => {
+          onLoginSuccess={() => {
             setGameError(null);
             const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
             if (targetCtx) {
-              const currentSeq = freshSeqOrder || progress?.currentSequenceOrder || 1;
-              if (targetCtx.sequenceOrder === currentSeq) {
-                setView('GAME');
-              } else if (targetCtx.sequenceOrder < currentSeq) {
-                setGameError("⚠️ لقد أكملت هذا الموقع بالفعل. / You have already completed this location.");
-                setTargetQrContext(null);
-                setView('CLUE');
-              } else {
-                setGameError("⚠️ لم تقم بفتح هذا الموقع بعد. / You haven't unlocked this location yet.");
-                setTargetQrContext(null);
-                setView('CLUE');
-              }
+              validateAndRouteStoreScan(targetCtx);
             } else {
               setView('CLUE');
             }
