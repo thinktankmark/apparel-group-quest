@@ -50,13 +50,13 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
       <HeaderLogo />
 
       {/* Title */}
-      <h1 className="title-ar">رحلة البحث عن الكنز — سجل معلوماتك انضمّ إلى المغامرة!</h1>
-      <h2 className="subtitle-en">Apparel Scavenger Hunt — Register to join the adventure!</h2>
+      <h1 className="title-ar">مغامرة البحث عن الكنز!</h1>
+      <h2 className="subtitle-en">Step into the treasure hunt!</h2>
 
       {/* Registration Form */}
-      <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px' }}>
+      <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px', direction: 'ltr' }}>
         <div className="input-group">
-          <label className="input-label">الاسم الكامل / Full Name</label>
+          <label className="input-label"> Full Name/ الاسم الكامل</label>
           <input
             type="text"
             className="input-field"
