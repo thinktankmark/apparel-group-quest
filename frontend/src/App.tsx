@@ -107,12 +107,16 @@ const AppContent: React.FC = () => {
     const isTestPreview = new URLSearchParams(window.location.search).has('test_view');
     if (isTestPreview) return; // Skip progress lockouts when using admin test preview links!
 
+    if (view === 'LOGIN' || view === 'SIGNUP') {
+      return;
+    }
+
     if (progress?.isCompleted) {
       setView('VICTORY');
       return;
     }
 
-    if (token && view !== 'LOGIN' && !isLoadingProgress) {
+    if (token && !isLoadingProgress) {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
         validateAndRouteStoreScan(targetCtx);

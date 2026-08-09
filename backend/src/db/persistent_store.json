@@ -80,6 +80,15 @@
       "phone_number": "+971504353977",
       "registered_at_store_id": "store-main-booth",
       "created_at": "2026-08-09T07:37:53.873Z"
+    },
+    {
+      "id": "player-1786262526947",
+      "event_id": "event-001",
+      "full_name": "Sequence Test Player",
+      "email": "seq_1786262526947@example.com",
+      "phone_number": "+971503598852",
+      "registered_at_store_id": "store-main-booth",
+      "created_at": "2026-08-09T08:02:06.947Z"
     }
   ],
   "progress": [
@@ -190,6 +199,20 @@
       "is_completed": true,
       "completed_at": "2026-08-09T07:37:53.877Z",
       "updated_at": "2026-08-09T07:37:53.877Z"
+    },
+    {
+      "id": "prog-1786262526947",
+      "player_id": "player-1786262526947",
+      "current_sequence_order": 4,
+      "store_sequence": [
+        "store-skechers",
+        "store-aco",
+        "store-bhpc",
+        "store-steve-madden"
+      ],
+      "is_completed": true,
+      "completed_at": "2026-08-09T08:02:06.951Z",
+      "updated_at": "2026-08-09T08:02:06.951Z"
     }
   ],
   "attempts": [
@@ -533,6 +556,50 @@
       "score": 100,
       "duration_seconds": 15,
       "created_at": "2026-08-09T07:37:53.877Z"
+    },
+    {
+      "id": "att-1786262526950-exdl",
+      "player_id": "player-1786262526947",
+      "sequence_order": 1,
+      "game_key": "MEMORY_MATCH",
+      "attempt_number": 1,
+      "is_success": true,
+      "score": 100,
+      "duration_seconds": 25,
+      "created_at": "2026-08-09T08:02:06.950Z"
+    },
+    {
+      "id": "att-1786262526950-wdx0",
+      "player_id": "player-1786262526947",
+      "sequence_order": 2,
+      "game_key": "TIC_TAC_TOE",
+      "attempt_number": 1,
+      "is_success": true,
+      "score": 100,
+      "duration_seconds": 30,
+      "created_at": "2026-08-09T08:02:06.950Z"
+    },
+    {
+      "id": "att-1786262526950-ot0w",
+      "player_id": "player-1786262526947",
+      "sequence_order": 3,
+      "game_key": "HORSE_JUMP",
+      "attempt_number": 1,
+      "is_success": true,
+      "score": 100,
+      "duration_seconds": 20,
+      "created_at": "2026-08-09T08:02:06.950Z"
+    },
+    {
+      "id": "att-1786262526951-cl73",
+      "player_id": "player-1786262526947",
+      "sequence_order": 4,
+      "game_key": "SPEED_TAP",
+      "attempt_number": 1,
+      "is_success": true,
+      "score": 100,
+      "duration_seconds": 15,
+      "created_at": "2026-08-09T08:02:06.951Z"
     }
   ],
   "prizeCollections": [],
