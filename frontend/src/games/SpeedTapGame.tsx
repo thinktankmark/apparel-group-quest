@@ -67,8 +67,8 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">النقرات السريعة للأحذية</h2>
         <p className="subtitle-en">Speed Sneaker Tap</p>
-        <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
-          انقر على الأحذية الظاهرة بسرعة! <br/> <span style={{ direction:'ltr' }} >Tap the appearing sneakers quickly!</span>
+        <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px', direction:'ltr' }}>
+         ! انقر على الأحذية الظاهرة بسرعة <br/>Tap the appearing sneakers quickly!
         </p>
       </div>
 
