@@ -285,7 +285,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             padding: '20px',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '12px', animation: 'bounce 1s infinite' }}>
+            <div style={{ fontSize: '48px', marginBottom: '12px', animation: 'bounce 1s infinite', display: 'flex', alignItems: 'center' }}>
               <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block'}}/>
               👇
             </div>
@@ -387,7 +387,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
       {showRetryModal && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <div style={{ fontSize: '48px', marginBottom: '12px' }}>
+            <div style={{ fontSize: '48px', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
               <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block'}}/> 💥
             </div>
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FF5252', marginBottom: '4px' }}>
