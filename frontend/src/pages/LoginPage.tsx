@@ -65,7 +65,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       <h2 style={{ fontSize: '13px', color: '#FFFFFF', textAlign: 'center', marginBottom: '15px' }}>
         سجّل الدخول برقم هاتفك أو بريدك الإلكتروني لتبدأ التحدّي الآن<br />
       </h2>
-      <h1 className="title-ar" style={{ fontSize: '18px', direction: 'ltr', marginBottom: '4px' }}>
+      <h1 className="title-en" style={{ fontSize: '18px', color: '#fec949', direction: 'ltr', marginBottom: '4px' }}>
        You found a clue!
       </h1>
       <h2 style={{ fontSize: '13px', color: '#9BB1DB', textAlign: 'center', direction: 'ltr', marginBottom: '24px' }}>
