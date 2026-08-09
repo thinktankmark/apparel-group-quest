@@ -37,13 +37,13 @@ const STORES_LIST = [
     locationTextEn: 'BHPC Store Station'
   },
   {
-    id: 'store-steve-madden',
-    nameAr: 'فرع ستيف مادن',
-    nameEn: 'Steve Madden Store',
-    stationCode: 'STEVE_MADDEN',
+    id: 'store-crocs',
+    nameAr: 'فرع كروكس',
+    nameEn: 'Crocs Store',
+    stationCode: 'CROCS',
     heroImageUrl: '6b71cb2867429c6763e78bf41f798068e6c6129a',
-    locationTextAr: 'محطة فرع ستيف مادن',
-    locationTextEn: 'Steve Madden Store Station'
+    locationTextAr: 'محطة فرع كروكس',
+    locationTextEn: 'Crocs Store Station'
   }
 ];
 
@@ -94,8 +94,8 @@ const AppContent: React.FC = () => {
       setTargetQrContext(null);
       setView('CLUE');
     } else {
-      const activeNameEn = activeClue?.store?.nameEn || (currentSeq === 2 ? 'ACO Store' : currentSeq === 3 ? 'BHPC Store' : currentSeq === 4 ? 'Steve Madden Store' : 'Skechers Store');
-      const activeNameAr = activeClue?.store?.nameAr || (currentSeq === 2 ? 'فرع أكو' : currentSeq === 3 ? 'فرع نادي بيفرلي هيلز للبولو' : currentSeq === 4 ? 'فرع ستيف مادن' : 'فرع سكتشرز');
+      const activeNameEn = activeClue?.store?.nameEn || (currentSeq === 2 ? 'ACO Store' : currentSeq === 3 ? 'BHPC Store' : currentSeq === 4 ? 'Crocs Store' : 'Skechers Store');
+      const activeNameAr = activeClue?.store?.nameAr || (currentSeq === 2 ? 'فرع أكو' : currentSeq === 3 ? 'فرع نادي بيفرلي هيلز للبولو' : currentSeq === 4 ? 'فرع كروكس' : 'فرع سكتشرز');
       setGameError(`⚠️ لم تقم بفتح هذا الموقع بعد. دليلك الحالي هو: ${activeNameAr}. / You haven't unlocked this location yet. Your active clue is for: ${activeNameEn}.`);
       setTargetQrContext(null);
       setView('CLUE');

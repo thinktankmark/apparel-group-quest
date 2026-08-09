@@ -6,7 +6,7 @@ function getGameKeyForStore(storeId) {
   if (storeId === 'store-skechers') return 'MEMORY_MATCH';
   if (storeId === 'store-aco') return 'TIC_TAC_TOE';
   if (storeId === 'store-bhpc') return 'HORSE_JUMP';
-  if (storeId === 'store-steve-madden') return 'SPEED_TAP';
+  if (storeId === 'store-crocs' || storeId === 'store-steve-madden') return 'SPEED_TAP';
   return 'TIC_TAC_TOE';
 }
 
@@ -115,7 +115,7 @@ const completeGame = (req, res) => {
 
   if (isSuccess || seqOrderInt === 1) {
     if (seqOrderInt === progress.current_sequence_order) {
-      const maxSequence = 4; // Guaranteed 4 stations: Skechers (1), ACO (2), BHPC (3), Steve Madden (4)
+      const maxSequence = 4; // Guaranteed 4 stations: Skechers (1), ACO (2), BHPC (3), Crocs (4)
 
       if (seqOrderInt >= maxSequence) {
         progress.is_completed = true;
