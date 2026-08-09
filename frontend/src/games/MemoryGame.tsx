@@ -27,6 +27,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
     return paired.sort(() => Math.random() - 0.5);
   });
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
+  const [showWinModal, setShowWinModal] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -55,8 +56,8 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
         // Check if all pairs are matched
         if (newCards.every(c => c.isMatched)) {
           setTimeout(() => {
-            onSuccess(100, 90 - timeLeft);
-          }, 500);
+            setShowWinModal(true);
+          }, 300);
         }
       } else {
         setTimeout(() => {
@@ -136,6 +137,28 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
           </button>
         ))}
       </div>
+
+      {/* Win Modal Popup Card */}
+      {showWinModal && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🎉 🏆</span>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
+              تهانينا! لقد فزت بالجولة!
+            </h2>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction:'ltr', marginBottom: '12px' }}>
+              CONGRATULATIONS! YOU WIN!
+            </h3>
+            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
+            </p>
+            <button className="btn-primary" onClick={() => onSuccess(100, Math.max(90 - timeLeft, 10))}>
+              <span className="text-ar">احصل على دليلك التالي</span>
+              <span className="text-en">GET YOUR NEXT CLUE</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
