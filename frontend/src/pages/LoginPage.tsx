@@ -114,7 +114,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
       {/* Footer Link to Signup */}
       <div style={{ textAlign: 'center', marginTop: '12px' }}>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB' }}>
-          ليس لديك حساب؟ / Don't have an account?{' '}
+          ليس لديك حساب؟{' '}
           <button
             onClick={handleSignUpClick}
             style={{
@@ -127,7 +127,24 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
               fontSize: '11.5px'
             }}
           >
-            سجّل هنا / Sign up here
+            سجّل هنا
+          </button>
+        </p>
+        <p style={{ fontSize: '11.5px', direction: 'ltr', color: '#9BB1DB' }}>
+          Don't have an account?{' '}
+          <button
+            onClick={handleSignUpClick}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#FEC949',
+              textDecoration: 'underline',
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontSize: '11.5px'
+            }}
+          >
+           Sign up here
           </button>
         </p>
       </div>

@@ -121,7 +121,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
             سجّل الدخول
           </button>
         </p>
-        <p style={{ fontSize: '12px', color: '#9BB1DB' }}>
+        <p style={{ fontSize: '12px', direction: 'ltr', color: '#9BB1DB' }}>
           Already have an account?{' '}
           <button
             type="button"
