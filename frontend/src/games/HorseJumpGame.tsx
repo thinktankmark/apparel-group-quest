@@ -274,7 +274,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px' }}>
               انقر على الشاشة للبدء!
             </h2>
-            <h3 style={{ fontSize: '12px', fontWeight: 600, color: '#FFFFFF', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '12px', fontWeight: 600, direction:'ltr', color: '#FFFFFF', marginBottom: '16px' }}>
               Tap anywhere to start the game!
             </h3>
             <button className="btn-primary" style={{ maxWidth: '260px', pointerEvents: 'none' }}>
@@ -363,7 +363,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FF5252', marginBottom: '4px' }}>
               اصطدمت بالحاجز!
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, direction:'ltr', color: '#FFFFFF', marginBottom: '8px' }}>
               You hit the barrier!
             </h3>
             <p style={{ fontSize: '12px', color: '#9BB1DB', marginBottom: '24px' }}>
@@ -372,7 +372,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
             </p>
             <button className="btn-primary" onClick={handleRetry}>
               <span className="text-ar">إعادة المحاولة</span>
-              <span className="text-en">RETRY JUMP</span>
+              <span className="text-en">TAP TO TRY AGAIN</span>
             </button>
           </div>
         </div>

@@ -185,16 +185,12 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#FF5252', marginBottom: '4px' }}>
               {winner === 'TIE' ? 'تعادل!' : 'فاز الذكاء الاصطناعي!'}
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, direction:'ltr', color: '#FFFFFF', marginBottom: '8px' }}>
               {winner === 'TIE' ? 'Game Tied!' : 'AI Won this round!'}
             </h3>
-            <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginBottom: '24px' }}>
-              اضغط لإعادة المحاولة وهزيمة الذكاء الاصطناعي.<br />
-              Tap retry to beat the AI and proceed.
-            </p>
             <button className="btn-primary" onClick={resetGame}>
-              <span className="text-ar">إعادة المحاولة</span>
-              <span className="text-en">RETRY GAME</span>
+              <span className="text-ar">اضغط لإعادة المحاولة.</span>
+              <span className="text-en">TAP TO TRY AGAIN</span>
             </button>
           </div>
         </div>

@@ -169,7 +169,7 @@ export const WelcomePage: React.FC<WelcomePageProps> = ({ onStart }) => {
                 3. Complete the treasure hunt to get your gift.
               </div>
               <div style={{ fontSize: '11px', color: '#D0DCF2', direction:'rtl', marginBottom: '2px', textAlign: 'start' }}>
-                إنهاء التحديات وتوجّه للجناح لاستلام هديتك الحصرية.
+                أنهِ التحديات وتوجّه إلى الجناح لاستلام هديتك.
               </div>
               <div style={{ fontSize: '10.5px', color: '#9BB1DB', textAlign: 'start' }}>
                 Finish all checkpoints & claim your gift at our booth.
