@@ -69,10 +69,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
         </span>
       </h2>
 
-      <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '500px', direction:'ltr', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div className="input-group">
           <label className="input-label">
-            رقم الهاتف أو البريد الإلكتروني / Phone Number or Email
+            Phone Number or Email / رقم الهاتف أو البريد الإلكتروني 
           </label>
           <input
             type="text"
@@ -80,7 +80,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onGoToSign
             autoCapitalize="none"
             autoCorrect="off"
             className={`input-field ${errorMsg ? 'error' : ''}`}
-            placeholder="أدخل رقم الهاتف أو البريد / Enter phone or email"
+            placeholder="Enter phone or email / أدخل رقم الهاتف أو البريد"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
