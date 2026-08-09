@@ -244,13 +244,25 @@ const AppContent: React.FC = () => {
         <SignupPage
           lang="ar"
           onSignupSuccess={() => { setGameError(null); setView('WELCOME'); }}
-          onGoToLogin={() => { setGameError(null); setView('SIGNUP'); }}
+          onGoToLogin={() => { setGameError(null); setView('LOGIN'); }}
         />
       )}
 
       {view === 'WELCOME' && (
         <WelcomePage
-          onStart={() => { setGameError(null); setView('CLUE'); }}
+          onStart={() => {
+            setGameError(null);
+            if (progress?.isCompleted) {
+              setView('VICTORY');
+            } else {
+              const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
+              if (targetCtx) {
+                validateAndRouteStoreScan(targetCtx);
+              } else {
+                setView('CLUE');
+              }
+            }
+          }}
         />
       )}
 
@@ -259,6 +271,10 @@ const AppContent: React.FC = () => {
           lang="ar"
           onLoginSuccess={() => {
             setGameError(null);
+            if (progress?.isCompleted) {
+              setView('VICTORY');
+              return;
+            }
             const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
             if (targetCtx) {
               validateAndRouteStoreScan(targetCtx);
