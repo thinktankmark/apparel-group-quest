@@ -9,18 +9,25 @@ interface GameProps {
 
 interface Card {
   id: number;
-  icon: string;
+  imageSrc: string;
   isFlipped: boolean;
   isMatched: boolean;
 }
 
+const SHOE_IMAGES = [
+  '/assets/skechers-1.png',
+  '/assets/skechers-2.png',
+  '/assets/skechers-3.png',
+  '/assets/skechers-4.png',
+  '/assets/skechers-5.png'
+];
+
 export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
-  const [timeLeft, setTimeLeft] = useState<number>(90); // 1 minute, 30 seconds countdown
+  const [timeLeft, setTimeLeft] = useState<number>(90);
   const [cards, setCards] = useState<Card[]>(() => {
-    const icons = ['👟', '👠', '👞', '👡', '👢', '🥾'];
-    const paired = [...icons, ...icons].map((icon, idx) => ({
+    const paired = [...SHOE_IMAGES, ...SHOE_IMAGES].map((imageSrc, idx) => ({
       id: idx,
-      icon,
+      imageSrc,
       isFlipped: false,
       isMatched: false
     }));
@@ -48,12 +55,11 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
 
     if (newSelected.length === 2) {
       const [first, second] = newSelected;
-      if (cards[first].icon === cards[second].icon) {
+      if (cards[first].imageSrc === cards[second].imageSrc) {
         newCards[first].isMatched = true;
         newCards[second].isMatched = true;
         setSelectedCards([]);
 
-        // Check if all pairs are matched
         if (newCards.every(c => c.isMatched)) {
           setTimeout(() => {
             setShowWinModal(true);
@@ -83,7 +89,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
 
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">تحدي مطابقة الأزواج</h2>
-        <p className="subtitle-en">Shoe Memory Match</p>
+        <p className="subtitle-en">Skechers Shoe Memory Match</p>
       </div>
 
       {/* Timer HUD */}
@@ -92,7 +98,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        maxWidth: '360px',
+        maxWidth: '380px',
         background: '#152B5B',
         border: '1.5px solid #FEC949',
         borderRadius: '12px',
@@ -102,7 +108,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
         <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>
           الوقت المتبقي / Time Left
         </span>
-        <span style={{ fontSize: '16px', fontWeight: 800, color: timeLeft <= 15 ? '#FF5252' : '#FEC949' }}>
+        <span style={{ fontSize: '16px', fontWeight: 800, color: timeLeft <= 15 ? '#FF5252' : '#FEC949', direction: 'ltr', unicodeBidi: 'isolate' }}>
           ⏱️ {formatTimer(timeLeft)}
         </span>
       </div>
@@ -110,30 +116,38 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
       {/* Grid Canvas */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '12px',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: '8px',
         width: '100%',
-        maxWidth: '360px'
+        maxWidth: '380px'
       }}>
         {cards.map((card, index) => (
           <button
             key={index}
             onClick={() => handleCardClick(index)}
             style={{
-              height: '75px',
-              borderRadius: '14px',
-              fontSize: '32px',
-              border: card.isMatched ? '2px solid #8CE63D' : '1.5px solid #35589A',
-              background: card.isFlipped || card.isMatched ? '#152B5B' : 'linear-gradient(135deg, #152B5B 0%, #03257E 100%)',
+              height: '72px',
+              borderRadius: '12px',
+              border: card.isMatched ? '2px solid #8CE63D' : card.isFlipped ? '2px solid #FEC949' : '1.5px solid #35589A',
+              background: card.isFlipped || card.isMatched ? '#FFFFFF' : 'linear-gradient(135deg, #152B5B 0%, #03257E 100%)',
               cursor: 'pointer',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               transition: 'transform 0.2s ease, background-color 0.2s ease',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+              padding: '4px'
             }}
           >
-            {card.isFlipped || card.isMatched ? card.icon : '❓'}
+            {card.isFlipped || card.isMatched ? (
+              <img
+                src={card.imageSrc}
+                alt="Skechers Shoe"
+                style={{ width: '100%', height: 'auto', maxHeight: '55px', objectFit: 'contain' }}
+              />
+            ) : (
+              <span style={{ fontSize: '20px', color: '#FEC949' }}>❓</span>
+            )}
           </button>
         ))}
       </div>
@@ -146,11 +160,11 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
               تهانينا! لقد فزت بالجولة!
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction:'ltr', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
               CONGRATULATIONS! YOU WIN!
             </h3>
             <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. <br/> <span style={{direction:'ltr'}}>Great job! You unlocked the next clue.</span>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. <br /> <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
             </p>
             <button className="btn-primary" onClick={() => onSuccess(100, Math.max(90 - timeLeft, 10))}>
               <span className="text-ar">احصل على دليلك التالي</span>
