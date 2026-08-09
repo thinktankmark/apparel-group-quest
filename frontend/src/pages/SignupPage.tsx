@@ -108,7 +108,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
       {/* Switch to Login */}
       <div style={{ textAlign: 'center', marginTop: '12px' }}>
         <p style={{ fontSize: '12px', color: '#9BB1DB' }}>
-          لديك حساب؟ / Already have an account?{' '}
+          لديك حساب؟{' '}
           <button
             type="button"
             onClick={(e) => {
@@ -118,7 +118,21 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSignupSuccess, onGoToL
             }}
             style={{ background: 'none', border: 'none', color: '#FEC949', textDecoration: 'underline', fontWeight: 700, cursor: 'pointer', fontSize: '12px' }}
           >
-            سجّل الدخول / Log in
+            سجّل الدخول
+          </button>
+        </p>
+        <p style={{ fontSize: '12px', color: '#9BB1DB' }}>
+          Already have an account?{' '}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onGoToLogin();
+            }}
+            style={{ background: 'none', border: 'none', color: '#FEC949', textDecoration: 'underline', fontWeight: 700, cursor: 'pointer', fontSize: '12px' }}
+          >
+           Log in
           </button>
         </p>
       </div>
