@@ -1,4 +1,4 @@
-const { memoryStore, saveStoreToFile, getRandomizedStoreSequence } = require('../db/store');
+const { memoryStore, saveStoreToFile, getFixedStoreSequence } = require('../db/store');
 
 function getGameKeyForStore(storeId) {
   const item = memoryStore.sequence.find(s => s.store_id === storeId);
@@ -20,22 +20,23 @@ const getPlayerProgress = (req, res) => {
       id: `prog-${Date.now()}`,
       player_id: player.id,
       current_sequence_order: 1,
-      store_sequence: getRandomizedStoreSequence(),
+      store_sequence: getFixedStoreSequence(),
       is_completed: false,
       completed_at: null,
       updated_at: new Date().toISOString()
     };
     memoryStore.progress.push(progress);
     saveStoreToFile();
-  } else if (!progress.store_sequence || !Array.isArray(progress.store_sequence) || progress.store_sequence.length === 0) {
-    progress.store_sequence = getRandomizedStoreSequence();
+  } else {
+    // Reset/Ensure progress uses fixed store sequence
+    progress.store_sequence = getFixedStoreSequence();
     saveStoreToFile();
   }
 
   // Find active store clue for current sequence order
   let activeClue = null;
   if (!progress.is_completed) {
-    const currentStoreId = progress.store_sequence[progress.current_sequence_order - 1];
+    const currentStoreId = progress.store_sequence[progress.current_sequence_order - 1] || 'store-skechers';
     const store = memoryStore.stores.find(s => s.id === currentStoreId);
     if (store) {
       activeClue = {
@@ -83,15 +84,13 @@ const completeGame = (req, res) => {
     return res.status(400).json({ error: 'PROGRESS_NOT_FOUND', message: 'Player progress not found.' });
   }
 
-  if (!progress.store_sequence || !Array.isArray(progress.store_sequence) || progress.store_sequence.length === 0) {
-    progress.store_sequence = getRandomizedStoreSequence();
-  }
+  progress.store_sequence = getFixedStoreSequence();
 
   if (seqOrderInt > progress.current_sequence_order) {
     return res.status(403).json({ error: 'LOCATION_LOCKED', message: "You haven't unlocked this location yet." });
   }
 
-  const currentStoreId = progress.store_sequence[seqOrderInt - 1] || progress.store_sequence[0];
+  const currentStoreId = progress.store_sequence[seqOrderInt - 1] || 'store-skechers';
   const gameKey = getGameKeyForStore(currentStoreId);
 
   const attemptCount = memoryStore.attempts.filter(
