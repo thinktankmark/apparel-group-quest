@@ -10,19 +10,19 @@ interface GameProps {
 
 export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [tappedCount, setTappedCount] = useState<number>(0);
-  const [targetCount] = useState<number>(20); // Target set to 25
-  const [activePosition, setActivePosition] = useState<{ top: number; left: number }>({ top: 100, left: 100 });
+  const [targetCount] = useState<number>(20);
+  const [activePosition, setActivePosition] = useState<{ top: number; left: number }>({ top: 90, left: 100 });
   const [isWon, setIsWon] = useState<boolean>(false);
 
   useEffect(() => {
     const moveSneaker = () => {
       if (isWon) return;
-      const top = Math.floor(Math.random() * 180) + 20;
-      const left = Math.floor(Math.random() * 240) + 20;
+      const top = Math.floor(Math.random() * 160) + 15;
+      const left = Math.floor(Math.random() * 210) + 15;
       setActivePosition({ top, left });
     };
 
-    const interval = setInterval(moveSneaker, 750);
+    const interval = setInterval(moveSneaker, 700);
     return () => clearInterval(interval);
   }, [isWon]);
 
@@ -38,8 +38,8 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
     });
 
     setActivePosition({
-      top: Math.floor(Math.random() * 180) + 20,
-      left: Math.floor(Math.random() * 240) + 20
+      top: Math.floor(Math.random() * 160) + 15,
+      left: Math.floor(Math.random() * 210) + 15
     });
   };
 
@@ -75,7 +75,7 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
       {/* Counter HUD */}
       <div style={{
         width: '100%',
-        maxWidth: '500px',
+        maxWidth: '460px',
         background: '#152B5B',
         border: '1.5px solid #8CE63D',
         borderRadius: '12px',
@@ -83,7 +83,7 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
         textAlign: 'center',
         marginBottom: '16px'
       }}>
-        <span style={{ fontSize: '14px', fontWeight: 700, color: '#8CE63D' }}>
+        <span style={{ fontSize: '14px', fontWeight: 800, color: '#8CE63D', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>
           ⭐ {tappedCount} / {targetCount} Sneakers Tapped ⭐
         </span>
       </div>
@@ -91,13 +91,14 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
       {/* Tap Arena */}
       <div style={{
         width: '100%',
-        maxWidth: '500px',
+        maxWidth: '460px',
         height: '280px',
-        background: '#152B5B',
-        border: '1.5px solid #35589A',
-        borderRadius: '16px',
+        background: 'linear-gradient(180deg, #091C47 0%, #152B5B 100%)',
+        border: '2px solid #FEC949',
+        borderRadius: '20px',
         position: 'relative',
         overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
         marginBottom: '20px'
       }}>
         <button
@@ -108,12 +109,23 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
             left: `${activePosition.left}px`,
             background: 'none',
             border: 'none',
-            fontSize: '48px',
+            padding: 0,
             cursor: 'pointer',
-            transition: 'top 0.15s ease, left 0.15s ease'
+            transition: 'top 0.15s ease, left 0.15s ease',
+            zIndex: 10
           }}
         >
-          👟
+          <img
+            src="/assets/speed-tap-sneaker.png"
+            alt="Speed Tap Sneaker"
+            style={{
+              width: '95px',
+              height: 'auto',
+              display: 'block',
+              filter: 'drop-shadow(0 6px 16px rgba(0,0,0,0.7))',
+              transform: 'rotate(-12deg)'
+            }}
+          />
         </button>
       </div>
     </div>
