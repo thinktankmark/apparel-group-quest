@@ -91,17 +91,17 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
           // Parabolic forward arc
           const timeProgress = Math.min(1.0, s.jumpStep / s.totalJumpSteps);
-          s.horseX = 60 + timeProgress * 30;
+          s.horseX = 60 + timeProgress * 25;
 
           // Smooth Touchdown Landing
           if (s.horseY <= 0) {
             s.horseY = 0;
             s.velocityY = 0;
             s.isJumping = false;
-            s.horseX = 90;
+            s.horseX = 85;
           }
         } else {
-          s.horseX = 90; // Base ground position
+          s.horseX = 100; // Base ground position
         }
 
         // 2. Smooth Oncoming Obstacle Motion (Slower, comfortable speed)
