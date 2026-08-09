@@ -195,6 +195,16 @@ body {
 .input-field.error {
   border-color: var(--color-error);
 }
+.error-banner
+{
+  font-size: 12px;
+  direction: ltr;
+  background: rgba(220, 53, 69, 0.25);
+  border: 1px solid #FF5252;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 
 /* Cards */
 .station-card {
