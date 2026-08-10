@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { HeaderLogo } from '../components/HeaderLogo';
-import { GameVictoryScreen } from '../components/GameVictoryScreen';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -12,51 +11,57 @@ interface GameProps {
 interface Card {
   id: number;
   imageSrc: string;
+  alt: string;
   isFlipped: boolean;
   isMatched: boolean;
 }
 
-const SHOE_IMAGES = [
-  '/assets/skechers-1.png',
-  '/assets/skechers-2.png',
-  '/assets/skechers-3.png',
-  '/assets/skechers-4.png',
-  '/assets/skechers-5.png',
-  '/assets/skechers-6.png'
+const MEMORY_IMAGES = [
+  { id: 1, src: '/assets/crocs-store.png', alt: 'Crocs' },
+  { id: 2, src: '/assets/polo-rider.png', alt: 'Polo Rider' },
+  { id: 3, src: '/assets/skechers-store.png', alt: 'Skechers' },
 ];
 
-export const MemoryGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = false }) => {
+export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
+  const [cards, setCards] = useState<Card[]>([]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(90);
-  const [cards, setCards] = useState<Card[]>(() => {
-    const paired = [...SHOE_IMAGES, ...SHOE_IMAGES].map((imageSrc, idx) => ({
-      id: idx,
-      imageSrc,
+
+  const initGame = () => {
+    const deck = [...MEMORY_IMAGES, ...MEMORY_IMAGES].map((item, index) => ({
+      id: index,
+      imageSrc: item.src,
+      alt: item.alt,
       isFlipped: false,
       isMatched: false
     }));
-    return paired.sort(() => Math.random() - 0.5);
-  });
-  const [flippedCards, setFlippedCards] = useState<number[]>([]);
-  const [isBusy, setIsBusy] = useState<boolean>(false);
-  const [showWinModal, setShowWinModal] = useState<boolean>(false);
+    // Shuffle cards
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    setCards(deck);
+    setFlippedCards([]);
+    setIsBusy(false);
+    setTimeLeft(90);
+  };
 
-  // Timer countdown
   useEffect(() => {
-    if (showWinModal || timeLeft <= 0) return;
+    initGame();
+  }, []);
+
+  // Timer Countdown
+  useEffect(() => {
+    if (timeLeft <= 0) return;
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTimeLeft(prev => prev - 1);
     }, 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, showWinModal]);
+  }, [timeLeft]);
 
   const handleCardClick = (index: number) => {
-    if (isBusy || cards[index].isFlipped || cards[index].isMatched || showWinModal) return;
+    if (isBusy || cards[index].isFlipped || cards[index].isMatched) return;
 
     const newCards = [...cards];
     newCards[index].isFlipped = true;
@@ -77,7 +82,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fals
             updated[firstIdx].isMatched = true;
             updated[secondIdx].isMatched = true;
             if (updated.every(c => c.isMatched)) {
-              setShowWinModal(true);
+              onSuccess(100, Math.max(90 - timeLeft, 10));
             }
             return updated;
           });
@@ -100,37 +105,19 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fals
     }
   };
 
-  // If this is the player's final stage and they won -> Render GameVictoryScreen
-  if (showWinModal && isFinalStage) {
-    return (
-      <GameVictoryScreen
-        gameTitleAr="تحدي مطابقة سكتشرز"
-        gameTitleEn="Skechers Memory Match"
-        scoreTextAr="مطابقة كاملة لجميع الأحذية!"
-        scoreTextEn="MATCH COMPLETED!"
-        subtitleAr="أداء أسطوري ورائع! أكملت التحدي الأخير لرحلة الكنز."
-        subtitleEn="Legendary performance! You completed the final challenge of the quest."
-        centerEmoji="👟 🏆 ✨"
-        isFinalStage={true}
-        onContinue={() => onSuccess(100, Math.max(90 - timeLeft, 10))}
-      />
-    );
-  }
-
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
-      {/* Header Logo */}
-      <HeaderLogo />
+      <HeaderLogo sequenceOrder={1} />
 
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
-        <h2 className="title-ar">تحدي الذاكرة سكتشرز</h2>
-        <p className="subtitle-en">Skechers Memory Match</p>
+        <h2 className="title-ar">تحدي مطابقة الذاكرة</h2>
+        <p className="subtitle-en">Skechers Memory Match Challenge</p>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
-          طابق جميع أزواج الأحذية للمتابعة. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Match all shoe pairs to proceed.</span>
+          اقلب الكروت وطابق الصور المتشابهة! / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Flip cards to find all matching pairs!</span>
         </p>
       </div>
 
-      {/* Timer HUD */}
+      {/* Timer & Status Bar */}
       <div style={{
         width: '100%',
         maxWidth: '460px',
@@ -139,44 +126,63 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fals
         borderRadius: '12px',
         padding: '10px 16px',
         textAlign: 'center',
-        marginBottom: '16px'
+        marginBottom: '16px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }}>
-        <span style={{ fontSize: '14px', fontWeight: 800, color: '#FEC949', direction: 'ltr', unicodeBidi: 'isolate', display: 'inline-block' }}>
-          ⏱️ TIME REMAINING: {timeLeft}s
+        <span style={{ fontSize: '13px', fontWeight: 800, color: '#FEC949' }}>
+          ⏱️ TIME: {timeLeft}s
         </span>
+        <button
+          onClick={initGame}
+          style={{
+            background: '#FEC949',
+            color: '#091C47',
+            border: 'none',
+            borderRadius: '16px',
+            padding: '4px 12px',
+            fontSize: '11px',
+            fontWeight: 800,
+            cursor: 'pointer'
+          }}
+        >
+          🔄 RESET
+        </button>
       </div>
 
-      {/* 4 Columns x 3 Rows Cards Grid */}
+      {/* Memory Cards 3x2 Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '8px',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '12px',
         width: '100%',
-        maxWidth: '420px',
-        marginBottom: '20px'
+        maxWidth: '460px',
+        margin: '0 auto'
       }}>
-        {cards.map((card, idx) => (
+        {cards.map((card, index) => (
           <button
             key={card.id}
-            onClick={() => handleCardClick(idx)}
+            onClick={() => handleCardClick(index)}
+            disabled={card.isMatched}
             style={{
-              height: '84px',
-              background: card.isFlipped || card.isMatched ? 'linear-gradient(135deg, #1A3673 0%, #152B5B 100%)' : '#0F214A',
+              height: '115px',
+              background: card.isFlipped || card.isMatched ? '#152B5B' : 'linear-gradient(135deg, #1A3673 0%, #0A193B 100%)',
               border: card.isMatched ? '2px solid #8CE63D' : card.isFlipped ? '2px solid #FEC949' : '1.5px solid #35589A',
               borderRadius: '14px',
               display: 'flex',
-              justifyContent: 'center',
               alignItems: 'center',
-              cursor: 'pointer',
-              transition: 'transform 0.15s ease',
-              padding: '6px'
+              justifyContent: 'center',
+              cursor: card.isMatched ? 'default' : 'pointer',
+              boxShadow: '0 6px 16px rgba(0,0,0,0.4)',
+              transition: 'transform 0.2s ease, border-color 0.2s ease'
             }}
           >
             {card.isFlipped || card.isMatched ? (
               <img
                 src={card.imageSrc}
-                alt="Skechers Shoe"
-                style={{ width: '100%', height: 'auto', maxHeight: '68px', objectFit: 'contain' }}
+                alt={card.alt}
+                style={{ width: '70%', height: '70%', objectFit: 'contain' }}
               />
             ) : (
               <span style={{ fontSize: '22px', color: '#FEC949' }}>❓</span>
@@ -184,28 +190,6 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fals
           </button>
         ))}
       </div>
-
-      {/* Win Modal Popup Card (Intermediate Stages 1-3) */}
-      {showWinModal && !isFinalStage && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>🎉 🏆</span>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
-              تهانينا! لقد فزت بالجولة!
-            </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
-              CONGRATULATIONS! YOU WIN!
-            </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. <br /> <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
-            </p>
-            <button className="btn-primary" onClick={() => onSuccess(100, Math.max(90 - timeLeft, 10))}>
-              <span className="text-ar">احصل على دليلك التالي</span>
-              <span className="text-en">GET YOUR NEXT CLUE</span>
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

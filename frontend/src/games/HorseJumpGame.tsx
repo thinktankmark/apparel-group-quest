@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HeaderLogo } from '../components/HeaderLogo';
-import { GameVictoryScreen } from '../components/GameVictoryScreen';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -9,13 +8,12 @@ interface GameProps {
   isFinalStage?: boolean;
 }
 
-export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = false }) => {
+export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [score, setScore] = useState<number>(0);
   const targetScore = 5;
 
   const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
-  const [showWinModal, setShowWinModal] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const horseRef = useRef<HTMLDivElement>(null);
@@ -47,7 +45,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = f
       setHasGameStarted(true);
       return;
     }
-    if (s.isJumping || s.isGameOver || showWinModal) return;
+    if (s.isJumping || s.isGameOver) return;
 
     s.isJumping = true;
     s.velocityY = 15.5; // Upward jump force
@@ -70,7 +68,6 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = f
 
     setScore(0);
     setShowRetryModal(false);
-    setShowWinModal(false);
     setHasGameStarted(true);
 
     // Sync initial positions directly to DOM
@@ -84,7 +81,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = f
   };
 
   useEffect(() => {
-    if (!hasGameStarted || showWinModal || showRetryModal) return;
+    if (!hasGameStarted || showRetryModal) return;
 
     let lastTime = performance.now();
 
@@ -165,8 +162,8 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = f
         setScore(newScore);
 
         if (newScore >= targetScore) {
-          setShowWinModal(true);
           if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+          onSuccess(newScore, 45);
           return;
         }
       }
@@ -185,24 +182,7 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = f
     return () => {
       if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     };
-  }, [hasGameStarted, showWinModal, showRetryModal]);
-
-  // If this is the player's final stage and they won -> Render GameVictoryScreen
-  if (showWinModal && isFinalStage) {
-    return (
-      <GameVictoryScreen
-        gameTitleAr="تحدي قفز البولو"
-        gameTitleEn="BHPC Polo Jump Challenge"
-        scoreTextAr={`${score} / ${targetScore} الحواجز المقفوزة`}
-        scoreTextEn={`${score} / ${targetScore} Hurdles Cleared`}
-        subtitleAr="أداء أسطوري ورائع! أكملت التحدي الأخير لرحلة الكنز."
-        subtitleEn="Legendary performance! You completed the final challenge of the quest."
-        centerEmoji="🏇 🏆 ✨"
-        isFinalStage={true}
-        onContinue={() => onSuccess(score, 45)}
-      />
-    );
-  }
+  }, [hasGameStarted, showRetryModal]);
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
@@ -407,30 +387,6 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = f
             <button className="btn-primary" onClick={handleRetry}>
               <span className="text-ar">إعادة المحاولة</span>
               <span className="text-en">RETRY JUMP</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Win Modal Popup Card (Intermediate Stages 1-3) */}
-      {showWinModal && !isFinalStage && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <div style={{ fontSize: '48px', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block' }} /> 🏆
-            </div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
-              تهانينا! أكملت تحدي البولو!
-            </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
-              CONGRATULATIONS! POLO CHALLENGE CLEARED!
-            </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
-            </p>
-            <button className="btn-primary" onClick={() => onSuccess(score, 45)}>
-              <span className="text-ar">احصل على دليلك التالي</span>
-              <span className="text-en">GET YOUR NEXT CLUE</span>
             </button>
           </div>
         </div>

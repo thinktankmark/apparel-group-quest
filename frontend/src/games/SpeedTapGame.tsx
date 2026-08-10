@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { HeaderLogo } from '../components/HeaderLogo';
-import { GameVictoryScreen } from '../components/GameVictoryScreen';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
@@ -9,7 +8,7 @@ interface GameProps {
   isFinalStage?: boolean;
 }
 
-export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = false }) => {
+export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [tappedCount, setTappedCount] = useState<number>(0);
   const [targetCount] = useState<number>(20);
   const [activePosition, setActivePosition] = useState<{ top: number; left: number }>({ top: 90, left: 100 });
@@ -34,6 +33,7 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fa
       const next = prev + 1;
       if (next >= targetCount) {
         setIsWon(true);
+        onSuccess(next, 20);
       }
       return next;
     });
@@ -43,23 +43,6 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fa
       left: Math.floor(Math.random() * 210) + 15
     });
   };
-
-  // If this is the player's final stage and they won -> Render GameVictoryScreen
-  if (isWon && isFinalStage) {
-    return (
-      <GameVictoryScreen
-        gameTitleAr="النقرات السريعة للأحذية"
-        gameTitleEn="Speed Sneaker Tap"
-        scoreTextAr={`${tappedCount} / ${targetCount} أحذية`}
-        scoreTextEn={`${tappedCount} / ${targetCount} Sneakers Tapped`}
-        subtitleAr="نقرات سريعة ورائعة! أكملت التحدي الأخير لرحلة الكنز."
-        subtitleEn="Lightning fast taps! You completed the final challenge of the quest."
-        centerEmoji="⚡ 🏆 ✨"
-        isFinalStage={true}
-        onContinue={() => onSuccess(tappedCount, 20)}
-      />
-    );
-  }
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
@@ -100,8 +83,8 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fa
         borderRadius: '20px',
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-        marginBottom: '20px'
+        boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+        userSelect: 'none'
       }}>
         <button
           onClick={handleSneakerTap}
@@ -111,47 +94,17 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = fa
             left: `${activePosition.left}px`,
             background: 'none',
             border: 'none',
-            padding: 0,
             cursor: 'pointer',
-            transition: 'top 0.15s ease, left 0.15s ease',
-            zIndex: 10
+            fontSize: '44px',
+            lineHeight: 1,
+            transition: 'top 0.15s ease, left 0.15s ease, transform 0.1s ease',
+            filter: 'drop-shadow(0 4px 10px rgba(254, 201, 73, 0.5))',
+            padding: '8px'
           }}
         >
-          <img
-            src="/assets/speed-tap-sneaker.png"
-            alt="Speed Tap Sneaker"
-            style={{
-              width: '95px',
-              height: 'auto',
-              display: 'block',
-              filter: 'drop-shadow(0 6px 16px rgba(0,0,0,0.7))',
-              transform: 'rotate(-12deg)'
-            }}
-          />
+          👟
         </button>
       </div>
-
-      {/* Win Modal Popup Card (Intermediate Stages 1-3) */}
-      {isWon && !isFinalStage && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <span style={{ fontSize: '48px', marginBottom: '12px' }}>⚡ 🏆</span>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
-              تهانينا! أكملت تحدي النقرات!
-            </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
-              CONGRATULATIONS! SPEED TAP CLEARED!
-            </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
-            </p>
-            <button className="btn-primary" onClick={() => onSuccess(tappedCount, 20)}>
-              <span className="text-ar">احصل على دليلك التالي</span>
-              <span className="text-en">GET YOUR NEXT CLUE</span>
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

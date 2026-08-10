@@ -107,12 +107,12 @@ const AppContent: React.FC = () => {
       return; // Unauthenticated users stay on LOGIN or SIGNUP
     }
 
-    if (progress?.isCompleted) {
+    if (progress?.isCompleted && view !== 'STAGE_REWARD' && view !== 'VICTORY') {
       setView('VICTORY');
       return;
     }
 
-    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP' && view !== 'STAGE_REWARD') {
+    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP' && view !== 'STAGE_REWARD' && view !== 'VICTORY') {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
         validateAndRouteStoreScan(targetCtx);
@@ -124,17 +124,12 @@ const AppContent: React.FC = () => {
     // ALWAYS use the player's current sequence order (1, 2, 3, or 4)
     const currentSeq = progress?.currentSequenceOrder || 1;
     try {
-      const result = await completeStage(currentSeq, score, durationSeconds, true);
+      await completeStage(currentSeq, score, durationSeconds, true);
       setTargetQrContext(null);
       setGameError(null);
 
-      // Stage 4 completion (result.progress.isCompleted) triggers final VictoryPage!
-      // Intermediate Stages (1, 2, 3) trigger the Voucher Win Screen (StageRewardPage)!
-      if (result.progress?.isCompleted) {
-        setView('VICTORY');
-      } else {
-        setView('STAGE_REWARD');
-      }
+      // ALWAYS show StageRewardPage.tsx (Voucher Win Screen) after completing ANY game (1, 2, 3, or 4)!
+      setView('STAGE_REWARD');
     } catch (err: any) {
       setGameError(err.message || 'Error updating progress.');
     }
@@ -314,7 +309,13 @@ const AppContent: React.FC = () => {
 
       {view === 'STAGE_REWARD' && (
         <StageRewardPage
-          onContinue={() => setView('CLUE')}
+          onContinue={() => {
+            if (progress?.isCompleted) {
+              setView('VICTORY'); // 4th Game completed -> Main Booth Victory & Wheel Spin Screen!
+            } else {
+              setView('CLUE'); // Games 1, 2, 3 -> Next Clue Page!
+            }
+          }}
           lang="ar"
         />
       )}

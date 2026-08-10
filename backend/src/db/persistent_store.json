@@ -1,144 +1,7 @@
 {
-  "players": [
-    {
-      "id": "player-1786363703436",
-      "event_id": "event-001",
-      "full_name": "Sarwat Zahra",
-      "email": "sarwatzahra1997@gmail.com",
-      "phone_number": "+966501638625",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-10T12:08:23.436Z"
-    },
-    {
-      "id": "player-1786365107234",
-      "event_id": "event-001",
-      "full_name": "Sarwat Zahra",
-      "email": "sarwatzahra546@gmail.com",
-      "phone_number": "+966501638621",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-10T12:31:47.234Z"
-    }
-  ],
-  "progress": [
-    {
-      "id": "prog-1786363703436",
-      "player_id": "player-1786363703436",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-bhpc",
-        "store-skechers",
-        "store-crocs",
-        "store-aco"
-      ],
-      "is_completed": true,
-      "completed_at": "2026-08-10T12:20:16.282Z",
-      "updated_at": "2026-08-10T12:20:16.282Z"
-    },
-    {
-      "id": "prog-1786365107234",
-      "player_id": "player-1786365107234",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-crocs",
-        "store-aco",
-        "store-skechers",
-        "store-bhpc"
-      ],
-      "is_completed": true,
-      "completed_at": "2026-08-10T13:01:48.608Z",
-      "updated_at": "2026-08-10T13:01:48.608Z"
-    }
-  ],
-  "attempts": [
-    {
-      "id": "att-1786364053110-2tn5",
-      "player_id": "player-1786363703436",
-      "sequence_order": 1,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 5,
-      "duration_seconds": 45,
-      "created_at": "2026-08-10T12:14:13.110Z"
-    },
-    {
-      "id": "att-1786364248706-ihsq",
-      "player_id": "player-1786363703436",
-      "sequence_order": 2,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 23,
-      "created_at": "2026-08-10T12:17:28.706Z"
-    },
-    {
-      "id": "att-1786364350894-wvwe",
-      "player_id": "player-1786363703436",
-      "sequence_order": 3,
-      "game_key": "TIC_TAC_TOE",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-10T12:19:10.894Z"
-    },
-    {
-      "id": "att-1786364416282-y6g4",
-      "player_id": "player-1786363703436",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 20,
-      "duration_seconds": 20,
-      "created_at": "2026-08-10T12:20:16.282Z"
-    },
-    {
-      "id": "att-1786365440585-ov9s",
-      "player_id": "player-1786365107234",
-      "sequence_order": 1,
-      "game_key": "TIC_TAC_TOE",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-10T12:37:20.585Z"
-    },
-    {
-      "id": "att-1786365500089-ddqr",
-      "player_id": "player-1786365107234",
-      "sequence_order": 2,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 20,
-      "duration_seconds": 20,
-      "created_at": "2026-08-10T12:38:20.089Z"
-    },
-    {
-      "id": "att-1786366128534-r0z8",
-      "player_id": "player-1786365107234",
-      "sequence_order": 3,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 20,
-      "created_at": "2026-08-10T12:48:48.534Z"
-    },
-    {
-      "id": "att-1786366908608-3yh7",
-      "player_id": "player-1786365107234",
-      "sequence_order": 4,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 5,
-      "duration_seconds": 45,
-      "created_at": "2026-08-10T13:01:48.608Z"
-    }
-  ],
+  "players": [],
+  "progress": [],
+  "attempts": [],
   "prizeCollections": [],
   "adminUsers": [
     {
@@ -148,7 +11,26 @@
       "created_at": "2026-08-10T10:18:12.496Z"
     }
   ],
-  "auditLogs": [],
+  "auditLogs": [
+    {
+      "id": "audit-1786370498185",
+      "action": "PLAYER_DELETED",
+      "details": {
+        "playerId": "player-1786365107234",
+        "playerName": "Sarwat Zahra"
+      },
+      "created_at": "2026-08-10T14:01:38.185Z"
+    },
+    {
+      "id": "audit-1786370500905",
+      "action": "PLAYER_DELETED",
+      "details": {
+        "playerId": "player-1786363703436",
+        "playerName": "Sarwat Zahra"
+      },
+      "created_at": "2026-08-10T14:01:40.905Z"
+    }
+  ],
   "stores": [
     {
       "id": "store-main-booth",
