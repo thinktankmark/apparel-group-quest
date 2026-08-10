@@ -14,26 +14,14 @@ export const MainBoothModal: React.FC<MainBoothModalProps> = ({ isOpen, onClose,
   return (
     <div className="modal-overlay">
       <div className="modal-card" style={{ maxWidth: '420px', padding: '20px 18px' }}>
-        {/* Header Pill */}
-        <div style={{
-          background: '#152B5B',
-          border: '1px solid #FEC949',
-          borderRadius: '8px',
-          padding: '6px 12px',
-          color: '#FEC949',
-          fontSize: '10.5px',
-          fontWeight: 700,
-          marginBottom: '14px',
-          textAlign: 'center'
-        }}>
-          {t.boothPopupHeader}
-        </div>
+        
 
         {/* Main Booth Image */}
         <div style={{
           width: '100%',
-          height: '140px',
+          height: '180px',
           borderRadius: '14px',
+          position: 'relative',
           overflow: 'hidden',
           border: '1.5px solid #FEC949',
           marginBottom: '16px',
@@ -44,6 +32,22 @@ export const MainBoothModal: React.FC<MainBoothModalProps> = ({ isOpen, onClose,
             alt="Apparel Group Main Booth"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
+          {/* Header Pill */}
+          <div style={{
+            background: '#152B5B',
+            border: '1px solid #FEC949',
+            borderRadius: '8px',
+            padding: '6px 12px',
+            color: '#FEC949',
+            position:'absolute',
+            bottom: '10px',
+            fontSize: '10.5px',
+            fontWeight: 700,
+            marginBottom: '14px',
+            textAlign: 'center'
+          }}>
+            {t.boothPopupHeader}
+          </div>
         </div>
 
         {/* Title */}
