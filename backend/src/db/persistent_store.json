@@ -1,608 +1,153 @@
 {
   "players": [
     {
-      "id": "player-1785921314730",
+      "id": "player-1786363703436",
       "event_id": "event-001",
       "full_name": "Sarwat Zahra",
       "email": "sarwatzahra1997@gmail.com",
       "phone_number": "+966501638625",
       "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-05T09:15:14.730Z"
+      "created_at": "2026-08-10T12:08:23.436Z"
     },
     {
-      "id": "player-1785933910010",
+      "id": "player-1786365107234",
       "event_id": "event-001",
-      "full_name": "Alexander",
-      "email": "alex@gmail.com",
-      "phone_number": "+966560461234",
+      "full_name": "Sarwat Zahra",
+      "email": "sarwatzahra546@gmail.com",
+      "phone_number": "+966501638621",
       "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-05T12:45:10.010Z"
-    },
-    {
-      "id": "player-1785935321747",
-      "event_id": "event-001",
-      "full_name": "Alex",
-      "email": "abc@gmail.com",
-      "phone_number": "+966561348",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-05T13:08:41.747Z"
-    },
-    {
-      "id": "player-1786254669525",
-      "event_id": "event-001",
-      "full_name": "Test Player One",
-      "email": "test1_1786254669525@example.com",
-      "phone_number": "+971506475352",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T05:51:09.525Z"
-    },
-    {
-      "id": "player-1786254669530",
-      "event_id": "event-001",
-      "full_name": "Test Player Two",
-      "email": "test2_1786254669530@example.com",
-      "phone_number": "+971555135254",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T05:51:09.530Z"
-    },
-    {
-      "id": "player-1786256006902",
-      "event_id": "event-001",
-      "full_name": "Sequence Test Player",
-      "email": "seq_1786256006901@example.com",
-      "phone_number": "+971506903249",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T06:13:26.902Z"
-    },
-    {
-      "id": "player-1786257918150",
-      "event_id": "event-001",
-      "full_name": "Sequence Test Player",
-      "email": "seq_1786257918150@example.com",
-      "phone_number": "+971509439632",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T06:45:18.150Z"
-    },
-    {
-      "id": "player-1786260238947",
-      "event_id": "event-001",
-      "full_name": "Sequence Test Player",
-      "email": "seq_1786260238947@example.com",
-      "phone_number": "+971509641562",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T07:23:58.947Z"
-    },
-    {
-      "id": "player-1786261073873",
-      "event_id": "event-001",
-      "full_name": "Sequence Test Player",
-      "email": "seq_1786261073873@example.com",
-      "phone_number": "+971504353977",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T07:37:53.873Z"
-    },
-    {
-      "id": "player-1786262526947",
-      "event_id": "event-001",
-      "full_name": "Sequence Test Player",
-      "email": "seq_1786262526947@example.com",
-      "phone_number": "+971503598852",
-      "registered_at_store_id": "store-main-booth",
-      "created_at": "2026-08-09T08:02:06.947Z"
+      "created_at": "2026-08-10T12:31:47.234Z"
     }
   ],
   "progress": [
     {
-      "id": "prog-1785921314730",
-      "player_id": "player-1785921314730",
+      "id": "prog-1786363703436",
+      "player_id": "player-1786363703436",
       "current_sequence_order": 4,
-      "is_completed": true,
-      "completed_at": "2026-08-05T09:32:02.012Z",
-      "updated_at": "2026-08-05T09:32:02.012Z"
-    },
-    {
-      "id": "prog-1785933910010",
-      "player_id": "player-1785933910010",
-      "current_sequence_order": 4,
-      "is_completed": true,
-      "completed_at": "2026-08-05T12:50:11.362Z",
-      "updated_at": "2026-08-05T12:50:11.362Z"
-    },
-    {
-      "id": "prog-1785935321747",
-      "player_id": "player-1785935321747",
-      "current_sequence_order": 4,
-      "is_completed": true,
-      "completed_at": "2026-08-05T13:21:26.617Z",
-      "updated_at": "2026-08-05T13:21:26.617Z"
-    },
-    {
-      "id": "prog-1786254669525",
-      "player_id": "player-1786254669525",
-      "current_sequence_order": 2,
       "store_sequence": [
+        "store-bhpc",
         "store-skechers",
-        "store-aco",
         "store-crocs",
-        "store-bhpc"
+        "store-aco"
       ],
-      "is_completed": false,
-      "completed_at": null,
-      "updated_at": "2026-08-09T05:51:09.529Z"
+      "is_completed": true,
+      "completed_at": "2026-08-10T12:20:16.282Z",
+      "updated_at": "2026-08-10T12:20:16.282Z"
     },
     {
-      "id": "prog-1786254669530",
-      "player_id": "player-1786254669530",
-      "current_sequence_order": 1,
+      "id": "prog-1786365107234",
+      "player_id": "player-1786365107234",
+      "current_sequence_order": 4,
       "store_sequence": [
         "store-crocs",
         "store-aco",
         "store-skechers",
         "store-bhpc"
       ],
-      "is_completed": false,
-      "completed_at": null,
-      "updated_at": "2026-08-09T05:51:09.530Z"
-    },
-    {
-      "id": "prog-1786256006902",
-      "player_id": "player-1786256006902",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-skechers",
-        "store-aco",
-        "store-bhpc",
-        "store-crocs"
-      ],
       "is_completed": true,
-      "completed_at": "2026-08-09T06:13:26.908Z",
-      "updated_at": "2026-08-09T06:13:26.908Z"
-    },
-    {
-      "id": "prog-1786257918150",
-      "player_id": "player-1786257918150",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-skechers",
-        "store-aco",
-        "store-bhpc",
-        "store-crocs"
-      ],
-      "is_completed": true,
-      "completed_at": "2026-08-09T06:45:18.177Z",
-      "updated_at": "2026-08-09T06:45:18.177Z"
-    },
-    {
-      "id": "prog-1786260238947",
-      "player_id": "player-1786260238947",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-skechers",
-        "store-aco",
-        "store-bhpc",
-        "store-crocs"
-      ],
-      "is_completed": true,
-      "completed_at": "2026-08-09T07:23:58.953Z",
-      "updated_at": "2026-08-09T07:23:58.953Z"
-    },
-    {
-      "id": "prog-1786261073873",
-      "player_id": "player-1786261073873",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-skechers",
-        "store-aco",
-        "store-bhpc",
-        "store-crocs"
-      ],
-      "is_completed": true,
-      "completed_at": "2026-08-09T07:37:53.877Z",
-      "updated_at": "2026-08-09T07:37:53.877Z"
-    },
-    {
-      "id": "prog-1786262526947",
-      "player_id": "player-1786262526947",
-      "current_sequence_order": 4,
-      "store_sequence": [
-        "store-skechers",
-        "store-aco",
-        "store-bhpc",
-        "store-crocs"
-      ],
-      "is_completed": true,
-      "completed_at": "2026-08-09T08:02:06.951Z",
-      "updated_at": "2026-08-09T08:02:06.951Z"
+      "completed_at": "2026-08-10T13:01:48.608Z",
+      "updated_at": "2026-08-10T13:01:48.608Z"
     }
   ],
   "attempts": [
     {
-      "id": "att-1785921366642-8o7h",
-      "player_id": "player-1785921314730",
+      "id": "att-1786364053110-2tn5",
+      "player_id": "player-1786363703436",
       "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 24,
-      "created_at": "2026-08-05T09:16:06.642Z"
-    },
-    {
-      "id": "att-1785921433501-us6p",
-      "player_id": "player-1785921314730",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 2,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 26,
-      "created_at": "2026-08-05T09:17:13.501Z"
-    },
-    {
-      "id": "att-1785921936661-7y8r",
-      "player_id": "player-1785921314730",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 3,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 27,
-      "created_at": "2026-08-05T09:25:36.661Z"
-    },
-    {
-      "id": "att-1785922175094-8ji6",
-      "player_id": "player-1785921314730",
-      "sequence_order": 2,
-      "game_key": "SHOE_XO",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-05T09:29:35.094Z"
-    },
-    {
-      "id": "att-1785922264461-mgo2",
-      "player_id": "player-1785921314730",
-      "sequence_order": 3,
       "game_key": "HORSE_JUMP",
       "attempt_number": 1,
       "is_success": true,
-      "score": 10,
-      "duration_seconds": 25,
-      "created_at": "2026-08-05T09:31:04.461Z"
+      "score": 5,
+      "duration_seconds": 45,
+      "created_at": "2026-08-10T12:14:13.110Z"
     },
     {
-      "id": "att-1785922322012-mm86",
-      "player_id": "player-1785921314730",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 25,
-      "duration_seconds": 20,
-      "created_at": "2026-08-05T09:32:02.012Z"
-    },
-    {
-      "id": "att-1785934034362-9noj",
-      "player_id": "player-1785933910010",
-      "sequence_order": 1,
+      "id": "att-1786364248706-ihsq",
+      "player_id": "player-1786363703436",
+      "sequence_order": 2,
       "game_key": "MEMORY_MATCH",
       "attempt_number": 1,
       "is_success": true,
       "score": 100,
-      "duration_seconds": 46,
-      "created_at": "2026-08-05T12:47:14.362Z"
+      "duration_seconds": 23,
+      "created_at": "2026-08-10T12:17:28.706Z"
     },
     {
-      "id": "att-1785934089618-2ylu",
-      "player_id": "player-1785933910010",
-      "sequence_order": 2,
-      "game_key": "SHOE_XO",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-05T12:48:09.618Z"
-    },
-    {
-      "id": "att-1785934148207-xidz",
-      "player_id": "player-1785933910010",
+      "id": "att-1786364350894-wvwe",
+      "player_id": "player-1786363703436",
       "sequence_order": 3,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 10,
-      "duration_seconds": 25,
-      "created_at": "2026-08-05T12:49:08.207Z"
-    },
-    {
-      "id": "att-1785934211362-lk1x",
-      "player_id": "player-1785933910010",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 25,
-      "duration_seconds": 20,
-      "created_at": "2026-08-05T12:50:11.362Z"
-    },
-    {
-      "id": "att-1785935559724-in9k",
-      "player_id": "player-1785935321747",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 22,
-      "created_at": "2026-08-05T13:12:39.724Z"
-    },
-    {
-      "id": "att-1785935615201-kto6",
-      "player_id": "player-1785935321747",
-      "sequence_order": 2,
-      "game_key": "SHOE_XO",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-05T13:13:35.201Z"
-    },
-    {
-      "id": "att-1785935958528-98sm",
-      "player_id": "player-1785935321747",
-      "sequence_order": 3,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 15,
-      "duration_seconds": 25,
-      "created_at": "2026-08-05T13:19:18.528Z"
-    },
-    {
-      "id": "att-1785936086617-an4v",
-      "player_id": "player-1785935321747",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 25,
-      "duration_seconds": 20,
-      "created_at": "2026-08-05T13:21:26.617Z"
-    },
-    {
-      "id": "att-1786254669529-bniq",
-      "player_id": "player-1786254669525",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-09T05:51:09.529Z"
-    },
-    {
-      "id": "att-1786256006905-dwbg",
-      "player_id": "player-1786256006902",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 25,
-      "created_at": "2026-08-09T06:13:26.905Z"
-    },
-    {
-      "id": "att-1786256006906-p0hc",
-      "player_id": "player-1786256006902",
-      "sequence_order": 2,
       "game_key": "TIC_TAC_TOE",
       "attempt_number": 1,
       "is_success": true,
       "score": 100,
       "duration_seconds": 30,
-      "created_at": "2026-08-09T06:13:26.906Z"
+      "created_at": "2026-08-10T12:19:10.894Z"
     },
     {
-      "id": "att-1786256006907-e3uo",
-      "player_id": "player-1786256006902",
-      "sequence_order": 3,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 20,
-      "created_at": "2026-08-09T06:13:26.907Z"
-    },
-    {
-      "id": "att-1786256006908-3v8m",
-      "player_id": "player-1786256006902",
+      "id": "att-1786364416282-y6g4",
+      "player_id": "player-1786363703436",
       "sequence_order": 4,
       "game_key": "SPEED_TAP",
       "attempt_number": 1,
       "is_success": true,
-      "score": 100,
-      "duration_seconds": 15,
-      "created_at": "2026-08-09T06:13:26.908Z"
+      "score": 20,
+      "duration_seconds": 20,
+      "created_at": "2026-08-10T12:20:16.282Z"
     },
     {
-      "id": "att-1786257918167-9amh",
-      "player_id": "player-1786257918150",
+      "id": "att-1786365440585-ov9s",
+      "player_id": "player-1786365107234",
       "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 25,
-      "created_at": "2026-08-09T06:45:18.167Z"
-    },
-    {
-      "id": "att-1786257918171-auxr",
-      "player_id": "player-1786257918150",
-      "sequence_order": 2,
       "game_key": "TIC_TAC_TOE",
       "attempt_number": 1,
       "is_success": true,
       "score": 100,
       "duration_seconds": 30,
-      "created_at": "2026-08-09T06:45:18.172Z"
+      "created_at": "2026-08-10T12:37:20.585Z"
     },
     {
-      "id": "att-1786257918175-2h48",
-      "player_id": "player-1786257918150",
-      "sequence_order": 3,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 20,
-      "created_at": "2026-08-09T06:45:18.175Z"
-    },
-    {
-      "id": "att-1786257918177-zwok",
-      "player_id": "player-1786257918150",
-      "sequence_order": 4,
+      "id": "att-1786365500089-ddqr",
+      "player_id": "player-1786365107234",
+      "sequence_order": 2,
       "game_key": "SPEED_TAP",
       "attempt_number": 1,
       "is_success": true,
-      "score": 100,
-      "duration_seconds": 15,
-      "created_at": "2026-08-09T06:45:18.177Z"
+      "score": 20,
+      "duration_seconds": 20,
+      "created_at": "2026-08-10T12:38:20.089Z"
     },
     {
-      "id": "att-1786260238951-0j0s",
-      "player_id": "player-1786260238947",
-      "sequence_order": 1,
+      "id": "att-1786366128534-r0z8",
+      "player_id": "player-1786365107234",
+      "sequence_order": 3,
       "game_key": "MEMORY_MATCH",
       "attempt_number": 1,
       "is_success": true,
       "score": 100,
-      "duration_seconds": 25,
-      "created_at": "2026-08-09T07:23:58.951Z"
+      "duration_seconds": 20,
+      "created_at": "2026-08-10T12:48:48.534Z"
     },
     {
-      "id": "att-1786260238952-bovm",
-      "player_id": "player-1786260238947",
-      "sequence_order": 2,
-      "game_key": "TIC_TAC_TOE",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-09T07:23:58.952Z"
-    },
-    {
-      "id": "att-1786260238952-qzw4",
-      "player_id": "player-1786260238947",
-      "sequence_order": 3,
+      "id": "att-1786366908608-3yh7",
+      "player_id": "player-1786365107234",
+      "sequence_order": 4,
       "game_key": "HORSE_JUMP",
       "attempt_number": 1,
       "is_success": true,
-      "score": 100,
-      "duration_seconds": 20,
-      "created_at": "2026-08-09T07:23:58.952Z"
-    },
-    {
-      "id": "att-1786260238953-ifxz",
-      "player_id": "player-1786260238947",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 15,
-      "created_at": "2026-08-09T07:23:58.953Z"
-    },
-    {
-      "id": "att-1786261073876-ke84",
-      "player_id": "player-1786261073873",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 25,
-      "created_at": "2026-08-09T07:37:53.876Z"
-    },
-    {
-      "id": "att-1786261073876-zj8m",
-      "player_id": "player-1786261073873",
-      "sequence_order": 2,
-      "game_key": "TIC_TAC_TOE",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-09T07:37:53.876Z"
-    },
-    {
-      "id": "att-1786261073877-pk6n",
-      "player_id": "player-1786261073873",
-      "sequence_order": 3,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 20,
-      "created_at": "2026-08-09T07:37:53.877Z"
-    },
-    {
-      "id": "att-1786261073877-ema7",
-      "player_id": "player-1786261073873",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 15,
-      "created_at": "2026-08-09T07:37:53.877Z"
-    },
-    {
-      "id": "att-1786262526950-exdl",
-      "player_id": "player-1786262526947",
-      "sequence_order": 1,
-      "game_key": "MEMORY_MATCH",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 25,
-      "created_at": "2026-08-09T08:02:06.950Z"
-    },
-    {
-      "id": "att-1786262526950-wdx0",
-      "player_id": "player-1786262526947",
-      "sequence_order": 2,
-      "game_key": "TIC_TAC_TOE",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 30,
-      "created_at": "2026-08-09T08:02:06.950Z"
-    },
-    {
-      "id": "att-1786262526950-ot0w",
-      "player_id": "player-1786262526947",
-      "sequence_order": 3,
-      "game_key": "HORSE_JUMP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 20,
-      "created_at": "2026-08-09T08:02:06.950Z"
-    },
-    {
-      "id": "att-1786262526951-cl73",
-      "player_id": "player-1786262526947",
-      "sequence_order": 4,
-      "game_key": "SPEED_TAP",
-      "attempt_number": 1,
-      "is_success": true,
-      "score": 100,
-      "duration_seconds": 15,
-      "created_at": "2026-08-09T08:02:06.951Z"
+      "score": 5,
+      "duration_seconds": 45,
+      "created_at": "2026-08-10T13:01:48.608Z"
     }
   ],
   "prizeCollections": [],
+  "adminUsers": [
+    {
+      "id": "admin-001",
+      "username": "admin",
+      "role": "SUPER_ADMIN",
+      "created_at": "2026-08-10T10:18:12.496Z"
+    }
+  ],
   "auditLogs": [],
   "stores": [
     {

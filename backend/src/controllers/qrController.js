@@ -1,6 +1,14 @@
 const jwt = require('jsonwebtoken');
 const { memoryStore, JWT_SECRET } = require('../db/store');
 
+function getGameKeyForStore(storeId) {
+  if (storeId === 'store-skechers') return 'MEMORY_MATCH';
+  if (storeId === 'store-aco') return 'SPEED_TAP';
+  if (storeId === 'store-bhpc') return 'HORSE_JUMP';
+  if (storeId === 'store-crocs' || storeId === 'store-steve-madden') return 'TIC_TAC_TOE';
+  return 'SPEED_TAP';
+}
+
 // GET /api/qr/validate?token=...
 const validateQrToken = (req, res) => {
   const { token } = req.query;
@@ -69,7 +77,6 @@ const validateQrToken = (req, res) => {
   }
 
   const storeItem = memoryStore.stores.find(s => s.id === targetStoreId);
-  const seqItem = memoryStore.sequence.find(s => s.store_id === targetStoreId);
 
   if (!storeItem) {
     return res.status(404).json({ error: 'STORE_NOT_FOUND', message: 'Store location for this QR code was not found.' });
@@ -79,8 +86,7 @@ const validateQrToken = (req, res) => {
     isMainBooth: false,
     store: storeItem,
     storeId: storeItem.id,
-    sequenceOrder: seqItem ? seqItem.sequence_order : 1,
-    gameKey: seqItem ? seqItem.game_key : 'TIC_TAC_TOE'
+    gameKey: getGameKeyForStore(storeItem.id)
   });
 };
 

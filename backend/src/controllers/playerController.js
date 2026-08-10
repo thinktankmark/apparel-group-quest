@@ -1,8 +1,6 @@
-const { memoryStore, saveStoreToFile, getFixedStoreSequence } = require('../db/store');
+const { memoryStore, saveStoreToFile, getFixedStoreSequence, createRandomizedStoreSequence } = require('../db/store');
 
 function getGameKeyForStore(storeId) {
-  const item = memoryStore.sequence.find(s => s.store_id === storeId);
-  if (item) return item.game_key;
   if (storeId === 'store-skechers') return 'MEMORY_MATCH';
   if (storeId === 'store-aco') return 'SPEED_TAP';
   if (storeId === 'store-bhpc') return 'HORSE_JUMP';
@@ -20,7 +18,7 @@ const getPlayerProgress = (req, res) => {
       id: `prog-${Date.now()}`,
       player_id: player.id,
       current_sequence_order: 1,
-      store_sequence: getFixedStoreSequence(),
+      store_sequence: createRandomizedStoreSequence(),
       is_completed: false,
       completed_at: null,
       updated_at: new Date().toISOString()
@@ -30,32 +28,30 @@ const getPlayerProgress = (req, res) => {
   } else {
     // Ensure store_sequence is always populated with 4 stations
     if (!progress.store_sequence || progress.store_sequence.length < 4) {
-      progress.store_sequence = getFixedStoreSequence();
+      progress.store_sequence = createRandomizedStoreSequence();
       saveStoreToFile();
     }
   }
 
-  // Find ONLY the current active sequence item & store details
-  const currentSeqItem = memoryStore.sequence.find(s => s.sequence_order === progress.current_sequence_order);
+  // Find ONLY the current active sequence item & store details based on player's custom store_sequence
+  const activeStoreId = progress.store_sequence[progress.current_sequence_order - 1] || 'store-skechers';
+  const activeStore = memoryStore.stores.find(s => s.id === activeStoreId);
   let activeClue = null;
 
-  if (currentSeqItem) {
-    const store = memoryStore.stores.find(s => s.id === currentSeqItem.store_id);
-    if (store) {
-      activeClue = {
-        sequenceOrder: currentSeqItem.sequence_order,
-        gameKey: currentSeqItem.game_key,
-        store: {
-          id: store.id,
-          nameAr: store.name_ar,
-          nameEn: store.name_en,
-          stationCode: store.station_code,
-          heroImageUrl: store.hero_image_url,
-          locationTextAr: store.location_text_ar,
-          locationTextEn: store.location_text_en
-        }
-      };
-    }
+  if (activeStore) {
+    activeClue = {
+      sequenceOrder: progress.current_sequence_order,
+      gameKey: getGameKeyForStore(activeStore.id),
+      store: {
+        id: activeStore.id,
+        nameAr: activeStore.name_ar,
+        nameEn: activeStore.name_en,
+        stationCode: activeStore.station_code,
+        heroImageUrl: activeStore.hero_image_url,
+        locationTextAr: activeStore.location_text_ar,
+        locationTextEn: activeStore.location_text_en
+      }
+    };
   }
 
   return res.json({
@@ -87,7 +83,9 @@ const completeGame = (req, res) => {
     return res.status(400).json({ error: 'PROGRESS_NOT_FOUND', message: 'Player progress not found.' });
   }
 
-  progress.store_sequence = getFixedStoreSequence();
+  if (!progress.store_sequence || progress.store_sequence.length < 4) {
+    progress.store_sequence = createRandomizedStoreSequence();
+  }
 
   if (seqOrderInt > progress.current_sequence_order) {
     return res.status(403).json({ error: 'LOCATION_LOCKED', message: "You haven't unlocked this location yet." });
@@ -115,7 +113,7 @@ const completeGame = (req, res) => {
 
   if (isSuccess || seqOrderInt === 1) {
     if (seqOrderInt === progress.current_sequence_order) {
-      const maxSequence = 4; // Guaranteed 4 stations: Skechers (1), ACO (2), BHPC (3), Crocs (4)
+      const maxSequence = 4; // Guaranteed 4 stations total per player
 
       if (seqOrderInt >= maxSequence) {
         progress.is_completed = true;

@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-const API_BASE = (import.meta.env.VITE_API_URL || 'https://apparel-hunt-api.onrender.com').replace(/\/$/, '');
+const isLocalHost = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.startsWith('192.168.') ||
+  window.location.hostname.startsWith('10.') ||
+  window.location.hostname.startsWith('172.')
+);
+
+const API_BASE = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
+  : isLocalHost
+    ? `http://${window.location.hostname}:4000`
+    : 'https://apparel-hunt-api.onrender.com';
+
+const APP_HOST_URL = isLocalHost
+  ? `http://${window.location.hostname}:3000`
+  : 'https://apparel-scavenger-hunt.vercel.app';
 
 interface Analytics {
   totalRegistered: number;
@@ -527,7 +543,7 @@ export const App: React.FC = () => {
                   <p style={{ color: '#9BB1DB', fontSize: '12px', margin: '0 0 16px 0' }}>{s.store.nameAr}</p>
                   <div style={{ background: '#FFF', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '16px' }}>
                     <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&data=${encodeURIComponent(`https://apparel-scavenger-hunt.vercel.app/scan?token=${s.qrToken}`)}`}
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&data=${encodeURIComponent(`${APP_HOST_URL}?token=${s.qrToken}`)}`}
                       alt={s.store.nameEn}
                       style={{ width: '220px', height: '220px', display: 'block' }}
                     />

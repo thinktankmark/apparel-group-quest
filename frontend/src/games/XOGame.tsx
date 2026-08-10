@@ -6,9 +6,10 @@ interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
   onFailure: () => void;
   lang?: string;
+  isFinalStage?: boolean;
 }
 
-export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
+export const XOGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = false }) => {
   const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
   const [isPlayerTurn, setIsPlayerTurn] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
@@ -114,8 +115,8 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     setShowWinModal(false);
   };
 
-  // Station 4 (Last Game) Win State -> Renders GameVictoryScreen with isFinalStage=true
-  if (showWinModal) {
+  // If this is the player's final stage and they won -> Render GameVictoryScreen
+  if (showWinModal && isFinalStage) {
     return (
       <GameVictoryScreen
         gameTitleAr="تحدي كروكس XO"
@@ -237,6 +238,30 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
             <button className="btn-primary" onClick={resetGame}>
               <span className="text-ar">اضغط لإعادة المحاولة.</span>
               <span className="text-en">TAP TO TRY AGAIN</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Win Modal Popup Card (Intermediate Stages 1-3) */}
+      {showWinModal && !isFinalStage && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '12px' }}>
+              <img src="/assets/xo-shoe-green.png" alt="Green Croc" style={{ width: '56px', height: 'auto' }} />
+            </div>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
+              تهانينا! لقد فزت بالجولة!
+            </h2>
+            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
+              CONGRATULATIONS! YOU WIN!
+            </h3>
+            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
+              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
+            </p>
+            <button className="btn-primary" onClick={() => onSuccess(100, 30)}>
+              <span className="text-ar">احصل على دليلك التالي</span>
+              <span className="text-en">GET YOUR NEXT CLUE</span>
             </button>
           </div>
         </div>

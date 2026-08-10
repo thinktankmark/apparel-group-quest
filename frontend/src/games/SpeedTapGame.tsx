@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { HeaderLogo } from '../components/HeaderLogo';
+import { GameVictoryScreen } from '../components/GameVictoryScreen';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
   onFailure: () => void;
   lang?: string;
+  isFinalStage?: boolean;
 }
 
-export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
+export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = false }) => {
   const [tappedCount, setTappedCount] = useState<number>(0);
   const [targetCount] = useState<number>(20);
   const [activePosition, setActivePosition] = useState<{ top: number; left: number }>({ top: 90, left: 100 });
@@ -41,6 +43,23 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
       left: Math.floor(Math.random() * 210) + 15
     });
   };
+
+  // If this is the player's final stage and they won -> Render GameVictoryScreen
+  if (isWon && isFinalStage) {
+    return (
+      <GameVictoryScreen
+        gameTitleAr="النقرات السريعة للأحذية"
+        gameTitleEn="Speed Sneaker Tap"
+        scoreTextAr={`${tappedCount} / ${targetCount} أحذية`}
+        scoreTextEn={`${tappedCount} / ${targetCount} Sneakers Tapped`}
+        subtitleAr="نقرات سريعة ورائعة! أكملت التحدي الأخير لرحلة الكنز."
+        subtitleEn="Lightning fast taps! You completed the final challenge of the quest."
+        centerEmoji="⚡ 🏆 ✨"
+        isFinalStage={true}
+        onContinue={() => onSuccess(tappedCount, 20)}
+      />
+    );
+  }
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
@@ -112,8 +131,8 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
         </button>
       </div>
 
-      {/* Win Modal Popup Card (Matching Memory Match & Horse Jump Popup Modals) */}
-      {isWon && (
+      {/* Win Modal Popup Card (Intermediate Stages 1-3) */}
+      {isWon && !isFinalStage && (
         <div className="modal-overlay">
           <div className="modal-card">
             <span style={{ fontSize: '48px', marginBottom: '12px' }}>⚡ 🏆</span>

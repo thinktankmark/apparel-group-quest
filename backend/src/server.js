@@ -26,6 +26,6 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'Apparel Group Scavenger Hunt REST API', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Apparel Group Scavenger Hunt REST API listening on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Apparel Group Scavenger Hunt REST API listening on port ${PORT} (0.0.0.0)`);
 });

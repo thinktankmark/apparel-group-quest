@@ -178,9 +178,19 @@ function getFixedStoreSequence() {
   return ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
 }
 
+function createRandomizedStoreSequence() {
+  const stores = ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+  for (let i = stores.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [stores[i], stores[j]] = [stores[j], stores[i]];
+  }
+  return stores;
+}
+
 module.exports = {
   memoryStore,
   JWT_SECRET,
   saveStoreToFile,
-  getFixedStoreSequence
+  getFixedStoreSequence,
+  createRandomizedStoreSequence
 };

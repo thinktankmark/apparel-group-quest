@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HeaderLogo } from '../components/HeaderLogo';
+import { GameVictoryScreen } from '../components/GameVictoryScreen';
 
 interface GameProps {
   onSuccess: (score: number, durationSeconds: number) => void;
   onFailure: () => void;
   lang?: string;
+  isFinalStage?: boolean;
 }
 
-export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
+export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess, isFinalStage = false }) => {
   const [score, setScore] = useState<number>(0);
   const targetScore = 5;
 
   const [hasGameStarted, setHasGameStarted] = useState<boolean>(false);
   const [showRetryModal, setShowRetryModal] = useState<boolean>(false);
   const [showWinModal, setShowWinModal] = useState<boolean>(false);
-  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLDivElement>(null);
+  const horseRef = useRef<HTMLDivElement>(null);
+  const hurdleRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const floorRef = useRef<HTMLDivElement>(null);
   const animationFrameId = useRef<number | null>(null);
 
   // Real-time Forward-Landing Runner Physics Engine
@@ -38,365 +43,364 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
 
   const handleJump = () => {
     const s = stateRef.current;
-    if (s.isJumping || s.isGameOver || showRetryModal || showWinModal) return;
-
-    s.isJumping = true;
-    s.velocityY = 11.8; // Upward jump impulse
-    s.jumpStartX = s.horseX;
-    s.jumpTargetX = Math.min(s.horseX + 40, 160); // Target landing position ahead on track
-    s.jumpFrame = 0;
-    s.hasPassedObstacle = false;
-  };
-
-  const handleStartGame = () => {
     if (!hasGameStarted) {
       setHasGameStarted(true);
+      return;
     }
+    if (s.isJumping || s.isGameOver || showWinModal) return;
+
+    s.isJumping = true;
+    s.velocityY = 15.5; // Upward jump force
+    s.jumpStartX = s.horseX;
+    s.jumpTargetX = Math.min(s.horseX + 40, 240); // Forward distance
+    s.jumpFrame = 0;
   };
 
   const handleRetry = () => {
-    stateRef.current = {
-      horseX: 45,
-      horseY: 0,
-      velocityY: 0,
-      isJumping: false,
-      jumpStartX: 45,
-      jumpTargetX: 85,
-      jumpFrame: 0,
-      totalJumpFrames: 42,
-      obstaclePos: 180,
-      trackOffset: 0,
-      score: 0,
-      isGameOver: false,
-      hasPassedObstacle: false
-    };
+    const s = stateRef.current;
+    s.horseX = 45;
+    s.horseY = 0;
+    s.velocityY = 0;
+    s.isJumping = false;
+    s.obstaclePos = 180;
+    s.trackOffset = 0;
+    s.score = 0;
+    s.isGameOver = false;
+    s.hasPassedObstacle = false;
+
     setScore(0);
     setShowRetryModal(false);
     setShowWinModal(false);
-    setIsGameOver(false);
-    setHasGameStarted(false);
+    setHasGameStarted(true);
+
+    // Sync initial positions directly to DOM
+    if (horseRef.current) {
+      horseRef.current.style.bottom = '42px';
+      horseRef.current.style.left = '45px';
+    }
+    if (hurdleRef.current) {
+      hurdleRef.current.style.left = '180%';
+    }
   };
 
-  // 60FPS Runner Physics Loop
   useEffect(() => {
-    if (!hasGameStarted || isGameOver || showWinModal || showRetryModal) return;
+    if (!hasGameStarted || showWinModal || showRetryModal) return;
 
     let lastTime = performance.now();
 
-    const loop = (currentTime: number) => {
+    const gameLoop = (currentTime: number) => {
+      const s = stateRef.current;
+      if (s.isGameOver) return;
+
       const dt = Math.min((currentTime - lastTime) / 1000, 0.033);
       lastTime = currentTime;
 
-      const s = stateRef.current;
+      // 1. Runner Forward & Jump Physics
+      if (s.isJumping) {
+        s.jumpFrame++;
+        s.horseY += s.velocityY;
+        s.velocityY -= 0.85; // Gravity acceleration
 
-      if (!s.isGameOver) {
-        // 1. Continuous Parallax Track Scrolling (Gentle 1.2px per frame)
-        s.trackOffset = (s.trackOffset + 1.2) % 60;
+        // Parabolic forward landing interpolation
+        const progress = Math.min(s.jumpFrame / s.totalJumpFrames, 1);
+        s.horseX = s.jumpStartX + (s.jumpTargetX - s.jumpStartX) * Math.sin(progress * (Math.PI / 2));
 
-        // 2. Airborne Physics with Forward Leap Arc & Landing Ahead
-        if (s.isJumping) {
-          s.jumpFrame += 1;
-          const progress = Math.min(1.0, s.jumpFrame / s.totalJumpFrames);
-
-          // Smoothly advance X forward during jump arc so it lands ahead
-          s.horseX = s.jumpStartX + ((s.jumpTargetX - s.jumpStartX) * progress);
-
-          s.horseY += s.velocityY;
-          s.velocityY -= 0.52; // Floaty gravity
-
-          // Touchdown Landing Ahead on Track
-          if (s.horseY <= 0) {
-            s.horseY = 0;
-            s.velocityY = 0;
-            s.isJumping = false;
-            s.horseX = s.jumpTargetX; // Lands at the new forward position ahead!
-          }
-        } else {
-          // Gentle, natural return drift toward base position so player can leap forward again
-          if (s.horseX > 45) {
-            s.horseX = Math.max(45, s.horseX - 0.35);
-          }
+        if (s.horseY <= 0) {
+          s.horseY = 0;
+          s.velocityY = 0;
+          s.isJumping = false;
         }
-
-        // 3. Oncoming Hurdle Motion (Comfortable 0.38 speed)
-        const obstacleSpeed = 0.38;
-        s.obstaclePos -= obstacleSpeed;
-
-        const containerWidth = canvasRef.current?.clientWidth || 460;
-        const obstaclePx = (s.obstaclePos / 100) * containerWidth;
-
-        // Horse Bounding Box
-        const horseLeft = s.horseX + 8;
-        const horseRight = s.horseX + 42;
-        const obstacleLeft = obstaclePx - 10;
-        const obstacleRight = obstaclePx + 10;
-
-        // 4. Collision Detection (32px clearance required)
-        if (obstacleRight >= horseLeft && obstacleLeft <= horseRight) {
-          if (s.horseY < 32) {
-            s.isGameOver = true;
-            setIsGameOver(true);
-            setShowRetryModal(true);
-          }
-        }
-
-        // 5. Score Increment on Clean Clearance
-        if (obstacleRight < horseLeft && !s.hasPassedObstacle && !s.isGameOver) {
-          s.hasPassedObstacle = true;
-          s.score += 1;
-          setScore(s.score);
-
-          if (s.score >= targetScore) {
-            s.isGameOver = true;
-            setIsGameOver(true);
-            setShowWinModal(true);
-          }
-        }
-
-        // Reset Obstacle to Right Side with ample spacing (130%)
-        if (s.obstaclePos <= -20) {
-          s.obstaclePos = 130;
-          s.hasPassedObstacle = false;
+      } else {
+        // Natural runner ground retraction
+        if (s.horseX > 45) {
+          s.horseX = Math.max(45, s.horseX - 0.7);
         }
       }
 
-      // Visual DOM Updates (Forward Landing + Gallop Stride + Track Motion)
-      const horseEl = document.getElementById('horse-runner-element');
-      const obstacleEl = document.getElementById('obstacle-runner-element');
-      const trackEl = document.getElementById('runner-track-element');
+      // 2. Parallax Track & Obstacle Movement
+      const trackSpeed = 220; // px/sec
+      s.trackOffset += trackSpeed * dt;
+      s.obstaclePos -= (trackSpeed / 4.6) * dt; // Move hurdle left (% speed)
 
-      if (horseEl) {
-        let gallopBob = 0;
-        let tiltDeg = 0;
+      // Direct 60FPS DOM Style Updates for Ultra Smooth Animation
+      if (horseRef.current) {
+        horseRef.current.style.bottom = `${42 + s.horseY}px`;
+        horseRef.current.style.left = `${s.horseX}px`;
+      }
+      if (hurdleRef.current) {
+        hurdleRef.current.style.left = `${s.obstaclePos}%`;
+      }
+      if (gridRef.current) {
+        gridRef.current.style.left = `-${s.trackOffset % 60}px`;
+      }
+      if (floorRef.current) {
+        floorRef.current.style.left = `-${s.trackOffset % 40}px`;
+      }
 
-        if (s.isJumping) {
-          // Dynamic tilt during forward jump arc
-          tiltDeg = s.velocityY > 0 ? -10 : 3;
-        } else {
-          // Galloping stride bobbing & tilt rhythm
-          gallopBob = Math.sin(currentTime / 70) * 3;
-          tiltDeg = Math.sin(currentTime / 90) * 3;
+      // 3. Collision Detection (AABB Bounding Box)
+      const canvasWidth = canvasRef.current ? canvasRef.current.clientWidth : 400;
+      const hurdlePxLeft = (s.obstaclePos / 100) * canvasWidth;
+      const hurdleWidthPx = 42;
+
+      const runnerLeft = s.horseX + 12;
+      const runnerRight = s.horseX + 63;
+      const hurdleLeft = hurdlePxLeft;
+      const hurdleRight = hurdlePxLeft + hurdleWidthPx;
+
+      const isHorizontalOverlap = runnerRight > hurdleLeft && runnerLeft < hurdleRight;
+      const isLowHeight = s.horseY < 36; // Collision threshold height
+
+      if (isHorizontalOverlap && isLowHeight) {
+        s.isGameOver = true;
+        setShowRetryModal(true);
+        if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+        return;
+      }
+
+      // 4. Score Point Assignment
+      if (hurdleRight < runnerLeft && !s.hasPassedObstacle) {
+        s.hasPassedObstacle = true;
+        s.score += 1;
+        const newScore = s.score;
+        setScore(newScore);
+
+        if (newScore >= targetScore) {
+          setShowWinModal(true);
+          if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+          return;
         }
-
-        horseEl.style.transform = `translate(${s.horseX}px, ${-(s.horseY + gallopBob)}px) rotate(${tiltDeg}deg)`;
       }
 
-      if (obstacleEl) {
-        obstacleEl.style.left = `${s.obstaclePos}%`;
+      // 5. Respawn Hurdle Offscreen Right
+      if (s.obstaclePos < -15) {
+        s.obstaclePos = 135 + Math.random() * 45;
+        s.hasPassedObstacle = false;
       }
 
-      if (trackEl) {
-        trackEl.style.backgroundPosition = `${-s.trackOffset}px 18px`;
-      }
-
-      animationFrameId.current = requestAnimationFrame(loop);
+      animationFrameId.current = requestAnimationFrame(gameLoop);
     };
 
-    animationFrameId.current = requestAnimationFrame(loop);
+    animationFrameId.current = requestAnimationFrame(gameLoop);
 
     return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
+      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     };
-  }, [hasGameStarted, isGameOver, showWinModal, showRetryModal]);
+  }, [hasGameStarted, showWinModal, showRetryModal]);
+
+  // If this is the player's final stage and they won -> Render GameVictoryScreen
+  if (showWinModal && isFinalStage) {
+    return (
+      <GameVictoryScreen
+        gameTitleAr="تحدي قفز البولو"
+        gameTitleEn="BHPC Polo Jump Challenge"
+        scoreTextAr={`${score} / ${targetScore} الحواجز المقفوزة`}
+        scoreTextEn={`${score} / ${targetScore} Hurdles Cleared`}
+        subtitleAr="أداء أسطوري ورائع! أكملت التحدي الأخير لرحلة الكنز."
+        subtitleEn="Legendary performance! You completed the final challenge of the quest."
+        centerEmoji="🏇 🏆 ✨"
+        isFinalStage={true}
+        onContinue={() => onSuccess(score, 45)}
+      />
+    );
+  }
 
   return (
-    <div
-      onClick={() => {
-        if (!hasGameStarted) {
-          handleStartGame();
-        } else {
-          handleJump();
-        }
-      }}
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        paddingBottom: '40px',
-        userSelect: 'none',
-        WebkitUserSelect: 'none'
-      }}
-    >
-      {/* Single Header Logo */}
-      <HeaderLogo />
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
+      {/* Header Logo */}
+      <HeaderLogo sequenceOrder={3} />
 
-      {/* Title */}
-      <h1 className="title-ar">سباق قفز البولو</h1>
-      <h2 className="subtitle-en">Beverly Hills Polo Club — Jump Challenge</h2>
+      <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
+        <h2 className="title-ar">تحدي قفز فرسان البولو</h2>
+        <p className="subtitle-en">Polo Rider Jump Challenge</p>
+        <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
+          انقر للقفز وتفادي الحواجز الخشبية على المضمار! / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Tap to jump over wooden hurdles!</span>
+        </p>
+      </div>
 
-      {/* Target Score & Progress HUD */}
+      {/* Score Counter & Instructions */}
       <div style={{
         width: '100%',
         maxWidth: '460px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: 'rgba(21, 43, 91, 0.9)',
-        border: '1.5px solid #35589A',
+        background: '#152B5B',
+        border: '1.5px solid #FEC949',
         borderRadius: '12px',
         padding: '10px 16px',
-        marginBottom: '16px'
+        textAlign: 'center',
+        marginBottom: '14px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '18px' }}>🏆</span>
-          <span style={{ fontSize: '13px', fontWeight: 700, color: '#FEC949' }}>
-            الهدف / Target: {targetScore}
-          </span>
-        </div>
-        <div style={{ background: '#041B4E', padding: '4px 12px', borderRadius: '12px', border: '1px solid #35589A' }}>
-          <span style={{ fontSize: '13px', fontWeight: 800, color: '#8CE63D' }}>
-            النقاط: {score}
-          </span>
-        </div>
+        <span style={{ fontSize: '13px', fontWeight: 800, color: '#FEC949' }}>
+          🏇 SCORE: {score} / {targetScore}
+        </span>
+        <span style={{ fontSize: '11px', color: '#8CE63D', fontWeight: 700 }}>
+          {!hasGameStarted ? '👆 TAP GAME TO START' : '⚡ RUNNING...'}
+        </span>
       </div>
 
-      {/* Runner Canvas Container */}
+      {/* Runner Game Canvas */}
       <div
         ref={canvasRef}
+        onClick={handleJump}
         style={{
           width: '100%',
           maxWidth: '460px',
-          height: '240px',
-          background: 'linear-gradient(180deg, #091C47 0%, #152B5B 70%, #1D3B7A 100%)',
-          border: '2px solid #FEC949',
+          height: '270px',
+          background: 'linear-gradient(180deg, #0A193B 0%, #152B5B 65%, #1A3673 100%)',
+          border: '2.5px solid #FEC949',
           borderRadius: '20px',
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          marginBottom: '16px',
-          cursor: 'pointer'
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          cursor: 'pointer',
+          userSelect: 'none',
+          marginBottom: '20px'
         }}
       >
-        {/* Tap To Start Overlay */}
+        {/* Parallax Background Grid */}
+        <div
+          ref={gridRef}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '560px',
+            height: '100%',
+            backgroundImage: 'linear-gradient(90deg, rgba(53, 88, 154, 0.15) 1px, transparent 1px)',
+            backgroundSize: '30px 100%'
+          }}
+        />
+
+        {/* Start Tap Overlay */}
         {!hasGameStarted && (
           <div style={{
             position: 'absolute',
-            top: 0, left: 0, right: 0, bottom: 0,
-            background: 'rgba(1, 18, 62, 0.75)',
-            backdropFilter: 'blur(4px)',
+            inset: 0,
+            background: 'rgba(9, 28, 71, 0.75)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: 100,
-            padding: '20px',
-            textAlign: 'center'
+            zIndex: 30,
+            backdropFilter: 'blur(3px)'
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '12px', animation: 'bounce 1s infinite', display: 'flex', alignItems: 'center' }}>
-              <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block'}}/>
-              👇
+            <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '90px', height: 'auto', marginBottom: '12px' }} />
+            <div style={{
+              background: '#FEC949',
+              color: '#091C47',
+              padding: '10px 24px',
+              borderRadius: '24px',
+              fontSize: '14px',
+              fontWeight: 800,
+              boxShadow: '0 4px 15px rgba(254, 201, 73, 0.4)'
+            }}>
+              👆 TAP ANYWHERE TO START JUMPING
             </div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FEC949', marginBottom: '4px' }}>
-              انقر على الشاشة للبدء!
-            </h2>
-            <h3 style={{ fontSize: '12px', fontWeight: 600, color: '#FFFFFF', marginBottom: '16px' }}>
-              Tap anywhere to start the game!
-            </h3>
-            <button className="btn-primary" style={{ maxWidth: '260px', pointerEvents: 'none' }}>
-              <span className="text-ar">ابدأ اللعبة الآن</span>
-              <span className="text-en">START GAME</span>
-            </button>
           </div>
         )}
 
-        {/* Dynamic Endless Runner Track Background */}
+        {/* Track Grass Floor */}
         <div style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          height: '44px',
-          background: '#1A3673',
-          borderTop: '3px solid #FEC949'
+          height: '42px',
+          background: 'linear-gradient(180deg, #1E4620 0%, #112812 100%)',
+          borderTop: '3px solid #8CE63D'
         }}>
-          {/* Dashed Moving Track Lines (Parallax Scrolling) */}
           <div
-            id="runner-track-element"
+            ref={floorRef}
             style={{
-              width: '100%',
-              height: '100%',
-              backgroundImage: 'repeating-linear-gradient(90deg, #FEC949 0, #FEC949 20px, transparent 20px, transparent 40px)',
-              backgroundSize: '40px 4px',
-              backgroundPosition: '0px 18px',
-              backgroundRepeat: 'repeat-x',
-              opacity: 0.7
+              position: 'absolute',
+              top: '6px',
+              left: 0,
+              width: '560px',
+              height: '4px',
+              backgroundImage: 'linear-gradient(90deg, #8CE63D 50%, transparent 50%)',
+              backgroundSize: '40px 4px'
             }}
           />
         </div>
 
-        {/* Official Beverly Hills Polo Club Rider Character Image */}
+        {/* Official White BHPC Polo Rider Silhouette Character */}
         <div
-          id="horse-runner-element"
+          ref={horseRef}
           style={{
             position: 'absolute',
-            bottom: '40px',
-            left: '0px',
-            zIndex: 10,
-            transition: 'none'
+            bottom: '42px',
+            left: '45px',
+            width: '75px',
+            height: '75px',
+            zIndex: 20
           }}
         >
           <img
             src="/assets/polo-rider.png"
-            alt="BHPC Polo Rider"
+            alt="BHPC Polo Rider Silhouette"
             style={{
-              width: '58px',
-              height: 'auto',
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
               display: 'block',
-              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.5))'
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
             }}
           />
         </div>
 
-        {/* Oncoming Hurdle Barrier Obstacle */}
+        {/* Hurdle Obstacle */}
         <div
-          id="obstacle-runner-element"
+          ref={hurdleRef}
           style={{
             position: 'absolute',
-            bottom: '44px',
+            bottom: '42px',
             left: '180%',
-            fontSize: '32px',
-            lineHeight: 1,
-            zIndex: 9,
-            transition: 'none'
+            width: '42px',
+            height: '46px',
+            zIndex: 15,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-end'
           }}
         >
-          🚧
+          <div style={{
+            width: '100%',
+            height: '12px',
+            background: '#8B4513',
+            border: '1.5px solid #FEC949',
+            borderRadius: '3px',
+            marginBottom: '4px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.4)'
+          }} />
+          <div style={{
+            width: '100%',
+            height: '12px',
+            background: '#A0522D',
+            border: '1.5px solid #FEC949',
+            borderRadius: '3px',
+            marginBottom: '4px'
+          }} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '85%' }}>
+            <div style={{ width: '7px', height: '18px', background: '#5C2E0B', borderRadius: '2px' }} />
+            <div style={{ width: '7px', height: '18px', background: '#5C2E0B', borderRadius: '2px' }} />
+          </div>
         </div>
       </div>
 
-      {/* Jump Button CTA */}
-      <button
-        className="btn-primary"
-        onClick={(e) => {
-          e.stopPropagation();
-          if (!hasGameStarted) {
-            handleStartGame();
-          } else {
-            handleJump();
-          }
-        }}
-      >
-        <span className="text-ar">{hasGameStarted ? 'انقر للقفز! 🏇' : 'ابدأ اللعبة! 🏇'}</span>
-        <span className="text-en">{hasGameStarted ? 'TAP TO JUMP!' : 'TAP TO START!'}</span>
-      </button>
-
-      {/* Retry Modal */}
+      {/* Defeat / Retry Modal */}
       {showRetryModal && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <div style={{ fontSize: '48px', marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-              <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block'}}/> 💥
-            </div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FF5252', marginBottom: '4px' }}>
+            <span style={{ fontSize: '48px', marginBottom: '12px' }}>💥 🏇</span>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#FF5252', marginBottom: '4px' }}>
               اصطدمت بالحاجز!
             </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
-              You hit the barrier!
+            <h3 style={{ fontSize: '14px', fontWeight: 700, direction: 'ltr', unicodeBidi: 'isolate', color: '#FFFFFF', marginBottom: '8px' }}>
+              HURDLE STUMBLED!
             </h3>
-            <p style={{ fontSize: '12px', color: '#9BB1DB', marginBottom: '24px' }}>
+            <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginBottom: '20px', lineHeight: 1.4 }}>
               نقاطك الحالية: <strong style={{ color: '#FEC949' }}>{score} / {targetScore}</strong><br />
               انقر لإعادة المحاولة ومواصلة السباق.
             </p>
@@ -408,12 +412,13 @@ export const HorseJumpGame: React.FC<GameProps> = ({ onSuccess }) => {
         </div>
       )}
 
-      {/* Win Modal Popup Card (Matching Memory Match & XO Game Popup Modals) */}
-      {showWinModal && (
+      {/* Win Modal Popup Card (Intermediate Stages 1-3) */}
+      {showWinModal && !isFinalStage && (
         <div className="modal-overlay">
           <div className="modal-card">
-            <div style={{ fontSize: '48px', marginBottom: '12px', display:'flex', alignItems:'center' }}>
-              <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block'}}/> 🏆</div>
+            <div style={{ fontSize: '48px', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src="/assets/polo-rider.png" alt="BHPC Polo Rider" style={{ width: '58px', height: 'auto', display: 'block' }} /> 🏆
+            </div>
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
               تهانينا! أكملت تحدي البولو!
             </h2>

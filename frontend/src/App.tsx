@@ -4,6 +4,7 @@ import { WelcomePage } from './pages/WelcomePage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { CluePage } from './pages/CluePage';
+import { StageRewardPage } from './pages/StageRewardPage';
 import { VictoryPage } from './pages/VictoryPage';
 import { GameHost } from './games/GameRegistry';
 import { ScanHandler } from './pages/ScanHandler';
@@ -49,7 +50,7 @@ const STORES_LIST = [
 
 const AppContent: React.FC = () => {
   const { token, player, progress, activeClue, targetQrContext, completeStage, setTargetQrContext, logout, isLoadingProgress } = useAuth();
-  const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'VICTORY'>('LOGIN');
+  const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'STAGE_REWARD' | 'VICTORY'>('LOGIN');
   const [gameError, setGameError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -67,24 +68,19 @@ const AppContent: React.FC = () => {
     }
   }, [gameError]);
 
-  const validateAndRouteStoreScan = (storeCtx: { storeId: string; sequenceOrder: number; gameKey: string }) => {
+  const validateAndRouteStoreScan = (storeCtx: { storeId: string; sequenceOrder?: number; gameKey?: string }) => {
     if (isLoadingProgress) return; // Wait for backend progress to load!
 
     const currentSeq = progress?.currentSequenceOrder || 1;
     const activeStoreId = activeClue?.store?.id;
+    const playerStoreSeq = progress?.storeSequence || ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
 
-    let isCompletedStore = false;
-    let isCurrentActiveStore = false;
+    // Check if the scanned storeId matches the player's current active store
+    const isCurrentActiveStore = storeCtx.storeId === activeStoreId || storeCtx.storeId === playerStoreSeq[currentSeq - 1];
 
-    if (activeStoreId) {
-      isCurrentActiveStore = storeCtx.storeId === activeStoreId || storeCtx.sequenceOrder === activeClue?.sequenceOrder;
-    } else {
-      isCurrentActiveStore = storeCtx.sequenceOrder === currentSeq;
-    }
-
-    if (storeCtx.sequenceOrder < currentSeq) {
-      isCompletedStore = true;
-    }
+    // Check if the scanned storeId is one of the player's previously completed stores
+    const completedStoreIds = playerStoreSeq.slice(0, currentSeq - 1);
+    const isCompletedStore = completedStoreIds.includes(storeCtx.storeId);
 
     if (isCurrentActiveStore) {
       setGameError(null);
@@ -94,8 +90,8 @@ const AppContent: React.FC = () => {
       setTargetQrContext(null);
       setView('CLUE');
     } else {
-      const activeNameEn = activeClue?.store?.nameEn || (currentSeq === 2 ? 'ACO Store' : currentSeq === 3 ? 'BHPC Store' : currentSeq === 4 ? 'Crocs Store' : 'Skechers Store');
-      const activeNameAr = activeClue?.store?.nameAr || (currentSeq === 2 ? 'فرع أكو' : currentSeq === 3 ? 'فرع نادي بيفرلي هيلز للبولو' : currentSeq === 4 ? 'فرع كروكس' : 'فرع سكتشرز');
+      const activeNameEn = activeClue?.store?.nameEn || 'Active Station Store';
+      const activeNameAr = activeClue?.store?.nameAr || 'فرع المحطة النشط';
       setGameError(`⚠️ لم تقم بفتح هذا الموقع بعد. دليلك الحالي هو: ${activeNameAr}. / You haven't unlocked this location yet. Your active clue is for: ${activeNameEn}.`);
       setTargetQrContext(null);
       setView('CLUE');
@@ -116,7 +112,7 @@ const AppContent: React.FC = () => {
       return;
     }
 
-    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP') {
+    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP' && view !== 'STAGE_REWARD') {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
         validateAndRouteStoreScan(targetCtx);
@@ -125,17 +121,19 @@ const AppContent: React.FC = () => {
   }, [token, progress, targetQrContext, activeClue, isLoadingProgress, view]);
 
   const handleGameSuccess = async (score: number, durationSeconds: number) => {
-    const currentSeq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
+    // ALWAYS use the player's current sequence order (1, 2, 3, or 4)
+    const currentSeq = progress?.currentSequenceOrder || 1;
     try {
       const result = await completeStage(currentSeq, score, durationSeconds, true);
       setTargetQrContext(null);
       setGameError(null);
 
-      // ONLY Station 4 completion (result.progress.isCompleted) triggers final VictoryPage!
+      // Stage 4 completion (result.progress.isCompleted) triggers final VictoryPage!
+      // Intermediate Stages (1, 2, 3) trigger the Voucher Win Screen (StageRewardPage)!
       if (result.progress?.isCompleted) {
         setView('VICTORY');
       } else {
-        setView('CLUE');
+        setView('STAGE_REWARD');
       }
     } catch (err: any) {
       setGameError(err.message || 'Error updating progress.');
@@ -155,23 +153,37 @@ const AppContent: React.FC = () => {
 
   const getClueForView = () => {
     if (activeClue) return activeClue;
-    const seq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
-    const store = STORES_LIST[Math.min(Math.max(seq - 1, 0), 3)];
-    const gameKeys = ['MEMORY_MATCH', 'SPEED_TAP', 'HORSE_JUMP', 'TIC_TAC_TOE'];
+    const seq = progress?.currentSequenceOrder || 1;
+    const playerSeq = progress?.storeSequence || ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+    const currentStoreId = playerSeq[seq - 1] || 'store-skechers';
+    const store = STORES_LIST.find(s => s.id === currentStoreId) || STORES_LIST[0];
+
+    const getGameKey = (sId: string) => {
+      if (sId === 'store-skechers') return 'MEMORY_MATCH';
+      if (sId === 'store-aco') return 'SPEED_TAP';
+      if (sId === 'store-bhpc') return 'HORSE_JUMP';
+      if (sId === 'store-crocs') return 'TIC_TAC_TOE';
+      return 'MEMORY_MATCH';
+    };
+
     return {
       sequenceOrder: seq,
-      gameKey: targetQrContext?.gameKey || gameKeys[Math.min(Math.max(seq - 1, 0), 3)],
+      gameKey: getGameKey(currentStoreId),
       store
     };
   };
 
   const getGameKeyForView = () => {
-    if (targetQrContext?.gameKey) return targetQrContext.gameKey;
     if (activeClue?.gameKey) return activeClue.gameKey;
-    const seq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
-    const gameKeys = ['MEMORY_MATCH', 'SPEED_TAP', 'HORSE_JUMP', 'TIC_TAC_TOE'];
-    return gameKeys[Math.min(Math.max(seq - 1, 0), 3)];
+    const storeId = activeClue?.store?.id || (progress?.storeSequence ? progress.storeSequence[(progress.currentSequenceOrder || 1) - 1] : 'store-skechers');
+    if (storeId === 'store-skechers') return 'MEMORY_MATCH';
+    if (storeId === 'store-aco') return 'SPEED_TAP';
+    if (storeId === 'store-bhpc') return 'HORSE_JUMP';
+    if (storeId === 'store-crocs') return 'TIC_TAC_TOE';
+    return 'MEMORY_MATCH';
   };
+
+  const isFinalStage = (progress?.currentSequenceOrder || activeClue?.sequenceOrder || 1) === 4;
 
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
@@ -235,6 +247,7 @@ const AppContent: React.FC = () => {
           const v = testView.toUpperCase();
           if (v === 'WELCOME' || v === 'INSTRUCTIONS') setView('WELCOME');
           else if (v === 'VICTORY') setView('VICTORY');
+          else if (v === 'REWARD' || v === 'STAGE_REWARD') setView('STAGE_REWARD');
           else if (v === 'GAME' || v === 'CLUE') {
             const gameKeys = ['MEMORY_MATCH', 'SPEED_TAP', 'HORSE_JUMP', 'TIC_TAC_TOE'];
             const gameKey = gameKeys[Math.min(Math.max(stationNum - 1, 0), 3)];
@@ -262,7 +275,7 @@ const AppContent: React.FC = () => {
       {view === 'LOGIN' && (
         <LoginPage
           lang="ar"
-          onLoginSuccess={(freshSeqOrder) => {
+          onLoginSuccess={() => {
             setGameError(null);
             const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
             if (targetCtx) {
@@ -294,8 +307,16 @@ const AppContent: React.FC = () => {
             onSuccess={handleGameSuccess}
             onFailure={handleGameFailure}
             lang="ar"
+            isFinalStage={isFinalStage}
           />
         </div>
+      )}
+
+      {view === 'STAGE_REWARD' && (
+        <StageRewardPage
+          onContinue={() => setView('CLUE')}
+          lang="ar"
+        />
       )}
 
       {view === 'VICTORY' && (

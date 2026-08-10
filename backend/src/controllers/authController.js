@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { memoryStore, JWT_SECRET, saveStoreToFile, getFixedStoreSequence } = require('../db/store');
+const { memoryStore, JWT_SECRET, saveStoreToFile, getFixedStoreSequence, createRandomizedStoreSequence } = require('../db/store');
 const { sendOtpEmail } = require('../utils/mailer');
 
 // In-Memory OTP Cache Store (email -> { otp: string, expiresAt: number })
@@ -129,8 +129,8 @@ const register = (req, res) => {
 
   memoryStore.players.push(newPlayer);
 
-  // 4. Initialize Player Progress (Stage 1)
-  const storeSeq = getFixedStoreSequence();
+  // 4. Initialize Player Progress with Shuffled 4-Store Sequence
+  const storeSeq = createRandomizedStoreSequence();
   const newProgress = {
     id: `prog-${Date.now()}`,
     player_id: newPlayer.id,
@@ -158,46 +158,52 @@ const register = (req, res) => {
       phoneNumber: newPlayer.phone_number
     },
     progress: {
-      currentSequenceOrder: 1,
-      isCompleted: false
+      currentSequenceOrder: newProgress.current_sequence_order,
+      storeSequence: newProgress.store_sequence,
+      isCompleted: newProgress.is_completed
     }
   });
 };
 
-// POST /api/auth/login (Supports EITHER Email Address OR Phone Number)
+// POST /api/auth/login
 const login = (req, res) => {
-  const { phoneNumber, credential } = req.body;
-  const inputVal = (phoneNumber || credential || '').trim();
+  const { credential, phoneNumber, email } = req.body;
+  const input = credential || phoneNumber || email;
 
-  if (!inputVal) {
-    return res.status(400).json({ error: 'MISSING_CREDENTIAL', message: 'Phone number or email address is required.' });
+  if (!input || !input.trim()) {
+    return res.status(400).json({ error: 'MISSING_CREDENTIAL', message: 'Phone number or email is required.' });
   }
 
-  const cleanInput = inputVal.toLowerCase();
-  const cleanPhoneInput = inputVal.replace(/\s+/g, '');
+  const clean = input.trim().toLowerCase();
+  const cleanPhone = input.trim().replace(/\s+/g, '');
 
   const player = memoryStore.players.find(
-    p => p.email.toLowerCase() === cleanInput || p.phone_number.replace(/\s+/g, '') === cleanPhoneInput
+    p => p.email.toLowerCase() === clean || p.phone_number.replace(/\s+/g, '') === cleanPhone
   );
 
-  // Unregistered Account -> Trigger Figma Booth Popup Modal
   if (!player) {
     return res.status(404).json({
       error: 'ACCOUNT_NOT_FOUND',
-      message: "Account doesn't exist. Please check your number or email, or visit our booth to sign up.",
       showBoothPopup: true,
-      boothInfo: {
-        locationAr: '📍 قاعة المعرض ٣ • جناح #A-12',
-        locationEn: '📍 Exhibition Hall 3 • Booth #A-12',
-        titleAr: 'تفضل بزيارة جناحنا للتسجيل!',
-        titleEn: 'Visit Our Booth to Sign Up!',
-        bodyAr: 'لتسجيل وتفعيل حسابك، يرجى زيارة جناحنا في قاعة المعرض.',
-        bodyEn: 'To register for the Treasure Hunt, please visit our booth.'
-      }
+      message: '⚠️ الحساب غير موجود. يرجى زيارة جناح أباريل الرئيسي للتسجيل في المسابقة.'
     });
   }
 
-  const progress = memoryStore.progress.find(p => p.player_id === player.id) || { current_sequence_order: 1, is_completed: false };
+  let progress = memoryStore.progress.find(p => p.player_id === player.id);
+  if (!progress) {
+    progress = {
+      id: `prog-${Date.now()}`,
+      player_id: player.id,
+      current_sequence_order: 1,
+      store_sequence: createRandomizedStoreSequence(),
+      is_completed: false,
+      completed_at: null,
+      updated_at: new Date().toISOString()
+    };
+    memoryStore.progress.push(progress);
+    saveStoreToFile();
+  }
+
   const token = jwt.sign({ playerId: player.id, email: player.email }, JWT_SECRET, { expiresIn: '7d' });
 
   return res.json({
@@ -211,6 +217,7 @@ const login = (req, res) => {
     },
     progress: {
       currentSequenceOrder: progress.current_sequence_order,
+      storeSequence: progress.store_sequence,
       isCompleted: progress.is_completed
     }
   });
