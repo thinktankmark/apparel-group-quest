@@ -41,9 +41,12 @@ export const MainBoothModal: React.FC<MainBoothModalProps> = ({ isOpen, onClose,
             color: '#FEC949',
             position:'absolute',
             bottom: '10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width:'max-content',
             fontSize: '10.5px',
             fontWeight: 700,
-            marginBottom: '14px',
+            marginBottom: '0',
             textAlign: 'center'
           }}>
             {t.boothPopupHeader}
