@@ -95,14 +95,17 @@ export const SpeedTapGame: React.FC<GameProps> = ({ onSuccess }) => {
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            fontSize: '44px',
+            padding: '4px',
             lineHeight: 1,
             transition: 'top 0.15s ease, left 0.15s ease, transform 0.1s ease',
-            filter: 'drop-shadow(0 4px 10px rgba(254, 201, 73, 0.5))',
-            padding: '8px'
+            filter: 'drop-shadow(0 4px 10px rgba(254, 201, 73, 0.5))'
           }}
         >
-          👟
+          <img
+            src="/assets/speed-tap-sneaker.png"
+            alt="Speed Sneaker"
+            style={{ width: '64px', height: 'auto', display: 'block' }}
+          />
         </button>
       </div>
     </div>

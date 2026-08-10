@@ -16,10 +16,13 @@ interface Card {
   isMatched: boolean;
 }
 
-const MEMORY_IMAGES = [
-  { id: 1, src: '/assets/crocs-store.png', alt: 'Crocs' },
-  { id: 2, src: '/assets/polo-rider.png', alt: 'Polo Rider' },
-  { id: 3, src: '/assets/skechers-store.png', alt: 'Skechers' },
+const SKECHERS_SHOES = [
+  { id: 1, src: '/assets/skechers-1.png', alt: 'Skechers Shoe 1' },
+  { id: 2, src: '/assets/skechers-2.png', alt: 'Skechers Shoe 2' },
+  { id: 3, src: '/assets/skechers-3.png', alt: 'Skechers Shoe 3' },
+  { id: 4, src: '/assets/skechers-4.png', alt: 'Skechers Shoe 4' },
+  { id: 5, src: '/assets/skechers-5.png', alt: 'Skechers Shoe 5' },
+  { id: 6, src: '/assets/skechers-6.png', alt: 'Skechers Shoe 6' },
 ];
 
 export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
@@ -29,14 +32,14 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
   const [timeLeft, setTimeLeft] = useState<number>(90);
 
   const initGame = () => {
-    const deck = [...MEMORY_IMAGES, ...MEMORY_IMAGES].map((item, index) => ({
+    const deck = [...SKECHERS_SHOES, ...SKECHERS_SHOES].map((item, index) => ({
       id: index,
       imageSrc: item.src,
       alt: item.alt,
       isFlipped: false,
       isMatched: false
     }));
-    // Shuffle cards
+    // Shuffle 12 cards
     for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -113,7 +116,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
         <h2 className="title-ar">تحدي مطابقة الذاكرة</h2>
         <p className="subtitle-en">Skechers Memory Match Challenge</p>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
-          اقلب الكروت وطابق الصور المتشابهة! / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Flip cards to find all matching pairs!</span>
+          اقلب الكروت وطابق جميع الأحذية المتشابهة! / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Flip cards to find all matching sneaker pairs!</span>
         </p>
       </div>
 
@@ -151,11 +154,11 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
         </button>
       </div>
 
-      {/* Memory Cards 3x2 Grid */}
+      {/* Memory Cards 3x4 Grid (12 Skechers Shoe Cards) */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px',
+        gap: '10px',
         width: '100%',
         maxWidth: '460px',
         margin: '0 auto'
@@ -166,7 +169,7 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
             onClick={() => handleCardClick(index)}
             disabled={card.isMatched}
             style={{
-              height: '115px',
+              height: '95px',
               background: card.isFlipped || card.isMatched ? '#152B5B' : 'linear-gradient(135deg, #1A3673 0%, #0A193B 100%)',
               border: card.isMatched ? '2px solid #8CE63D' : card.isFlipped ? '2px solid #FEC949' : '1.5px solid #35589A',
               borderRadius: '14px',
@@ -175,14 +178,15 @@ export const MemoryGame: React.FC<GameProps> = ({ onSuccess }) => {
               justifyContent: 'center',
               cursor: card.isMatched ? 'default' : 'pointer',
               boxShadow: '0 6px 16px rgba(0,0,0,0.4)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease'
+              transition: 'transform 0.2s ease, border-color 0.2s ease',
+              padding: '6px'
             }}
           >
             {card.isFlipped || card.isMatched ? (
               <img
                 src={card.imageSrc}
                 alt={card.alt}
-                style={{ width: '70%', height: '70%', objectFit: 'contain' }}
+                style={{ width: '80%', height: '80%', objectFit: 'contain', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}
               />
             ) : (
               <span style={{ fontSize: '22px', color: '#FEC949' }}>❓</span>
