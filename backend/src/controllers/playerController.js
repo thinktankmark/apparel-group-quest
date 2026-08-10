@@ -4,10 +4,10 @@ function getGameKeyForStore(storeId) {
   const item = memoryStore.sequence.find(s => s.store_id === storeId);
   if (item) return item.game_key;
   if (storeId === 'store-skechers') return 'MEMORY_MATCH';
-  if (storeId === 'store-aco') return 'TIC_TAC_TOE';
+  if (storeId === 'store-aco') return 'SPEED_TAP';
   if (storeId === 'store-bhpc') return 'HORSE_JUMP';
-  if (storeId === 'store-crocs') return 'SPEED_TAP';
-  return 'TIC_TAC_TOE';
+  if (storeId === 'store-crocs' || storeId === 'store-steve-madden') return 'TIC_TAC_TOE';
+  return 'SPEED_TAP';
 }
 
 // GET /api/player/progress

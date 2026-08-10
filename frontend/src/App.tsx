@@ -38,7 +38,7 @@ const STORES_LIST = [
   },
   {
     id: 'store-crocs',
-    nameAr: 'فرع ستيف مادن',
+    nameAr: 'فرع كروكس',
     nameEn: 'Crocs Store',
     stationCode: 'CROCS',
     heroImageUrl: '6b71cb2867429c6763e78bf41f798068e6c6129a',
@@ -157,7 +157,7 @@ const AppContent: React.FC = () => {
     if (activeClue) return activeClue;
     const seq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
     const store = STORES_LIST[Math.min(Math.max(seq - 1, 0), 3)];
-    const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
+    const gameKeys = ['MEMORY_MATCH', 'SPEED_TAP', 'HORSE_JUMP', 'TIC_TAC_TOE'];
     return {
       sequenceOrder: seq,
       gameKey: targetQrContext?.gameKey || gameKeys[Math.min(Math.max(seq - 1, 0), 3)],
@@ -169,7 +169,7 @@ const AppContent: React.FC = () => {
     if (targetQrContext?.gameKey) return targetQrContext.gameKey;
     if (activeClue?.gameKey) return activeClue.gameKey;
     const seq = targetQrContext?.sequenceOrder || progress?.currentSequenceOrder || 1;
-    const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
+    const gameKeys = ['MEMORY_MATCH', 'SPEED_TAP', 'HORSE_JUMP', 'TIC_TAC_TOE'];
     return gameKeys[Math.min(Math.max(seq - 1, 0), 3)];
   };
 
@@ -236,7 +236,7 @@ const AppContent: React.FC = () => {
           if (v === 'WELCOME' || v === 'INSTRUCTIONS') setView('WELCOME');
           else if (v === 'VICTORY') setView('VICTORY');
           else if (v === 'GAME' || v === 'CLUE') {
-            const gameKeys = ['MEMORY_MATCH', 'TIC_TAC_TOE', 'HORSE_JUMP', 'SPEED_TAP'];
+            const gameKeys = ['MEMORY_MATCH', 'SPEED_TAP', 'HORSE_JUMP', 'TIC_TAC_TOE'];
             const gameKey = gameKeys[Math.min(Math.max(stationNum - 1, 0), 3)];
             setTargetQrContext({ storeId: `store-test-${stationNum}`, sequenceOrder: stationNum, gameKey });
             setView(v as any);

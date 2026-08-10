@@ -90,9 +90,9 @@ const memoryStore = {
       event_id: 'event-001',
       sequence_order: 2,
       store_id: 'store-aco',
-      game_key: 'TIC_TAC_TOE',
+      game_key: 'SPEED_TAP',
       qr_token: 'token-aco-seq-2',
-      qr_signed_jwt: jwt.sign({ sequenceOrder: 2, storeId: 'store-aco', gameKey: 'TIC_TAC_TOE' }, JWT_SECRET)
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 2, storeId: 'store-aco', gameKey: 'SPEED_TAP' }, JWT_SECRET)
     },
     {
       id: 'seq-3',
@@ -108,9 +108,9 @@ const memoryStore = {
       event_id: 'event-001',
       sequence_order: 4,
       store_id: 'store-crocs',
-      game_key: 'SPEED_TAP',
+      game_key: 'TIC_TAC_TOE',
       qr_token: 'token-crocs-seq-4',
-      qr_signed_jwt: jwt.sign({ sequenceOrder: 4, storeId: 'store-crocs', gameKey: 'SPEED_TAP' }, JWT_SECRET)
+      qr_signed_jwt: jwt.sign({ sequenceOrder: 4, storeId: 'store-crocs', gameKey: 'TIC_TAC_TOE' }, JWT_SECRET)
     }
   ],
   mainBoothQr: {
@@ -125,41 +125,35 @@ const memoryStore = {
     {
       id: 'admin-001',
       username: 'admin',
-      password_hash: 'admin123',
-      role: 'SUPER_ADMIN'
+      role: 'SUPER_ADMIN',
+      created_at: new Date().toISOString()
     }
   ],
   auditLogs: []
 };
 
-// Persistence Handlers
+// Load persistent data from JSON file if exists
 function loadStoreFromFile() {
   try {
     if (fs.existsSync(DATA_FILE)) {
       const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-      const json = JSON.parse(fileData);
-
-      if (json.players) memoryStore.players = json.players;
-      if (json.progress) memoryStore.progress = json.progress;
-      if (json.attempts) memoryStore.attempts = json.attempts;
-      if (json.prizeCollections) memoryStore.prizeCollections = json.prizeCollections;
-      if (json.auditLogs) memoryStore.auditLogs = json.auditLogs;
-
-      // Clean up any residual location pin emojis in persistent store
-      if (memoryStore.stores) {
-        memoryStore.stores.forEach(st => {
-          if (st.location_text_ar) st.location_text_ar = st.location_text_ar.replace(/^📍\s*/, '');
-          if (st.location_text_en) st.location_text_en = st.location_text_en.replace(/^📍\s*/, '');
-        });
+      const parsed = JSON.parse(fileData);
+      if (parsed) {
+        if (parsed.players) memoryStore.players = parsed.players;
+        if (parsed.progress) memoryStore.progress = parsed.progress;
+        if (parsed.attempts) memoryStore.attempts = parsed.attempts;
+        if (parsed.prizeCollections) memoryStore.prizeCollections = parsed.prizeCollections;
+        if (parsed.adminUsers) memoryStore.adminUsers = parsed.adminUsers;
+        if (parsed.auditLogs) memoryStore.auditLogs = parsed.auditLogs;
+        if (parsed.stores) memoryStore.stores = parsed.stores;
       }
-
-      console.log(`💾 Persisted database loaded successfully (${memoryStore.players.length} players).`);
     }
   } catch (err) {
-    console.error('⚠️ Warning reading persistent_store.json:', err.message);
+    console.error('⚠️ Warning loading persistent_store.json:', err.message);
   }
 }
 
+// Save persistent data to JSON file
 function saveStoreToFile() {
   try {
     const dataToSave = {
@@ -167,6 +161,7 @@ function saveStoreToFile() {
       progress: memoryStore.progress,
       attempts: memoryStore.attempts,
       prizeCollections: memoryStore.prizeCollections,
+      adminUsers: memoryStore.adminUsers,
       auditLogs: memoryStore.auditLogs,
       stores: memoryStore.stores
     };
@@ -189,4 +184,3 @@ module.exports = {
   saveStoreToFile,
   getFixedStoreSequence
 };
-
