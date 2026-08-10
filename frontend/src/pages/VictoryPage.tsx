@@ -115,7 +115,7 @@ export const VictoryPage: React.FC<VictoryPageProps> = ({ player }) => {
         </div> */}
 
         {/* Card Footer Text */}
-        <div style={{ textAlign: 'center', padding: '0 8px' }}>
+        <div style={{ textAlign: 'center', padding: '12px 8px 0px' }}>
           <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', marginBottom: '4px', direction: 'rtl' }}>
             🎁 جوائز فورية وقسائم شراء حصرية بانتظارك!
           </p>
