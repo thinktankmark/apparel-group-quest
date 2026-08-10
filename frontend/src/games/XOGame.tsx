@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GameVictoryScreen } from '../components/GameVictoryScreen';
 import { HeaderLogo } from '../components/HeaderLogo';
 
 interface GameProps {
@@ -113,6 +114,23 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     setShowWinModal(false);
   };
 
+  // Station 4 (Last Game) Win State -> Renders GameVictoryScreen with isFinalStage=true
+  if (showWinModal) {
+    return (
+      <GameVictoryScreen
+        gameTitleAr="تحدي كروكس XO"
+        gameTitleEn="Crocs XO Challenge"
+        scoreTextAr="فوز مستحق في التحدي الأخير!"
+        scoreTextEn="FINAL CHALLENGE CLEARED!"
+        subtitleAr="أداء أسطوري ورائع! أكملت التحدي الأخير لرحلة الكنز."
+        subtitleEn="Legendary performance! You completed the final challenge of the quest."
+        centerEmoji="👟 🏆 🌸"
+        isFinalStage={true}
+        onContinue={() => onSuccess(100, 30)}
+      />
+    );
+  }
+
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '70px' }}>
       {/* Header Logo */}
@@ -120,7 +138,7 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
 
       <div style={{ width: '100%', textAlign: 'center', marginBottom: '12px' }}>
         <h2 className="title-ar">تحدي XO للأحذية</h2>
-        <p className="subtitle-en">Shoes XO Challenge</p>
+        <p className="subtitle-en">Crocs XO Challenge</p>
         <p style={{ fontSize: '11.5px', color: '#9BB1DB', marginTop: '4px' }}>
           اهزم الذكاء الاصطناعي في تحدي XO للمتابعة. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Beat the AI in XO Challenge to proceed.</span>
         </p>
@@ -219,30 +237,6 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
             <button className="btn-primary" onClick={resetGame}>
               <span className="text-ar">اضغط لإعادة المحاولة.</span>
               <span className="text-en">TAP TO TRY AGAIN</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Win Modal */}
-      {showWinModal && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '12px' }}>
-              <img src="/assets/xo-shoe-green.png" alt="Green Croc" style={{ width: '56px', height: 'auto' }} />
-            </div>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#8CE63D', marginBottom: '4px' }}>
-              تهانينا! لقد فزت بالجولة!
-            </h2>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#FFFFFF', direction: 'ltr', unicodeBidi: 'isolate', marginBottom: '12px' }}>
-              CONGRATULATIONS! YOU WIN!
-            </h3>
-            <p style={{ fontSize: '11px', color: '#9BB1DB', marginBottom: '24px' }}>
-              أداء رائع! فتحت الدليل التالي لرحلة الكنز. / <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>Great job! You unlocked the next clue.</span>
-            </p>
-            <button className="btn-primary" onClick={() => onSuccess(100, 30)}>
-              <span className="text-ar">احصل على دليلك التالي</span>
-              <span className="text-en">GET YOUR NEXT CLUE</span>
             </button>
           </div>
         </div>
