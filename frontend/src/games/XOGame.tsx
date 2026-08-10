@@ -38,14 +38,19 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     const emptyIndices = b.map((val, idx) => (val === null ? idx : null)).filter(val => val !== null) as number[];
     if (emptyIndices.length === 0) return -1;
 
-    // 1. Check if AI can win immediately
+    // After 1st defeat (attempts >= 2), AI enters Easy Mode to guarantee player win!
+    if (attempts >= 2) {
+      return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+    }
+
+    // 1. Check if AI can win immediately (on 1st attempt)
     for (const idx of emptyIndices) {
       const temp = [...b];
       temp[idx] = 'PINK_SHOE';
       if (checkWinner(temp) === 'PINK_SHOE') return idx;
     }
 
-    // 2. Check if player is about to win & block
+    // 2. Check if player is about to win & block (on 1st attempt)
     for (const idx of emptyIndices) {
       const temp = [...b];
       temp[idx] = 'GREEN_SHOE';
@@ -53,11 +58,11 @@ export const XOGame: React.FC<GameProps> = ({ onSuccess }) => {
     }
 
     // 3. Take Center if available
-    if (b[4] === null && attempts < 3) return 4;
+    if (b[4] === null) return 4;
 
     // 4. Take Corners
     const openCorners = [0, 2, 6, 8].filter(idx => b[idx] === null);
-    if (openCorners.length > 0 && attempts < 3) {
+    if (openCorners.length > 0) {
       return openCorners[Math.floor(Math.random() * openCorners.length)];
     }
 
