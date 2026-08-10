@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { CluePage } from './pages/CluePage';
 import { StageRewardPage } from './pages/StageRewardPage';
+import { GameVictoryScreen } from './components/GameVictoryScreen';
 import { VictoryPage } from './pages/VictoryPage';
 import { GameHost } from './games/GameRegistry';
 import { ScanHandler } from './pages/ScanHandler';
@@ -50,7 +51,7 @@ const STORES_LIST = [
 
 const AppContent: React.FC = () => {
   const { token, player, progress, activeClue, targetQrContext, completeStage, setTargetQrContext, logout, isLoadingProgress } = useAuth();
-  const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'STAGE_REWARD' | 'VICTORY'>('LOGIN');
+  const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'STAGE_REWARD' | 'FINAL_VICTORY_SCREEN' | 'VICTORY'>('LOGIN');
   const [gameError, setGameError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -107,12 +108,12 @@ const AppContent: React.FC = () => {
       return; // Unauthenticated users stay on LOGIN or SIGNUP
     }
 
-    if (progress?.isCompleted && view !== 'STAGE_REWARD' && view !== 'VICTORY') {
+    if (progress?.isCompleted && view !== 'STAGE_REWARD' && view !== 'FINAL_VICTORY_SCREEN' && view !== 'VICTORY') {
       setView('VICTORY');
       return;
     }
 
-    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP' && view !== 'STAGE_REWARD' && view !== 'VICTORY') {
+    if (token && !isLoadingProgress && view !== 'LOGIN' && view !== 'SIGNUP' && view !== 'STAGE_REWARD' && view !== 'FINAL_VICTORY_SCREEN' && view !== 'VICTORY') {
       const targetCtx = targetQrContext || JSON.parse(sessionStorage.getItem('ag_target_qr') || 'null');
       if (targetCtx) {
         validateAndRouteStoreScan(targetCtx);
@@ -311,12 +312,26 @@ const AppContent: React.FC = () => {
         <StageRewardPage
           onContinue={() => {
             if (progress?.isCompleted) {
-              setView('VICTORY'); // 4th Game completed -> Main Booth Victory & Wheel Spin Screen!
+              setView('FINAL_VICTORY_SCREEN'); // 4th Game completed -> GameVictoryScreen!
             } else {
               setView('CLUE'); // Games 1, 2, 3 -> Next Clue Page!
             }
           }}
           lang="ar"
+        />
+      )}
+
+      {view === 'FINAL_VICTORY_SCREEN' && (
+        <GameVictoryScreen
+          gameTitleAr="تحدي البحث عن الكنز"
+          gameTitleEn="Apparel Scavenger Hunt Quest"
+          scoreTextAr="أكملت جميع المحطات الـ ٤ بنجاح!"
+          scoreTextEn="ALL 4 STATIONS COMPLETED!"
+          subtitleAr="أداء أسطوري ورائع! توجه إلى الجناح الرئيسي للمطالبة بجائزتك وحرق عجلة الحظ."
+          subtitleEn="Legendary performance! Head to the Main Booth to claim your prize and spin the wheel."
+          centerEmoji="🏆 🎁 ✨"
+          isFinalStage={true}
+          onContinue={() => setView('VICTORY')}
         />
       )}
 

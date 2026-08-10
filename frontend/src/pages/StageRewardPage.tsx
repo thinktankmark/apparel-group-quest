@@ -16,7 +16,10 @@ export const StageRewardPage: React.FC<StageRewardPageProps> = ({ onContinue }) 
         {/* Top Sunburst Voucher Reward Card matching Figma */}
         <div style={{
           width: '100%',
-          background: 'linear-gradient(180deg, #152B5B 0%, #0F214A 100%)',
+          backgroundImage: "url('/assets/congrats-box-bg.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           border: '1.5px solid #35589A',
           borderRadius: '24px',
           padding: '32px 20px',
@@ -32,7 +35,6 @@ export const StageRewardPage: React.FC<StageRewardPageProps> = ({ onContinue }) 
             left: '-50%',
             width: '200%',
             height: '200%',
-            background: 'radial-gradient(circle, rgba(254,201,73,0.12) 0%, transparent 65%)',
             pointerEvents: 'none'
           }} />
 
