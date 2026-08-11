@@ -20,7 +20,7 @@ const validateQrToken = (req, res) => {
   const cleanToken = token.trim().toLowerCase();
 
   // 1. Main Booth QR check
-  if (cleanToken === 'token-main-booth' || cleanToken === 'main-booth' || cleanToken.includes('main-booth')) {
+  if (cleanToken === 'token-main-booth' || cleanToken === 'main-booth' || cleanToken.includes('main-booth') || cleanToken.includes('main-boo')) {
     const mainBoothToken = jwt.sign({ isMainBooth: true, eventId: 'event-001' }, JWT_SECRET, { expiresIn: '1h' });
     const mainBoothStore = memoryStore.stores.find(s => s.is_main_booth) || {
       id: 'store-main-booth',
