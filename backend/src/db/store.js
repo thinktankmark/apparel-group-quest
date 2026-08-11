@@ -82,7 +82,7 @@ const memoryStore = {
       sequence_order: 1,
       store_id: 'store-skechers',
       game_key: 'MEMORY_MATCH',
-      qr_token: 'token-skechers-seq-1',
+      qr_token: 'skechers',
       qr_signed_jwt: jwt.sign({ sequenceOrder: 1, storeId: 'store-skechers', gameKey: 'MEMORY_MATCH' }, JWT_SECRET)
     },
     {
@@ -91,7 +91,7 @@ const memoryStore = {
       sequence_order: 2,
       store_id: 'store-aco',
       game_key: 'SPEED_TAP',
-      qr_token: 'token-aco-seq-2',
+      qr_token: 'aco',
       qr_signed_jwt: jwt.sign({ sequenceOrder: 2, storeId: 'store-aco', gameKey: 'SPEED_TAP' }, JWT_SECRET)
     },
     {
@@ -100,7 +100,7 @@ const memoryStore = {
       sequence_order: 3,
       store_id: 'store-bhpc',
       game_key: 'HORSE_JUMP',
-      qr_token: 'token-bhpc-seq-3',
+      qr_token: 'bhpc',
       qr_signed_jwt: jwt.sign({ sequenceOrder: 3, storeId: 'store-bhpc', gameKey: 'HORSE_JUMP' }, JWT_SECRET)
     },
     {
@@ -109,12 +109,12 @@ const memoryStore = {
       sequence_order: 4,
       store_id: 'store-crocs',
       game_key: 'TIC_TAC_TOE',
-      qr_token: 'token-crocs-seq-4',
+      qr_token: 'crocs',
       qr_signed_jwt: jwt.sign({ sequenceOrder: 4, storeId: 'store-crocs', gameKey: 'TIC_TAC_TOE' }, JWT_SECRET)
     }
   ],
   mainBoothQr: {
-    token: 'token-main-booth',
+    token: 'main-booth',
     qr_signed_jwt: jwt.sign({ sequenceOrder: 0, storeId: 'store-main-booth', gameKey: 'REGISTRATION' }, JWT_SECRET)
   },
   players: [],
