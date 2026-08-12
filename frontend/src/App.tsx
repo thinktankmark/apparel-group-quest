@@ -59,12 +59,12 @@ const AppContent: React.FC = () => {
     document.documentElement.lang = 'ar';
   }, []);
 
-  // Auto-dismiss floating error toast after 9 seconds (or until manual dismissal)
+  // Auto-dismiss floating error toast after 18 seconds (or until manual dismissal)
   useEffect(() => {
     if (gameError) {
       const timer = setTimeout(() => {
         setGameError(null);
-      }, 9000);
+      }, 18000);
       return () => clearTimeout(timer);
     }
   }, [gameError]);
