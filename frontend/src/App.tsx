@@ -129,10 +129,10 @@ const AppContent: React.FC = () => {
       setTargetQrContext(null);
       setGameError(null);
 
-      // For 4th/last game (result.progress.isCompleted), go DIRECTLY to VictoryPage!
+      // For 4th/last game (result.progress.isCompleted), show GameVictoryScreen first!
       // For intermediate games (1, 2, 3), show StageRewardPage.tsx!
       if (result.progress?.isCompleted) {
-        setView('VICTORY');
+        setView('FINAL_VICTORY_SCREEN');
       } else {
         setView('STAGE_REWARD');
       }
@@ -317,6 +317,20 @@ const AppContent: React.FC = () => {
         <StageRewardPage
           onContinue={() => setView('CLUE')}
           lang="ar"
+        />
+      )}
+
+      {view === 'FINAL_VICTORY_SCREEN' && (
+        <GameVictoryScreen
+          gameTitleAr="تحدي البحث عن الكنز"
+          gameTitleEn="Apparel Scavenger Hunt Quest"
+          scoreTextAr="أكملت جميع المحطات الـ ٤ بنجاح!"
+          scoreTextEn="ALL 4 STATIONS COMPLETED!"
+          subtitleAr="أداء أسطوري ورائع! توجه إلى الجناح الرئيسي للمطالبة بجائزتك وحرق عجلة الحظ."
+          subtitleEn="Legendary performance! Head to the Main Booth to claim your prize and spin the wheel."
+          centerEmoji="🏆 🎁 ✨"
+          isFinalStage={true}
+          onContinue={() => setView('VICTORY')}
         />
       )}
 
