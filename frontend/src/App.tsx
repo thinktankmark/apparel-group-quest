@@ -125,12 +125,17 @@ const AppContent: React.FC = () => {
     // ALWAYS use the player's current sequence order (1, 2, 3, or 4)
     const currentSeq = progress?.currentSequenceOrder || 1;
     try {
-      await completeStage(currentSeq, score, durationSeconds, true);
+      const result = await completeStage(currentSeq, score, durationSeconds, true);
       setTargetQrContext(null);
       setGameError(null);
 
-      // ALWAYS show StageRewardPage.tsx (Voucher Win Screen) after completing ANY game (1, 2, 3, or 4)!
-      setView('STAGE_REWARD');
+      // For 4th/last game (result.progress.isCompleted), go DIRECTLY to VictoryPage!
+      // For intermediate games (1, 2, 3), show StageRewardPage.tsx!
+      if (result.progress?.isCompleted) {
+        setView('VICTORY');
+      } else {
+        setView('STAGE_REWARD');
+      }
     } catch (err: any) {
       setGameError(err.message || 'Error updating progress.');
     }
@@ -310,28 +315,8 @@ const AppContent: React.FC = () => {
 
       {view === 'STAGE_REWARD' && (
         <StageRewardPage
-          onContinue={() => {
-            if (progress?.isCompleted) {
-              setView('FINAL_VICTORY_SCREEN'); // 4th Game completed -> GameVictoryScreen!
-            } else {
-              setView('CLUE'); // Games 1, 2, 3 -> Next Clue Page!
-            }
-          }}
+          onContinue={() => setView('CLUE')}
           lang="ar"
-        />
-      )}
-
-      {view === 'FINAL_VICTORY_SCREEN' && (
-        <GameVictoryScreen
-          gameTitleAr="تحدي البحث عن الكنز"
-          gameTitleEn="Apparel Scavenger Hunt Quest"
-          scoreTextAr="أكملت جميع المحطات الـ ٤ بنجاح!"
-          scoreTextEn="ALL 4 STATIONS COMPLETED!"
-          subtitleAr="أداء أسطوري ورائع! توجه إلى الجناح الرئيسي للمطالبة بجائزتك وحرق عجلة الحظ."
-          subtitleEn="Legendary performance! Head to the Main Booth to claim your prize and spin the wheel."
-          centerEmoji="🏆 🎁 ✨"
-          isFinalStage={true}
-          onContinue={() => setView('VICTORY')}
         />
       )}
 
