@@ -547,30 +547,66 @@ export const App: React.FC = () => {
 
         {activeTab === 'QR_PRINTER' && (
           <div>
-            <h2 style={{ color: '#FEC949', marginBottom: '16px' }}>🖨️ Station QR Code Posters (Print Ready)</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-              {sequence.map(s => (
-                <div key={s.sequenceId} style={{ background: '#152B5B', border: '1.5px solid #FEC949', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
-                  <span style={{ fontSize: '11px', background: s.sequenceOrder === 0 ? '#38EF7D' : '#FEC949', color: '#041B4E', padding: '4px 10px', borderRadius: '10px', fontWeight: 800 }}>
-                    {s.sequenceOrder === 0 ? 'MAIN BOOTH REGISTRATION' : `STATION ${s.sequenceOrder}`}
-                  </span>
-                  <h3 style={{ color: '#FFF', margin: '12px 0 4px 0' }}>{s.store.nameEn}</h3>
-                  <p style={{ color: '#9BB1DB', fontSize: '12px', margin: '0 0 16px 0' }}>{s.store.nameAr}</p>
-                  <div style={{ background: '#FFF', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '16px', textAlign: 'center' }}>
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&data=${encodeURIComponent(`${APP_HOST_URL}?token=${s.qrToken}`)}`}
-                      alt={s.store.nameEn}
-                      style={{ width: '220px', height: '220px', display: 'block', margin: '0 auto' }}
-                    />
-                    <div style={{ marginTop: '10px', fontSize: '13px', fontWeight: 900, color: '#041B4E', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
-                      📍 {s.store.nameEn} | {s.store.nameAr}
+            <h2 style={{ color: '#FEC949', marginBottom: '8px' }}>🖨️ Station QR Code Posters & Printable Cards (High-Res Labeled PNG/SVG)</h2>
+            <p style={{ color: '#9BB1DB', fontSize: '13px', marginBottom: '24px' }}>
+              Each card below includes the official Store Name in English & Arabic printed directly under the QR code. You can download high-resolution PNG/SVG images for print or messaging!
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+              {sequence.map(s => {
+                const qrFilenameMap: Record<string, string> = {
+                  'main-booth': 'QR_Main_Booth_Registration.svg',
+                  'skechers': 'QR_Station_1_Skechers_Store.svg',
+                  'aco': 'QR_Station_2_ACO_Store.svg',
+                  'bhpc': 'QR_Station_3_BHPC_Polo_Store.svg',
+                  'crocs': 'QR_Station_4_Crocs_Store.svg'
+                };
+                const svgFilename = qrFilenameMap[s.qrToken] || 'QR_Main_Booth_Registration.svg';
+                const pngFilename = svgFilename.replace('.svg', '.png');
+
+                return (
+                  <div key={s.sequenceId} style={{ background: '#152B5B', border: '1.5px solid #FEC949', borderRadius: '20px', padding: '24px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
+                    <span style={{ fontSize: '11px', background: s.sequenceOrder === 0 ? '#38EF7D' : '#FEC949', color: '#041B4E', padding: '5px 12px', borderRadius: '12px', fontWeight: 800 }}>
+                      {s.sequenceOrder === 0 ? 'MAIN BOOTH REGISTRATION' : `STATION ${s.sequenceOrder}`}
+                    </span>
+                    <h3 style={{ color: '#FFF', margin: '14px 0 4px 0', fontSize: '18px' }}>{s.store.nameEn}</h3>
+                    <p style={{ color: '#9BB1DB', fontSize: '13px', margin: '0 0 18px 0' }}>{s.store.nameAr}</p>
+                    
+                    {/* Embedded Printable White QR Frame with Labeled Store Name */}
+                    <div style={{ background: '#FFF', padding: '18px 14px', borderRadius: '16px', display: 'block', marginBottom: '18px', textAlign: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.2)' }}>
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&data=${encodeURIComponent(`${APP_HOST_URL}?token=${s.qrToken}`)}`}
+                        alt={s.store.nameEn}
+                        style={{ width: '210px', height: '210px', display: 'block', margin: '0 auto' }}
+                      />
+                      <div style={{ marginTop: '12px', fontSize: '13px', fontWeight: 900, color: '#041B4E', letterSpacing: '0.4px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+                        📍 {s.store.nameEn}  •  {s.store.nameAr}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                      <a
+                        href={`/assets/${pngFilename}`}
+                        download={pngFilename}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ flex: 1, padding: '10px 12px', background: '#8CE63D', border: 'none', borderRadius: '8px', color: '#041B4E', fontWeight: 800, fontSize: '12px', textDecoration: 'none', textAlign: 'center' }}
+                      >
+                        📥 Download PNG
+                      </a>
+                      <a
+                        href={`/assets/${svgFilename}`}
+                        download={svgFilename}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ flex: 1, padding: '10px 12px', background: '#041B4E', border: '1px solid #35589A', borderRadius: '8px', color: '#FEC949', fontWeight: 800, fontSize: '12px', textDecoration: 'none', textAlign: 'center' }}
+                      >
+                        🖼️ Download SVG
+                      </a>
                     </div>
                   </div>
-                  <div style={{ fontSize: '11px', color: '#9BB1DB', wordBreak: 'break-all', background: '#041B4E', padding: '8px', borderRadius: '6px' }}>
-                    Token: {s.qrToken}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

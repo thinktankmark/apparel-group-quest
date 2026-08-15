@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900">
+    <rect width="700" height="900" fill="#041B4E" rx="32"/>
+    
+    <!-- Outer Card Border -->
+    <rect x="20" y="20" width="660" height="860" fill="#152B5B" stroke="#FEC949" stroke-width="4" rx="24"/>
+    
+    <!-- Badge -->
+    <rect x="210" y="55" width="280" height="42" fill="#FEC949" rx="12"/>
+    <text x="350" y="83" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#041B4E" text-anchor="middle" letter-spacing="1">STATION 4</text>
+    
+    <!-- Store Name Headers -->
+    <text x="350" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#FFFFFF" text-anchor="middle">Crocs Store</text>
+    <text x="350" y="175" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9BB1DB" text-anchor="middle">فرع كروكس</text>
+    
+    <!-- Inner White QR Frame -->
+    <rect x="75" y="210" width="550" height="550" fill="#FFFFFF" stroke="#35589A" stroke-width="3" rx="20"/>
+    
+    <!-- Embedded High-Res QR Code Image -->
+    <image x="105" y="235" width="490" height="490" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYAQMAAACEqAqfAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAADPklEQVR4nO3cMbKjMAzGcXu2oMwRchSOBkfjKBxhyxQM2mdLlgVkd1PQ5f81LwnyL53Go2cnpRszySF7+ewhW0rl3e/0SySlUV4p6/OXrlnLHzkvxcLCwsLa2+eaoVlSCIvI8vPgJ3N6qpV+Xmz6wPPAwsLCwnJr0Ca7qlW69rVHG+Ex66HvFiwsLCysf1oSerQmtx5tL7CwsLCwPrdqay7xFyF7mClgYWFhYb21PLFHu+UPfO87a/UH8wksLCysb7QO6T26jBKO/wO77n1PS7GwsLCw9nSNWx4/WxC2yZ8FCwsL6/usMFMIjbaOEsqgYNP3Q+/A2a2+yjbBWFhYWFj3WmHo4Ke7Hr2oWmNYJXHue5gM71hYWFhYPp/wcW8fMoT/loUHg36tJ1xtSFhYWFhY9e1Ti71HT/q5733lklnXqGXBwsLCwmqWH0/w81+ilWPf2dqmuCQHa4ylWFhYWFitR1trXlNqP09g8WbtD7zUprlJK0p2LCwsLCw5nP/yHv3uvkKdKTz19dxelNg0t88nsLCwsL7b0gIf0WYlUiuIrXjqaDh9IKECCwsLC8u2vBEtS7a25Y09ujx49VKbKdiprtOdMiwsLCysOy2vnE5tPtx9CPOJdDj/tWBhYWFhmaXJeqhr0AV2p2yU0Kzz9a5uqPC9NxYWFhZWK5C+CfY8umXxH5lxq6b1aCwsLCysYFnm5NdqQ/LhmkLqXVzO57+wsLCwvtuaRNqG1pZIKwi3EWyUIL2d2xA3XG3YsbCwsLB8VptPh7rMuqZOHeb2buzjB+3RWFhYWFjFCgVZ975Ha2w9em3T3FWJ0MWxsLCwsCT0aMsgMUsfLpx/vzDEhrZYWFhYWPdb10xao298vOvnanMg/D9uIvHnvrCwsLC+2bKVLbsWSB86xG999sKtjXu3fv4LCwsLC+uy990PerBq1r479h5dE/+fhoWFhYU19MpqhZ+UEW3WL10Z7ivIqUKwsLCwsP5q+QDWsqQwou2b4NCjBQsLCwvrf1b55Nis59qjk1uhYqmfYmFhYWG9m6+GhPu1uX2bfa1XCBYWFhbW0TrkbY9elJjrApsp2O7Yjmq1819YWFhYWHdaN+YPaFoDStWJ/QAAAAAASUVORK5CYII="/>
+    
+    <!-- Labeled Store Name Footer inside QR Frame -->
+    <text x="350" y="742" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#041B4E" text-anchor="middle">📍 Crocs Store  •  فرع كروكس</text>
+    
+    <!-- Scan Instructions Footer -->
+    <text x="350" y="805" font-family="Arial, sans-serif" font-size="16" font-weight="800" fill="#8CE63D" text-anchor="middle">📲 SCAN WITH YOUR PHONE CAMERA TO PLAY</text>
+    <text x="350" y="835" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#9BB1DB" text-anchor="middle">https://apparel-scavenger-hunt.vercel.app?token=crocs</text>
+  </svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900">
+    <rect width="700" height="900" fill="#041B4E" rx="32"/>
+    
+    <!-- Outer Card Border -->
+    <rect x="20" y="20" width="660" height="860" fill="#152B5B" stroke="#FEC949" stroke-width="4" rx="24"/>
+    
+    <!-- Badge -->
+    <rect x="210" y="55" width="280" height="42" fill="#FEC949" rx="12"/>
+    <text x="350" y="83" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#041B4E" text-anchor="middle" letter-spacing="1">STATION 2</text>
+    
+    <!-- Store Name Headers -->
+    <text x="350" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#FFFFFF" text-anchor="middle">ACO Store</text>
+    <text x="350" y="175" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9BB1DB" text-anchor="middle">فرع أكو</text>
+    
+    <!-- Inner White QR Frame -->
+    <rect x="75" y="210" width="550" height="550" fill="#FFFFFF" stroke="#35589A" stroke-width="3" rx="20"/>
+    
+    <!-- Embedded High-Res QR Code Image -->
+    <image x="105" y="235" width="490" height="490" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYAQMAAACEqAqfAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAADN0lEQVR4nO3cPZLiMBCG4Z4icMgRfBSOZh/NR+EIhASUtVj9o5aBrdkqNvL7JSOw/GiiLlVbRuSLmUqXNV26lJucStkGd/nR63e957r9KftbsbCwsLBW/14zJKuUJQ+e1iyjWvIcPNKMLWcsLCwsrLAGLbJXtaZnaRatwKlGGxEx66yfFiwsLCysv1g10qfW6BiMWFhYWFj/YFlp3nIqlropHnVg+2UsLCwsrA9WpN/7LmqlC7bsrLN/0Z/AwsLCOqLVJdfo/TOwufZq8953dysWFhYW1iqvMV2tmnS2wHJ9c9+7YGFhYR3PSj2FLbXQnlsFfuis2PuKotVK9oKFhYWF9R8snVnS6a4pzVHrkr/JfV87yZD+DSwsLCws6bq6fd/33BFp2UiUc9tyY2FhYR3eig2tTqiDSnQz+8z1wILNsGBhYWFhtRodjYKhu2WROP91lzw1rIteTS1iLCwsrMNbU/20djP7KJovbHX95KuJV/EVCwsLC8usqMCDPwMrOjPtfeuFUcezD7ZYN9drNBYWFtbRLfFHX13yudooxVNDxS/EsoKFhYWF9Tph2M2sKT5jm3r39Yv3FOxUV3sPDAsLCwvrW5am7z6k2C7542/M3lrhx8LCwsJqVs3YEbtdsj1Gy+/qRo1WVLCwsLCwpKvIV0fT+a+wLIM3gMOyGbvflsHCwsI6tBUb2mH7fpa+q6vI/gDD6cP5LywsLCyseP3rKnbANn5jNs4p2GrFmwt2/su2z61GY2FhYWEFMdeewhqdgbBSRr00++eLL9tqNBYWFhZW2vIaevZebWxx+92x1WhdLbJiYWFhYcV+1WIz7dlYVOB0mEv8kEEkVXEsLCwsrO9ar5nyhGjvxrnan47Yv3WGhYWFdXhrKl3WIMqbC2P7/PB27+Pt+S8sLCysA1tXiQxeinONTon+RKrRNfl5GhYWFhbW0GauqWovDlrfVxOP3lp8d4yFhYWF9RtLB9GibZvgbfD+2RwWFhYWVmfdGiHeiS3+fq2EtaX7VS8sLCwsrHf91f1x2qjRc51hy1p2v4WIhYWFhTWVLuvuG3vUVYm53mA9hbraJR/vwsLCwsL6tvXF/AHcg1EFD3p+iQAAAABJRU5ErkJggg=="/>
+    
+    <!-- Labeled Store Name Footer inside QR Frame -->
+    <text x="350" y="742" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#041B4E" text-anchor="middle">📍 ACO Store  •  فرع أكو</text>
+    
+    <!-- Scan Instructions Footer -->
+    <text x="350" y="805" font-family="Arial, sans-serif" font-size="16" font-weight="800" fill="#8CE63D" text-anchor="middle">📲 SCAN WITH YOUR PHONE CAMERA TO PLAY</text>
+    <text x="350" y="835" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#9BB1DB" text-anchor="middle">https://apparel-scavenger-hunt.vercel.app?token=aco</text>
+  </svg>

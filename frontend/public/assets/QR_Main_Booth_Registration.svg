@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900">
+    <rect width="700" height="900" fill="#041B4E" rx="32"/>
+    
+    <!-- Outer Card Border -->
+    <rect x="20" y="20" width="660" height="860" fill="#152B5B" stroke="#FEC949" stroke-width="4" rx="24"/>
+    
+    <!-- Badge -->
+    <rect x="210" y="55" width="280" height="42" fill="#38EF7D" rx="12"/>
+    <text x="350" y="83" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#041B4E" text-anchor="middle" letter-spacing="1">MAIN BOOTH REGISTRATION</text>
+    
+    <!-- Store Name Headers -->
+    <text x="350" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#FFFFFF" text-anchor="middle">Apparel Group Main Booth</text>
+    <text x="350" y="175" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9BB1DB" text-anchor="middle">جناح مجموعة أباريل الرئيسي</text>
+    
+    <!-- Inner White QR Frame -->
+    <rect x="75" y="210" width="550" height="550" fill="#FFFFFF" stroke="#35589A" stroke-width="3" rx="20"/>
+    
+    <!-- Embedded High-Res QR Code Image -->
+    <image x="105" y="235" width="490" height="490" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYAQMAAACEqAqfAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAADPElEQVR4nO3dO5KjMBCAYVEEDjmCj8LR7KNxFI7gkIBCW6IfasnszAbeyH8ng0XrU9alagST0gfjkZs4ZHQMQynN9ccmc9byJ/dTsbCwsLAOG5e4BSsQi92/i1Uu9mItdeqEhYWFheXWTaasYj1yiL3kzZWIN4o12WpYWFhYWD9Zu5VeL9aHjQw5P2uNxsLCwsL69xq9yORy0WesdgMLCwsL68Ly0MxXHfGm7WEZudRoX8QDCwsLC8usJtTSLa9fbLbl3Zq9bzcVCwsLC+tI76G6/5ZSPDTz1ot5V4GFhYX1fVboKZQ4C+1Uf+/WU/BWwuBWsBcsLCwsrP9glfCurpd13SVro0L30b7ao1qvvoOBhYWFheXtXo1nfUiWbIreaPu+JaZuWSwsLKyvt5wosaXkfV+xRrsR+xOl75ulg+HbZCwsLCwsq9F3y1xrBR5DgvcUJIZgzZImj96wsLCwsKoVLx6WECqw12jNWGsVT7Y7PrCwsLCw8g/vK0gF1hfCtEbf5dbTLrJlzLqPxsLCwsLyzILqznayBM/UKu5oshrdtnWxsLCwsJIUXi/Nh/RqU3j0JahmbHVOW8Un3UdjYWFhYX3OCsSako1n6U9ozO7W/kRqzn8tWFhYWFhqpdr37Q+CefjztJKqz9PiTlvQhIWFhYWl1nuN3rsKnJrVUrR0tW4fjYWFhfXVVmgUHG55ZiBCjL+d/8LCwsL6UktKs25ot5DcPS3z8196BLc/eVu/q4iFhYWF5RFL8cUphLOK5/B+7ZzDZxMTFhYWFpZat6yhNXqyAwN+zCusdsYqRKqrdf9fAQsLCwvrWZu2rzp3fOspDLmN5swWFhYWFtYnrfd4SE4YmW0R708EYq/v6mJhYWFhXf3fmhJtV9dv3Gvibh0MP9LwdnIMCwsL60utNXn4udq9jp2ZZ+OiaWV4jT6j9iewsLCwsDxhNctL86tZRGLovi2T7SAYFhYWFtbfLI0l+fFZrdE5x01wuZiqiIWFhYX1oyWZ2jrwp2QnmmqNbt4Uw8LCwsK66q8qIRva3XoK7ZbX5zQnb7GwsLCwwk5XQnsKo/2ONVqI9nsw2nWw9xWwsLCwsD5pfTD+AOxFgC4Z85PzAAAAAElFTkSuQmCC"/>
+    
+    <!-- Labeled Store Name Footer inside QR Frame -->
+    <text x="350" y="742" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#041B4E" text-anchor="middle">📍 Apparel Group Main Booth  •  جناح مجموعة أباريل الرئيسي</text>
+    
+    <!-- Scan Instructions Footer -->
+    <text x="350" y="805" font-family="Arial, sans-serif" font-size="16" font-weight="800" fill="#8CE63D" text-anchor="middle">📲 SCAN WITH YOUR PHONE CAMERA TO PLAY</text>
+    <text x="350" y="835" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#9BB1DB" text-anchor="middle">https://apparel-scavenger-hunt.vercel.app?token=main-booth</text>
+  </svg>

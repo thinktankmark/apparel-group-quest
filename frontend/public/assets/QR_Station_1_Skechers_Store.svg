@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900">
+    <rect width="700" height="900" fill="#041B4E" rx="32"/>
+    
+    <!-- Outer Card Border -->
+    <rect x="20" y="20" width="660" height="860" fill="#152B5B" stroke="#FEC949" stroke-width="4" rx="24"/>
+    
+    <!-- Badge -->
+    <rect x="210" y="55" width="280" height="42" fill="#FEC949" rx="12"/>
+    <text x="350" y="83" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#041B4E" text-anchor="middle" letter-spacing="1">STATION 1</text>
+    
+    <!-- Store Name Headers -->
+    <text x="350" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#FFFFFF" text-anchor="middle">Skechers Store</text>
+    <text x="350" y="175" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9BB1DB" text-anchor="middle">فرع سكتشرز</text>
+    
+    <!-- Inner White QR Frame -->
+    <rect x="75" y="210" width="550" height="550" fill="#FFFFFF" stroke="#35589A" stroke-width="3" rx="20"/>
+    
+    <!-- Embedded High-Res QR Code Image -->
+    <image x="105" y="235" width="490" height="490" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYAQMAAACEqAqfAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAADTUlEQVR4nO3cPZLyMAyAYTMUlDnCHiVHC0fjKDkCJQUTfWvrx3Jgd7bgq/Kq2QDK406rkZ2U8sFYZIitfjfVq3Qx998fes9a/8j+ViwsLCyszb/XuKhlEcTt+8NJ5Fq+1CrfF89q3XryhIWFhYUV1kVvWdVa5F7OzjwVfbgl6YdqTb4aFhYWFtbPVgstvWfvfaN4G4qFhYWF9XfrXu+JzrZeWIYouvhMAQsLCwvrrRUx9r7VOieieO977YtEYGFhYWG5NUS3assbFzFTeAy97+5WLCwsLKytvEbVLTM1waf6ObXJfwssLCys41lpplCjFdqpf376TCHPasVnChE3LCwsLKz/Zm1a5h9+w7knlOijY7WlW+lIw4aFhYWFZZU31WjRqa4l3P2WWOTiGRbT0HJjYWFhYeW571pKL8Uy7Kc1K1KvurGmlvRlsbCwsLDSHKC0hDebYq8zhbBmdXTrDQsLCwur975jZop9jbaLdZg6aM6GhYWFhdWMdKhrDHsaIa1mGUOqPYGrNRoLCwsLa5FUeG2mEMdpRa1ZbFZbCSvn57RaP1uAhYWFhaURNbqdHLD5wNwvxGt0Qm21p34zRf+MhYWFhfU5y/roGlb4EyHpmbKUsdY/9fO9F34sLCwsLH9vQSTEAHic6tb9NNEqnp/VjRqtaMHCwsLCarlDjc7ziQG1jbYYAIclmvGm3mNhYWEd0lratSXkGHrf14Nh+8lwP6OLhYWFdXTLWt6KWmc7+esK4qJFZIisfjCstby9RmNhYWFhDaOES0qoEU955a2vdPJ29jZ5V6OxsLCwDm7F2QIb2r57F2Is22L1qcPuLBkWFhYWllrFhwuiva+kiYHugW1p2SHSmS0sLCwsrM9ar7G8ZM79H0FsvQVh/xrevj4BCwsL64DWcKfh48sS47dr3nEbJ8OS9uawsLCwjm6tvTzHxlpkWliNjvlEqtEtbmMfjYWFhXVwK4a5ZqWHu8QP2J58G+20K9bST4hhYWFhYf1kFW95rbONUUILs2rW1L/FwsLCwvrV8kNdLS5OPPTzlwNRzmtgYWFhYb2br0bMmq57YCdfzZa1eH/+CwsLC+vQ1hB9VquZT19EdjMFO3QwlHMsLCwsrM9aH4x/ZB65fSyGwCoAAAAASUVORK5CYII="/>
+    
+    <!-- Labeled Store Name Footer inside QR Frame -->
+    <text x="350" y="742" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#041B4E" text-anchor="middle">📍 Skechers Store  •  فرع سكتشرز</text>
+    
+    <!-- Scan Instructions Footer -->
+    <text x="350" y="805" font-family="Arial, sans-serif" font-size="16" font-weight="800" fill="#8CE63D" text-anchor="middle">📲 SCAN WITH YOUR PHONE CAMERA TO PLAY</text>
+    <text x="350" y="835" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#9BB1DB" text-anchor="middle">https://apparel-scavenger-hunt.vercel.app?token=skechers</text>
+  </svg>
