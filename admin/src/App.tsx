@@ -564,23 +564,26 @@ export const App: React.FC = () => {
                 const svgFilename = qrFilenameMap[s.qrToken] || 'QR_Main_Booth_Registration.svg';
                 const pngFilename = svgFilename.replace('.svg', '.png');
 
+                const nameEn = s.store?.nameEn || s.store?.name_en || (s.qrToken === 'skechers' ? 'Skechers Store' : s.qrToken === 'aco' ? 'ACO Store' : s.qrToken === 'bhpc' ? 'BHPC Polo Store' : s.qrToken === 'crocs' ? 'Crocs Store' : 'Apparel Group Main Booth');
+                const nameAr = s.store?.nameAr || s.store?.name_ar || (s.qrToken === 'skechers' ? 'فرع سكتشرز' : s.qrToken === 'aco' ? 'فرع أكو' : s.qrToken === 'bhpc' ? 'فرع نادي بيفرلي هيلز للبولو' : s.qrToken === 'crocs' ? 'فرع كروكس' : 'جناح أباريل الرئيسي');
+
                 return (
                   <div key={s.sequenceId} style={{ background: '#152B5B', border: '1.5px solid #FEC949', borderRadius: '20px', padding: '24px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
                     <span style={{ fontSize: '11px', background: s.sequenceOrder === 0 ? '#38EF7D' : '#FEC949', color: '#041B4E', padding: '5px 12px', borderRadius: '12px', fontWeight: 800 }}>
                       {s.sequenceOrder === 0 ? 'MAIN BOOTH REGISTRATION' : `STATION ${s.sequenceOrder}`}
                     </span>
-                    <h3 style={{ color: '#FFF', margin: '14px 0 4px 0', fontSize: '18px' }}>{s.store.nameEn}</h3>
-                    <p style={{ color: '#9BB1DB', fontSize: '13px', margin: '0 0 18px 0' }}>{s.store.nameAr}</p>
+                    <h3 style={{ color: '#FFF', margin: '14px 0 4px 0', fontSize: '18px' }}>{nameEn}</h3>
+                    <p style={{ color: '#9BB1DB', fontSize: '13px', margin: '0 0 18px 0' }}>{nameAr}</p>
                     
                     {/* Embedded Printable White QR Frame with Labeled Store Name */}
                     <div style={{ background: '#FFF', padding: '18px 14px', borderRadius: '16px', display: 'block', marginBottom: '18px', textAlign: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.2)' }}>
                       <img
                         src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&data=${encodeURIComponent(`${APP_HOST_URL}?token=${s.qrToken}`)}`}
-                        alt={s.store.nameEn}
+                        alt={nameEn}
                         style={{ width: '210px', height: '210px', display: 'block', margin: '0 auto' }}
                       />
                       <div style={{ marginTop: '12px', fontSize: '13px', fontWeight: 900, color: '#041B4E', letterSpacing: '0.4px', direction: 'ltr', unicodeBidi: 'isolate' }}>
-                        📍 {s.store.nameEn}  •  {s.store.nameAr}
+                        📍 {nameEn}  •  {nameAr}
                       </div>
                     </div>
 
