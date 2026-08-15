@@ -340,7 +340,7 @@ export const App: React.FC = () => {
       )}
 
       {/* Tabs Bar */}
-      <nav style={{ background: '#041B4E', borderBottom: '1px solid #35589A', padding: '0 24px', display: 'flex', gap: '8px' }}>
+      <nav style={{ background: '#041B4E', borderBottom: '1px solid #35589A', padding: '0 16px', display: 'flex', gap: '8px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         {(['DASHBOARD', 'PLAYERS', 'QR_PRINTER', 'AUDIT'] as const).map(tab => (
           <button
             key={tab}
@@ -449,7 +449,7 @@ export const App: React.FC = () => {
               </div>
             )}
 
-            <div style={{ marginBottom: '20px', display: 'flex', gap: '12px' }}>
+            <div style={{ marginBottom: '20px', display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
               <input
                 type="text"
                 placeholder="Search players by Name, Email, or Phone..."
@@ -458,7 +458,7 @@ export const App: React.FC = () => {
                   setSearchQuery(e.target.value);
                   fetchPlayers(e.target.value);
                 }}
-                style={{ flex: 1, padding: '12px 16px', background: '#152B5B', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', fontSize: '14px' }}
+                style={{ flex: '1 1 240px', padding: '12px 16px', background: '#152B5B', border: '1px solid #35589A', borderRadius: '8px', color: '#FFF', fontSize: '14px' }}
               />
               <button
                 onClick={handleExportPlayersCsv}
@@ -468,8 +468,8 @@ export const App: React.FC = () => {
               </button>
             </div>
 
-            <div style={{ background: '#152B5B', border: '1px solid #35589A', borderRadius: '12px', overflow: 'hidden' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
+            <div style={{ background: '#152B5B', border: '1px solid #35589A', borderRadius: '12px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table style={{ width: '100%', minWidth: '750px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
                 <thead>
                   <tr style={{ background: '#041B4E', borderBottom: '1px solid #35589A', color: '#9BB1DB' }}>
                     <th style={{ padding: '14px 16px' }}>Player Details</th>
