@@ -1,6 +1,14 @@
 {
   "players": [
     {
+      "id": "player-1786727044999",
+      "full_name": "Karma hany",
+      "email": "karmahanymedhat@gmail.com",
+      "phone_number": "0567736674",
+      "registered_at_store_id": "store-main-booth",
+      "created_at": "2026-08-14T17:04:04.999Z"
+    },
+    {
       "id": "player-1786727326386",
       "full_name": "Kindah Hany",
       "email": "kindah.hany@icloud.com",
@@ -186,6 +194,20 @@
     }
   ],
   "progress": [
+    {
+      "id": "prog-player-1786727044999",
+      "player_id": "player-1786727044999",
+      "current_sequence_order": 4,
+      "store_sequence": [
+        "store-skechers",
+        "store-aco",
+        "store-bhpc",
+        "store-crocs"
+      ],
+      "is_completed": true,
+      "completed_at": "2026-08-14T18:02:36.102Z",
+      "updated_at": "2026-08-14T18:02:36.102Z"
+    },
     {
       "id": "prog-player-1786727326386",
       "player_id": "player-1786727326386",
