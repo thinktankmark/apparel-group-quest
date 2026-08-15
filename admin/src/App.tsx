@@ -176,6 +176,8 @@ export const App: React.FC = () => {
       'Phone Number',
       'Registration Date',
       'Current Station Progress',
+      'Assigned Route Sequence',
+      'Active Clue Station',
       'Event Completed',
       'Completion Date',
       'Prize Handed Over',
@@ -189,6 +191,8 @@ export const App: React.FC = () => {
       `"${(p.phoneNumber || '').replace(/"/g, '""')}"`,
       `"${p.registeredAt ? new Date(p.registeredAt).toLocaleString() : ''}"`,
       `"Station ${p.currentSequenceOrder || 1} of 4"`,
+      `"${(p.readableSequenceEn || (p.storeSequence ? p.storeSequence.join(' -> ') : '')).replace(/"/g, '""')}"`,
+      `"${(p.activeStoreNameEn || '').replace(/"/g, '""')}"`,
       `"${p.isCompleted ? 'Yes' : 'No'}"`,
       `"${p.completedAt ? new Date(p.completedAt).toLocaleString() : 'N/A'}"`,
       `"${p.isPrizeCollected ? 'Yes' : 'No'}"`,
@@ -469,7 +473,8 @@ export const App: React.FC = () => {
                 <thead>
                   <tr style={{ background: '#041B4E', borderBottom: '1px solid #35589A', color: '#9BB1DB' }}>
                     <th style={{ padding: '14px 16px' }}>Player Details</th>
-                    <th style={{ padding: '14px 16px' }}>Current Progress</th>
+                    <th style={{ padding: '14px 16px' }}>Assigned Clue Sequence Route</th>
+                    <th style={{ padding: '14px 16px' }}>Current Progress & Active Clue</th>
                     <th style={{ padding: '14px 16px' }}>Event Completed</th>
                     <th style={{ padding: '14px 16px' }}>Prize Status</th>
                     <th style={{ padding: '14px 16px' }}>Actions</th>
@@ -483,9 +488,19 @@ export const App: React.FC = () => {
                         <div style={{ fontSize: '11.5px', color: '#9BB1DB' }}>{p.email} • {p.phoneNumber}</div>
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <span style={{ padding: '4px 10px', background: '#041B4E', borderRadius: '12px', border: '1px solid #35589A', color: '#FEC949' }}>
+                        <div style={{ fontSize: '11.5px', color: '#8CE63D', fontWeight: 600 }}>
+                          {p.readableSequenceEn || (p.storeSequence ? p.storeSequence.join(' ➔ ') : 'Skechers ➔ ACO ➔ BHPC ➔ Crocs')}
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ padding: '4px 10px', background: '#041B4E', borderRadius: '12px', border: '1px solid #35589A', color: '#FEC949', display: 'inline-block', fontSize: '12px' }}>
                           Station {p.currentSequenceOrder} / 4
-                        </span>
+                        </div>
+                        {p.activeStoreNameEn && !p.isCompleted && (
+                          <div style={{ fontSize: '11px', color: '#9BB1DB', marginTop: '4px' }}>
+                            📍 Active Clue: <strong style={{ color: '#FFF' }}>{p.activeStoreNameEn}</strong>
+                          </div>
+                        )}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         {p.isCompleted ? (

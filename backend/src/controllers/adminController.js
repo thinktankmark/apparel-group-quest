@@ -53,23 +53,46 @@ const getAnalytics = (req, res) => {
 const searchPlayers = (req, res) => {
   const { search } = req.query;
 
+  const storeMap = {
+    'store-skechers': { nameAr: 'فرع سكتشرز', nameEn: 'Skechers Store' },
+    'store-aco': { nameAr: 'فرع أكو', nameEn: 'ACO Store' },
+    'store-bhpc': { nameAr: 'فرع نادي بيفرلي هيلز للبولو', nameEn: 'BHPC Store' },
+    'store-crocs': { nameAr: 'فرع كروكس', nameEn: 'Crocs Store' }
+  };
+
+  const mapPlayerData = (p) => {
+    const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
+    const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
+    const storeSeq = prog.store_sequence || ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+    const currentSeq = prog.current_sequence_order || 1;
+    const activeStoreId = storeSeq[currentSeq - 1] || storeSeq[0];
+    const activeStore = storeMap[activeStoreId] || { nameAr: 'سكتشرز', nameEn: 'Skechers Store' };
+
+    const readableSequenceEn = storeSeq.map(sId => (storeMap[sId] ? storeMap[sId].nameEn : sId)).join(' ➔ ');
+    const readableSequenceAr = storeSeq.map(sId => (storeMap[sId] ? storeMap[sId].nameAr : sId)).join(' ➔ ');
+
+    return {
+      id: p.id,
+      fullName: p.full_name,
+      email: p.email,
+      phoneNumber: p.phone_number,
+      registeredAt: p.created_at,
+      currentSequenceOrder: currentSeq,
+      storeSequence: storeSeq,
+      readableSequenceEn,
+      readableSequenceAr,
+      activeStoreId,
+      activeStoreNameEn: activeStore.nameEn,
+      activeStoreNameAr: activeStore.nameAr,
+      isCompleted: !!prog.is_completed,
+      completedAt: prog.completed_at || null,
+      isPrizeCollected: !!prize,
+      prizeCollectedAt: prize ? prize.collected_at : null
+    };
+  };
+
   if (!search) {
-    const results = memoryStore.players.map(p => {
-      const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
-      const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
-      return {
-        id: p.id,
-        fullName: p.full_name,
-        email: p.email,
-        phoneNumber: p.phone_number,
-        registeredAt: p.created_at,
-        currentSequenceOrder: prog.current_sequence_order || 1,
-        isCompleted: !!prog.is_completed,
-        completedAt: prog.completed_at || null,
-        isPrizeCollected: !!prize,
-        prizeCollectedAt: prize ? prize.collected_at : null
-      };
-    });
+    const results = memoryStore.players.map(mapPlayerData);
     return res.json(results);
   }
 
@@ -80,23 +103,7 @@ const searchPlayers = (req, res) => {
     (p.phone_number && p.phone_number.includes(query))
   );
 
-  const results = filtered.map(p => {
-    const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
-    const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
-    return {
-      id: p.id,
-      fullName: p.full_name,
-      email: p.email,
-      phoneNumber: p.phone_number,
-      registeredAt: p.created_at,
-      currentSequenceOrder: prog.current_sequence_order || 1,
-      isCompleted: !!prog.is_completed,
-      completedAt: prog.completed_at || null,
-      isPrizeCollected: !!prize,
-      prizeCollectedAt: prize ? prize.collected_at : null
-    };
-  });
-
+  const results = filtered.map(mapPlayerData);
   return res.json(results);
 };
 
