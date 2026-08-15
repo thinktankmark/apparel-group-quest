@@ -556,12 +556,15 @@ export const App: React.FC = () => {
                   </span>
                   <h3 style={{ color: '#FFF', margin: '12px 0 4px 0' }}>{s.store.nameEn}</h3>
                   <p style={{ color: '#9BB1DB', fontSize: '12px', margin: '0 0 16px 0' }}>{s.store.nameAr}</p>
-                  <div style={{ background: '#FFF', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '16px' }}>
+                  <div style={{ background: '#FFF', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '16px', textAlign: 'center' }}>
                     <img
                       src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&ecc=M&data=${encodeURIComponent(`${APP_HOST_URL}?token=${s.qrToken}`)}`}
                       alt={s.store.nameEn}
-                      style={{ width: '220px', height: '220px', display: 'block' }}
+                      style={{ width: '220px', height: '220px', display: 'block', margin: '0 auto' }}
                     />
+                    <div style={{ marginTop: '10px', fontSize: '13px', fontWeight: 900, color: '#041B4E', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+                      📍 {s.store.nameEn} | {s.store.nameAr}
+                    </div>
                   </div>
                   <div style={{ fontSize: '11px', color: '#9BB1DB', wordBreak: 'break-all', background: '#041B4E', padding: '8px', borderRadius: '6px' }}>
                     Token: {s.qrToken}
