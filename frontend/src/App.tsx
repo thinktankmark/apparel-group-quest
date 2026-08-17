@@ -54,10 +54,35 @@ const AppContent: React.FC = () => {
   const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'STAGE_REWARD' | 'FINAL_VICTORY_SCREEN' | 'VICTORY'>('LOGIN');
   const [gameError, setGameError] = useState<string | null>(null);
 
+  const [scannedQrName, setScannedQrName] = useState<string | null>(() => {
+    const saved = sessionStorage.getItem('ag_scanned_qr_name');
+    if (saved) return saved;
+    const tokenParam = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('token') : null;
+    if (tokenParam) {
+      if (tokenParam.includes('skechers')) return 'Skechers Store';
+      if (tokenParam.includes('aco')) return 'ACO Store';
+      if (tokenParam.includes('bhpc') || tokenParam.includes('polo')) return 'BHPC Polo Store';
+      if (tokenParam.includes('crocs')) return 'Crocs Store';
+      if (tokenParam.includes('main-booth')) return 'Main Booth';
+    }
+    return null;
+  });
+
   useEffect(() => {
     document.documentElement.dir = 'rtl';
     document.documentElement.lang = 'ar';
   }, []);
+
+  useEffect(() => {
+    const checkScannedName = () => {
+      const saved = sessionStorage.getItem('ag_scanned_qr_name');
+      if (saved && saved !== scannedQrName) {
+        setScannedQrName(saved);
+      }
+    };
+    const interval = setInterval(checkScannedName, 1000);
+    return () => clearInterval(interval);
+  }, [scannedQrName]);
 
   // Auto-dismiss floating error toast after 18 seconds (or until manual dismissal)
   useEffect(() => {
@@ -372,6 +397,30 @@ const AppContent: React.FC = () => {
           >
             Logout 🚪
           </button>
+        </div>
+      )}
+
+      {/* Subtle Admin Top-Right Scanned Store Name Indicator */}
+      {scannedQrName && (
+        <div style={{
+          position: 'fixed',
+          top: '6px',
+          right: '10px',
+          fontSize: '9.5px',
+          fontWeight: 700,
+          color: 'rgba(255, 255, 255, 0.45)',
+          background: 'rgba(4, 27, 78, 0.55)',
+          border: '1px solid rgba(53, 88, 154, 0.4)',
+          borderRadius: '4px',
+          padding: '2px 6px',
+          letterSpacing: '0.4px',
+          pointerEvents: 'none',
+          zIndex: 999999,
+          userSelect: 'none',
+          direction: 'ltr',
+          unicodeBidi: 'isolate'
+        }}>
+          QR: {scannedQrName}
         </div>
       )}
     </div>

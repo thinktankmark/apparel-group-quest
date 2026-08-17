@@ -56,9 +56,12 @@ export const ScanHandler: React.FC<ScanHandlerProps> = ({ onMainBoothScanned, on
         }
 
         if (data.isMainBooth) {
+          sessionStorage.setItem('ag_scanned_qr_name', 'Main Booth');
           setMainBoothToken(data.mainBoothToken);
           onMainBoothScanned();
         } else {
+          const storeName = data.store?.nameEn || (data.store?.id ? data.store.id.replace('store-', '').toUpperCase() : 'Store QR');
+          sessionStorage.setItem('ag_scanned_qr_name', storeName);
           const ctx = {
             storeId: data.store.id,
             sequenceOrder: data.sequenceOrder,
