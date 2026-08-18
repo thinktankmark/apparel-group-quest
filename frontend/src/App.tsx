@@ -54,16 +54,16 @@ const AppContent: React.FC = () => {
   const [view, setView] = useState<'WELCOME' | 'LOGIN' | 'SIGNUP' | 'CLUE' | 'GAME' | 'STAGE_REWARD' | 'FINAL_VICTORY_SCREEN' | 'VICTORY'>('LOGIN');
   const [gameError, setGameError] = useState<string | null>(null);
 
-  const [scannedQrName, setScannedQrName] = useState<string | null>(() => {
-    const saved = sessionStorage.getItem('ag_scanned_qr_name');
+  const [scannedQrNum, setScannedQrNum] = useState<string | null>(() => {
+    const saved = sessionStorage.getItem('ag_scanned_qr_num');
     if (saved) return saved;
     const tokenParam = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('token') : null;
     if (tokenParam) {
-      if (tokenParam.includes('skechers')) return 'Skechers Store';
-      if (tokenParam.includes('aco')) return 'ACO Store';
-      if (tokenParam.includes('bhpc') || tokenParam.includes('polo')) return 'BHPC Polo Store';
-      if (tokenParam.includes('crocs')) return 'Crocs Store';
-      if (tokenParam.includes('main-booth')) return 'Main Booth';
+      if (tokenParam.includes('skechers')) return '1';
+      if (tokenParam.includes('aco')) return '2';
+      if (tokenParam.includes('bhpc') || tokenParam.includes('polo')) return '3';
+      if (tokenParam.includes('crocs')) return '4';
+      if (tokenParam.includes('main-booth')) return '0';
     }
     return null;
   });
@@ -74,15 +74,15 @@ const AppContent: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const checkScannedName = () => {
-      const saved = sessionStorage.getItem('ag_scanned_qr_name');
-      if (saved && saved !== scannedQrName) {
-        setScannedQrName(saved);
+    const checkScannedNum = () => {
+      const saved = sessionStorage.getItem('ag_scanned_qr_num');
+      if (saved && saved !== scannedQrNum) {
+        setScannedQrNum(saved);
       }
     };
-    const interval = setInterval(checkScannedName, 1000);
+    const interval = setInterval(checkScannedNum, 1000);
     return () => clearInterval(interval);
-  }, [scannedQrName]);
+  }, [scannedQrNum]);
 
   // Auto-dismiss floating error toast after 18 seconds (or until manual dismissal)
   useEffect(() => {
@@ -400,14 +400,14 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Subtle Admin Top-Right Scanned Store Name Indicator */}
-      {scannedQrName && (
+      {/* Subtle Admin Top-Right Scanned Station Number Indicator */}
+      {scannedQrNum && (
         <div style={{
           position: 'fixed',
           top: '6px',
           right: '10px',
           fontSize: '9.5px',
-          fontWeight: 700,
+          fontWeight: 800,
           color: 'rgba(255, 255, 255, 0.45)',
           background: 'rgba(4, 27, 78, 0.55)',
           border: '1px solid rgba(53, 88, 154, 0.4)',
@@ -420,7 +420,7 @@ const AppContent: React.FC = () => {
           direction: 'ltr',
           unicodeBidi: 'isolate'
         }}>
-          QR: {scannedQrName}
+          QR: #{scannedQrNum}
         </div>
       )}
     </div>
