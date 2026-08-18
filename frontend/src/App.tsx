@@ -420,7 +420,7 @@ const AppContent: React.FC = () => {
           direction: 'ltr',
           unicodeBidi: 'isolate'
         }}>
-          QR: #{scannedQrNum}
+          {scannedQrNum}
         </div>
       )}
     </div>
