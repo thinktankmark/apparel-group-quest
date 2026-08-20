@@ -134,7 +134,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
             alt={store?.nameEn || 'Store'}
             style={{
               width: '100%',
-              height: '190px',
+              height: '260px',
               objectFit: 'cover',
               objectPosition: 'top center',
               borderRadius: '14px',
