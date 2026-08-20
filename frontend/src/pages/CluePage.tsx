@@ -136,6 +136,7 @@ export const CluePage: React.FC<CluePageProps> = ({ activeClue }) => {
               width: '100%',
               height: '190px',
               objectFit: 'cover',
+              objectPosition: 'top center',
               borderRadius: '14px',
               border: '1px solid #35589A',
               display: 'block'
