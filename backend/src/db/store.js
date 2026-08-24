@@ -175,19 +175,19 @@ function saveStoreToFile() {
 loadStoreFromFile();
 
 function getFixedStoreSequence() {
-  return ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+  return ['store-skechers', 'store-bhpc', 'store-crocs'];
 }
 
 let roundRobinIndex = 0;
 
 function createRandomizedStoreSequence() {
-  const allStores = ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+  const allStores = ['store-skechers', 'store-bhpc', 'store-crocs'];
   
-  // Pick the 1st store using round-robin rotation to guarantee 100% equal distribution across all 4 stores
+  // Pick the 1st store using round-robin rotation to guarantee 100% equal distribution across all 3 active stores
   const firstStore = allStores[roundRobinIndex % allStores.length];
   roundRobinIndex++;
 
-  // Get remaining 3 stores and shuffle them
+  // Get remaining 2 stores and shuffle them
   const remainingStores = allStores.filter(s => s !== firstStore);
   for (let i = remainingStores.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

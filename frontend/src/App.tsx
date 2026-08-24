@@ -21,15 +21,6 @@ const STORES_LIST = [
     locationTextEn: 'Skechers Store Station'
   },
   {
-    id: 'store-aco',
-    nameAr: 'فرع أكو',
-    nameEn: 'ACO Store',
-    stationCode: 'ACO',
-    heroImageUrl: 'cca4f63abe8d7095ba2e58420d30d9f620dcac66',
-    locationTextAr: 'محطة فرع أكو',
-    locationTextEn: 'ACO Store Station'
-  },
-  {
     id: 'store-bhpc',
     nameAr: 'فرع نادي بيفرلي هيلز للبولو',
     nameEn: 'BHPC Store',
@@ -99,7 +90,7 @@ const AppContent: React.FC = () => {
 
     const currentSeq = progress?.currentSequenceOrder || 1;
     const activeStoreId = activeClue?.store?.id;
-    const playerStoreSeq = progress?.storeSequence || ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+    const playerStoreSeq = progress?.storeSequence || ['store-skechers', 'store-bhpc', 'store-crocs'];
 
     // Check if the scanned storeId matches the player's current active store
     const isCurrentActiveStore = storeCtx.storeId === activeStoreId || storeCtx.storeId === playerStoreSeq[currentSeq - 1];
@@ -180,13 +171,12 @@ const AppContent: React.FC = () => {
   const getClueForView = () => {
     if (activeClue) return activeClue;
     const seq = progress?.currentSequenceOrder || 1;
-    const playerSeq = progress?.storeSequence || ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+    const playerSeq = progress?.storeSequence || ['store-skechers', 'store-bhpc', 'store-crocs'];
     const currentStoreId = playerSeq[seq - 1] || 'store-skechers';
     const store = STORES_LIST.find(s => s.id === currentStoreId) || STORES_LIST[0];
 
     const getGameKey = (sId: string) => {
       if (sId === 'store-skechers') return 'MEMORY_MATCH';
-      if (sId === 'store-aco') return 'SPEED_TAP';
       if (sId === 'store-bhpc') return 'HORSE_JUMP';
       if (sId === 'store-crocs') return 'TIC_TAC_TOE';
       return 'MEMORY_MATCH';
@@ -203,13 +193,12 @@ const AppContent: React.FC = () => {
     if (activeClue?.gameKey) return activeClue.gameKey;
     const storeId = activeClue?.store?.id || (progress?.storeSequence ? progress.storeSequence[(progress.currentSequenceOrder || 1) - 1] : 'store-skechers');
     if (storeId === 'store-skechers') return 'MEMORY_MATCH';
-    if (storeId === 'store-aco') return 'SPEED_TAP';
     if (storeId === 'store-bhpc') return 'HORSE_JUMP';
     if (storeId === 'store-crocs') return 'TIC_TAC_TOE';
     return 'MEMORY_MATCH';
   };
 
-  const isFinalStage = (progress?.currentSequenceOrder || activeClue?.sequenceOrder || 1) === 4;
+  const isFinalStage = (progress?.currentSequenceOrder || activeClue?.sequenceOrder || 1) === 3;
 
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>

@@ -190,7 +190,7 @@ export const App: React.FC = () => {
       `"${(p.email || '').replace(/"/g, '""')}"`,
       `"${(p.phoneNumber || '').replace(/"/g, '""')}"`,
       `"${p.registeredAt ? new Date(p.registeredAt).toLocaleString() : ''}"`,
-      `"Station ${p.currentSequenceOrder || 1} of 4"`,
+      `"Station ${p.currentSequenceOrder || 1} of 3"`,
       `"${(p.readableSequenceEn || (p.storeSequence ? p.storeSequence.join(' -> ') : '')).replace(/"/g, '""')}"`,
       `"${(p.activeStoreNameEn || '').replace(/"/g, '""')}"`,
       `"${p.isCompleted ? 'Yes' : 'No'}"`,
@@ -489,12 +489,12 @@ export const App: React.FC = () => {
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ fontSize: '11.5px', color: '#8CE63D', fontWeight: 600 }}>
-                          {p.readableSequenceEn || (p.storeSequence ? p.storeSequence.join(' ➔ ') : 'Skechers ➔ ACO ➔ BHPC ➔ Crocs')}
+                          {p.readableSequenceEn || (p.storeSequence ? p.storeSequence.join(' ➔ ') : 'Skechers ➔ BHPC ➔ Crocs')}
                         </div>
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <div style={{ padding: '4px 10px', background: '#041B4E', borderRadius: '12px', border: '1px solid #35589A', color: '#FEC949', display: 'inline-block', fontSize: '12px' }}>
-                          Station {p.currentSequenceOrder} / 4
+                          Station {p.currentSequenceOrder} / 3
                         </div>
                         {p.activeStoreNameEn && !p.isCompleted && (
                           <div style={{ fontSize: '11px', color: '#9BB1DB', marginTop: '4px' }}>
@@ -553,11 +553,10 @@ export const App: React.FC = () => {
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-              {sequence.map(s => {
+              {sequence.filter(s => s.qrToken !== 'aco').map(s => {
                 const qrFilenameMap: Record<string, string> = {
                   'main-booth': 'QR_Main_Booth_Registration.svg',
                   'skechers': 'QR_Station_1_Skechers_Store.svg',
-                  'aco': 'QR_Station_2_ACO_Store.svg',
                   'bhpc': 'QR_Station_3_BHPC_Polo_Store.svg',
                   'crocs': 'QR_Station_4_Crocs_Store.svg'
                 };

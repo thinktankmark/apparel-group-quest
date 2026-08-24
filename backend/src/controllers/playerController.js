@@ -26,8 +26,8 @@ const getPlayerProgress = (req, res) => {
     memoryStore.progress.push(progress);
     saveStoreToFile();
   } else {
-    // Ensure store_sequence is always populated with 4 stations
-    if (!progress.store_sequence || progress.store_sequence.length < 4) {
+    // Ensure store_sequence is always populated with 3 stations
+    if (!progress.store_sequence || progress.store_sequence.length < 3) {
       progress.store_sequence = createRandomizedStoreSequence();
       saveStoreToFile();
     }
@@ -83,7 +83,7 @@ const completeGame = (req, res) => {
     return res.status(400).json({ error: 'PROGRESS_NOT_FOUND', message: 'Player progress not found.' });
   }
 
-  if (!progress.store_sequence || progress.store_sequence.length < 4) {
+  if (!progress.store_sequence || progress.store_sequence.length < 3) {
     progress.store_sequence = createRandomizedStoreSequence();
   }
 
@@ -113,7 +113,7 @@ const completeGame = (req, res) => {
 
   if (isSuccess || seqOrderInt === 1) {
     if (seqOrderInt === progress.current_sequence_order) {
-      const maxSequence = 4; // Guaranteed 4 stations total per player
+      const maxSequence = 3; // Guaranteed 3 stations total per player
 
       if (seqOrderInt >= maxSequence) {
         progress.is_completed = true;
