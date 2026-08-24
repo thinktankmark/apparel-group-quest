@@ -63,7 +63,8 @@ const searchPlayers = (req, res) => {
   const mapPlayerData = (p) => {
     const prog = memoryStore.progress.find(pr => pr.player_id === p.id) || {};
     const prize = memoryStore.prizeCollections.find(pc => pc.player_id === p.id);
-    const storeSeq = prog.store_sequence || ['store-skechers', 'store-aco', 'store-bhpc', 'store-crocs'];
+    const rawSeq = prog.store_sequence || ['store-skechers', 'store-bhpc', 'store-crocs'];
+    const storeSeq = rawSeq.filter(sId => sId !== 'store-aco');
     const currentSeq = prog.current_sequence_order || 1;
     const activeStoreId = storeSeq[currentSeq - 1] || storeSeq[0];
     const activeStore = storeMap[activeStoreId] || { nameAr: 'سكتشرز', nameEn: 'Skechers Store' };
