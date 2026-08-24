@@ -140,7 +140,14 @@ function loadStoreFromFile() {
       const parsed = JSON.parse(fileData);
       if (parsed) {
         if (parsed.players) memoryStore.players = parsed.players;
-        if (parsed.progress) memoryStore.progress = parsed.progress;
+        if (parsed.progress) {
+          memoryStore.progress = parsed.progress.map(p => {
+            if (p.store_sequence && p.store_sequence.includes('store-aco')) {
+              p.store_sequence = p.store_sequence.filter(sId => sId !== 'store-aco');
+            }
+            return p;
+          });
+        }
         if (parsed.attempts) memoryStore.attempts = parsed.attempts;
         if (parsed.prizeCollections) memoryStore.prizeCollections = parsed.prizeCollections;
         if (parsed.adminUsers) memoryStore.adminUsers = parsed.adminUsers;

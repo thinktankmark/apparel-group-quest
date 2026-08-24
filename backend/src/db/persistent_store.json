@@ -200,7 +200,6 @@
       "current_sequence_order": 4,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -214,7 +213,6 @@
       "current_sequence_order": 4,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -227,7 +225,6 @@
       "player_id": "player-1786727419708",
       "current_sequence_order": 2,
       "store_sequence": [
-        "store-aco",
         "store-skechers",
         "store-crocs",
         "store-bhpc"
@@ -243,7 +240,6 @@
       "store_sequence": [
         "store-bhpc",
         "store-crocs",
-        "store-aco",
         "store-skechers"
       ],
       "is_completed": false,
@@ -257,8 +253,7 @@
       "store_sequence": [
         "store-crocs",
         "store-bhpc",
-        "store-skechers",
-        "store-aco"
+        "store-skechers"
       ],
       "is_completed": false,
       "completed_at": null,
@@ -270,7 +265,6 @@
       "current_sequence_order": 1,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -283,7 +277,6 @@
       "player_id": "player-1786730122525",
       "current_sequence_order": 1,
       "store_sequence": [
-        "store-aco",
         "store-skechers",
         "store-crocs",
         "store-bhpc"
@@ -299,7 +292,6 @@
       "store_sequence": [
         "store-bhpc",
         "store-crocs",
-        "store-aco",
         "store-skechers"
       ],
       "is_completed": false,
@@ -313,8 +305,7 @@
       "store_sequence": [
         "store-crocs",
         "store-bhpc",
-        "store-skechers",
-        "store-aco"
+        "store-skechers"
       ],
       "is_completed": false,
       "completed_at": null,
@@ -326,7 +317,6 @@
       "current_sequence_order": 1,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -339,7 +329,6 @@
       "player_id": "player-1786732535019",
       "current_sequence_order": 4,
       "store_sequence": [
-        "store-aco",
         "store-skechers",
         "store-crocs",
         "store-bhpc"
@@ -355,7 +344,6 @@
       "store_sequence": [
         "store-bhpc",
         "store-crocs",
-        "store-aco",
         "store-skechers"
       ],
       "is_completed": false,
@@ -369,8 +357,7 @@
       "store_sequence": [
         "store-crocs",
         "store-bhpc",
-        "store-skechers",
-        "store-aco"
+        "store-skechers"
       ],
       "is_completed": false,
       "completed_at": null,
@@ -382,7 +369,6 @@
       "current_sequence_order": 1,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -395,7 +381,6 @@
       "player_id": "player-1786735826522",
       "current_sequence_order": 1,
       "store_sequence": [
-        "store-aco",
         "store-skechers",
         "store-crocs",
         "store-bhpc"
@@ -411,7 +396,6 @@
       "store_sequence": [
         "store-bhpc",
         "store-crocs",
-        "store-aco",
         "store-skechers"
       ],
       "is_completed": true,
@@ -425,8 +409,7 @@
       "store_sequence": [
         "store-crocs",
         "store-bhpc",
-        "store-skechers",
-        "store-aco"
+        "store-skechers"
       ],
       "is_completed": false,
       "completed_at": null,
@@ -438,7 +421,6 @@
       "current_sequence_order": 1,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -451,7 +433,6 @@
       "player_id": "player-1786751293295",
       "current_sequence_order": 1,
       "store_sequence": [
-        "store-aco",
         "store-skechers",
         "store-crocs",
         "store-bhpc"
@@ -467,7 +448,6 @@
       "store_sequence": [
         "store-bhpc",
         "store-crocs",
-        "store-aco",
         "store-skechers"
       ],
       "is_completed": false,
@@ -481,8 +461,7 @@
       "store_sequence": [
         "store-crocs",
         "store-bhpc",
-        "store-skechers",
-        "store-aco"
+        "store-skechers"
       ],
       "is_completed": false,
       "completed_at": null,
@@ -494,7 +473,6 @@
       "current_sequence_order": 1,
       "store_sequence": [
         "store-skechers",
-        "store-aco",
         "store-bhpc",
         "store-crocs"
       ],
@@ -507,7 +485,6 @@
       "player_id": "player-1786752180334",
       "current_sequence_order": 1,
       "store_sequence": [
-        "store-aco",
         "store-skechers",
         "store-crocs",
         "store-bhpc"
@@ -523,7 +500,6 @@
       "store_sequence": [
         "store-bhpc",
         "store-crocs",
-        "store-aco",
         "store-skechers"
       ],
       "is_completed": false,
